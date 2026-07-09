@@ -301,6 +301,7 @@ function recenter(g){
 
 let gbViewer, gbModel;
 const cartViewers = [];
+let animationStarted = false;
 // Baked cart geometries (theme → {meshes: [{geom, mat}], size}) for slot-insert animation
 const cartShapes = {};
 let slotMesh = null;          // currently-inserted cart inside gbViewer.scene
@@ -438,6 +439,72 @@ function hideCartFromSlot(){
     slotMesh = null;
   }
 }
+function startAnimationLoop(){
+  if(animationStarted) return;
+  animationStarted = true;
+  animate();
+  window.addEventListener('resize', onResize);
+}
+
+function scheduleIdleTask(fn, timeout=1200){
+  if('requestIdleCallback' in window){
+    window.requestIdleCallback(fn, { timeout });
+    return;
+  }
+  window.setTimeout(fn, 250);
+}
+
+async function loadCartridgeModels(){
+  try{
+    const cartRoot = await loadUSDZ('assets/cartridges.usdz?v=2');
+    pruneGhosts(cartRoot);
+    const pickCart = (name)=> name.includes('Zelda') ? 'Zelda'
+      : (name.includes('Pokemon')||name.includes('Yellow')) ? 'Pokemon'
+      : name.includes('Kirby') ? 'Kirby' : null;
+    applyMaterial(cartRoot, pickCart);
+    cartRoot.updateWorldMatrix(true,true);
+    const refBody = findMeshByName(cartRoot, REF_BODY).matrixWorld.clone();
+    const refLabel = findMeshByName(cartRoot, REF_LABEL).matrixWorld.clone();
+    CARTS.forEach((c,i)=>{
+      const grp = extractCart(cartRoot, c, refBody, refLabel);
+      const v = cartViewers[i];
+      if(!v.renderer){
+        Object.assign(v, makeViewer(v.canvas));
+      }
+      v.scene.add(grp);
+      v.model = grp;
+      v.resize();
+      const box = new THREE.Box3().setFromObject(grp);
+      v.center = frame(v.camera, box, { offset:1.35, dir:new THREE.Vector3(0.25,0.15,1) });
+      v.card.classList.add('loaded');
+      if(v.fallback) v.fallback.hidden = true;
+      // Cache geometries (shared) + size so we can render the cart in the GameBoy's slot
+      cartShapes[c.theme] = {
+        meshes: grp.children.map(m => ({ geom: m.geometry, mat: m.material })),
+        size: box.getSize(new THREE.Vector3()),
+      };
+    });
+    // Compute the slot anchor: top-center of GameBoy at the back-plate Z
+    if(gbModel){
+      const gbBox = boxOfVisible(gbModel);
+      slotAnchor = new THREE.Vector3(
+        gbBox.getCenter(new THREE.Vector3()).x,
+        gbBox.max.y,
+        gbBox.getCenter(new THREE.Vector3()).z - (gbBox.max.z - gbBox.min.z) * 0.10
+      );
+      if(currentCart) showCartInSlot(currentCart.theme);
+    }
+  }catch(e){
+    console.error('cartridges load failed', e);
+    cartViewers.forEach(v=>{
+      if(v.fallback){
+        v.fallback.hidden = false;
+        v.fallback.textContent = 'READY';
+      }
+    });
+  }
+}
+
 async function init(){
   setIp('default');
   gbViewer = makeViewer(document.getElementById('gbCanvas'));
@@ -484,46 +551,8 @@ async function init(){
   }
 
   buildCards();
-  try{
-    const cartRoot = await loadUSDZ('assets/cartridges.usdz');
-    pruneGhosts(cartRoot);
-    const pickCart = (name)=> name.includes('Zelda') ? 'Zelda'
-      : (name.includes('Pokemon')||name.includes('Yellow')) ? 'Pokemon'
-      : name.includes('Kirby') ? 'Kirby' : null;
-    applyMaterial(cartRoot, pickCart);
-    cartRoot.updateWorldMatrix(true,true);
-    const refBody = findMeshByName(cartRoot, REF_BODY).matrixWorld.clone();
-    const refLabel = findMeshByName(cartRoot, REF_LABEL).matrixWorld.clone();
-    CARTS.forEach((c,i)=>{
-      const grp = extractCart(cartRoot, c, refBody, refLabel);
-      const v = cartViewers[i];
-      v.scene.add(grp);
-      v.model = grp;
-      v.resize();
-      const box = new THREE.Box3().setFromObject(grp);
-      v.center = frame(v.camera, box, { offset:1.35, dir:new THREE.Vector3(0.25,0.15,1) });
-      // Cache geometries (shared) + size so we can render the cart in the GameBoy's slot
-      cartShapes[c.theme] = {
-        meshes: grp.children.map(m => ({ geom: m.geometry, mat: m.material })),
-        size: box.getSize(new THREE.Vector3()),
-      };
-    });
-    // Compute the slot anchor: top-center of GameBoy at the back-plate Z
-    if(gbModel){
-      const gbBox = boxOfVisible(gbModel);
-      slotAnchor = new THREE.Vector3(
-        gbBox.getCenter(new THREE.Vector3()).x,
-        gbBox.max.y,
-        gbBox.getCenter(new THREE.Vector3()).z - (gbBox.max.z - gbBox.min.z) * 0.10
-      );
-    }
-  }catch(e){
-    console.error('cartridges load failed', e);
-    cartViewers.forEach(v=>{ if(v.fallback) v.fallback.hidden=false; });
-  }
-
-  animate();
-  window.addEventListener('resize', onResize);
+  startAnimationLoop();
+  scheduleIdleTask(loadCartridgeModels);
 }
 
 function buildCards(){
@@ -534,7 +563,7 @@ function buildCards(){
     card.innerHTML = `
       <div class="card-canvas-wrap">
         <canvas></canvas>
-        <div class="loading mono" hidden>卡带</div>
+        <div class="loading mono">LOADING</div>
       </div>
       <div class="card-label">
         <span class="card-ico">${ICON[c.ico] || ''}</span>
@@ -542,8 +571,7 @@ function buildCards(){
       </div>`;
     tray.appendChild(card);
     const canvas = card.querySelector('canvas');
-    const v = makeViewer(canvas);
-    v.card = card; v.fallback = card.querySelector('.loading'); v.cart=c;
+    const v = { canvas, card, fallback: card.querySelector('.loading'), cart:c };
     cartViewers.push(v);
     setupDrag(card, c);
   });
@@ -560,12 +588,12 @@ function animate(){
   }
   for(const v of cartViewers){
     // cart is static — hover/scale handled by CSS
-    v.renderer.render(v.scene, v.camera);
+    if(v.renderer) v.renderer.render(v.scene, v.camera);
   }
 }
 function onResize(){
   gbViewer?.resize();
-  cartViewers.forEach(v=>v.resize());
+  cartViewers.forEach(v=>v.resize?.());
 }
 
 /* ---------- insert interaction (click + drag-up) ---------- */
