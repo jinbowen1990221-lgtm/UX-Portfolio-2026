@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Archivo+Black&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@500;700;900&family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="styles.css?v=42" />
+<link rel="stylesheet" href="styles.css?v=43" />
 <script type="importmap">
 {
   "imports": {
@@ -125,26 +125,38 @@
 
   <!-- ===== Bottom nav (contact, hover reveals detail) ===== -->
   <nav class="bottomnav">
-    <button class="contact">
+    <button class="contact" type="button" data-copy="15618969646" aria-label="复制电话 156 1896 9646">
       <span class="c-label">
         <svg class="c-ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 2.5 H5.4 L6.7 5.7 L5.1 7 C6 8.9 7.1 10 9 10.9 L10.3 9.3 L13.5 10.6 V13 C13.5 13.6 13 14 12.4 14 C7 14 2 9 2 3.6 C2 3 2.4 2.5 3 2.5 Z"/></svg>
         电话
       </span>
-      <span class="c-detail mono">156 1896 9646</span>
+      <span class="c-detail mono">
+        <span class="c-copy-value">156 1896 9646</span>
+        <span class="c-copy-done">已复制</span>
+        <svg class="c-copy-ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="8" height="9" rx="1"/><path d="M3 11V2.8C3 2.4 3.4 2 3.8 2H11"/></svg>
+      </span>
     </button>
-    <button class="contact">
+    <button class="contact" type="button" data-copy="15618969646" aria-label="复制微信 15618969646">
       <span class="c-label">
         <svg class="c-ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><ellipse cx="6.2" cy="6.4" rx="4.7" ry="3.4"/><path d="M3.6 9.2 L2.6 11 L4.5 10"/><ellipse cx="10.4" cy="10.2" rx="3.9" ry="2.9"/><path d="M12.7 12.2 L13.6 13.4 L12 12.8"/><circle cx="4.7" cy="5.8" r="0.6" fill="currentColor" stroke="none"/><circle cx="7.6" cy="5.8" r="0.6" fill="currentColor" stroke="none"/><circle cx="9.4" cy="9.7" r="0.5" fill="currentColor" stroke="none"/><circle cx="11.6" cy="9.7" r="0.5" fill="currentColor" stroke="none"/></svg>
         微信
       </span>
-      <span class="c-detail mono">15618969646</span>
+      <span class="c-detail mono">
+        <span class="c-copy-value">15618969646</span>
+        <span class="c-copy-done">已复制</span>
+        <svg class="c-copy-ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="8" height="9" rx="1"/><path d="M3 11V2.8C3 2.4 3.4 2 3.8 2H11"/></svg>
+      </span>
     </button>
-    <button class="contact">
+    <button class="contact" type="button" data-copy="249197662@qq.com" aria-label="复制邮箱 249197662@qq.com">
       <span class="c-label">
         <svg class="c-ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="1.5" y="3.5" width="13" height="9" rx="1"/><polyline points="2,4.5 8,9 14,4.5"/></svg>
         邮箱
       </span>
-      <span class="c-detail mono">249197662@qq.com</span>
+      <span class="c-detail mono">
+        <span class="c-copy-value">249197662@qq.com</span>
+        <span class="c-copy-done">已复制</span>
+        <svg class="c-copy-ico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4" width="8" height="9" rx="1"/><path d="M3 11V2.8C3 2.4 3.4 2 3.8 2H11"/></svg>
+      </span>
     </button>
   </nav>
 
@@ -165,6 +177,6 @@
     </footer>
   </section>
 
-  <script type="module" src="main.js?v=52"></script>
+  <script type="module" src="main.js?v=53"></script>
 </body>
 </html>

@@ -1726,4 +1726,35 @@ document.getElementById('ovBody').addEventListener('click', (e)=>{
   if (mod && _currentProject){ showProject(_currentProject, parseInt(mod.dataset.mod,10)||0); return; }
 });
 
+function copyFallback(text){
+  const el = document.createElement('textarea');
+  el.value = text;
+  el.setAttribute('readonly', '');
+  el.style.position = 'fixed';
+  el.style.left = '-9999px';
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand('copy');
+  el.remove();
+}
+
+async function copyContactValue(text){
+  if (navigator.clipboard && window.isSecureContext){
+    await navigator.clipboard.writeText(text);
+    return;
+  }
+  copyFallback(text);
+}
+
+document.querySelectorAll('.contact[data-copy]').forEach((contact)=>{
+  const resetCopied = () => contact.classList.remove('copied');
+  contact.addEventListener('click', async ()=>{
+    await copyContactValue(contact.dataset.copy || '');
+    document.querySelectorAll('.contact.copied').forEach(el => el.classList.remove('copied'));
+    contact.classList.add('copied');
+  });
+  contact.addEventListener('pointerleave', resetCopied);
+  contact.addEventListener('blur', resetCopied);
+});
+
 init();
