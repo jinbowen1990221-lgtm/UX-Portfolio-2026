@@ -759,6 +759,12 @@ const SECTION_HTML = {
         <span class="kpi">视频分析</span> <span class="kpi">动作诊断</span> <span class="kpi">HTML / PNG / PDF</span></p>
       </a>
 
+      <button class="work work-project" type="button" data-project-key="vibecoding">
+        <div class="ph pixel-art ph-xiaoman" role="img" aria-label="像素风记录本、预感星光与新芽插画"><span>VIBE CODING</span></div>
+        <p><b>小满 · AI 陪伴记录 App</b><br/>通过每日记录与情绪标签形成趋势分析，并生成对明天状态的概率预感。<br/>
+        <span class="kpi">AI 陪伴</span> <span class="kpi">情绪预测</span> <span class="kpi">MVP 已上线</span></p>
+      </button>
+
       <div class="work work-pending"><div class="ph pixel-art ph-pacman"></div>
         <p><b>吃豆人大作战 · 开发中</b><br/>项目仍在完善，完成后再补充玩法与项目说明。<br/>
         <span class="kpi">COMING SOON</span></p></div>
@@ -1216,7 +1222,8 @@ const PROJECTS = {
     ],
   },
 };
-const PROJECT_ORDER = ['jiligaga','ximalaya','weimob','lingbiao','xiaoshiji','vibecoding'];
+const PROJECT_ORDER = ['jiligaga','ximalaya','weimob','lingbiao','xiaoshiji'];
+const CODING_PROJECT_ORDER = ['vibecoding'];
 
 function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
@@ -1225,7 +1232,7 @@ function renderProjectList(){
     <div class="pf-list-intro">
       <p class="pf-list-lead">从 0→1 孵化到商业化设计，从出海儿童教育到 AI SaaS — 覆盖 B / C 端的核心体验与转化。</p>
       <div class="pf-list-stats">
-        <span><b>06</b> 精选项目</span>
+        <span><b>${String(PROJECT_ORDER.length).padStart(2,'0')}</b> 精选项目</span>
         <span><b>13</b> 年经验</span>
         <span><b>B / C</b> 双端</span>
       </div>
@@ -1236,7 +1243,7 @@ function renderProjectList(){
         const num = String(i+1).padStart(2,'0');
         return `
           <button class="pf-card" data-key="${k}" style="--pf-accent:${p.accent}">
-            <div class="pf-card-num mono">${num} / 06</div>
+            <div class="pf-card-num mono">${num} / ${String(PROJECT_ORDER.length).padStart(2,'0')}</div>
             <div class="pf-card-tag mono">${escapeHtml(p.tag)}</div>
             <h4 class="pf-card-title">${escapeHtml(p.title)}</h4>
             <p class="pf-card-sub">${escapeHtml(p.subtitle)}</p>
@@ -1682,9 +1689,10 @@ function renderProjectDetail(key, modIdx){
   const p = PROJECTS[key]; if (!p) return '';
   _currentProject = key;
   _currentModuleIdx = modIdx || 0;
-  const idx = PROJECT_ORDER.indexOf(key);
-  const prevKey = idx > 0 ? PROJECT_ORDER[idx-1] : null;
-  const nextKey = idx < PROJECT_ORDER.length-1 ? PROJECT_ORDER[idx+1] : null;
+  const projectOrder = _activeSection?.section === 'art' ? CODING_PROJECT_ORDER : PROJECT_ORDER;
+  const idx = projectOrder.indexOf(key);
+  const prevKey = idx > 0 ? projectOrder[idx-1] : null;
+  const nextKey = idx >= 0 && idx < projectOrder.length-1 ? projectOrder[idx+1] : null;
   const activeMod = p.modules ? (p.modules[_currentModuleIdx] || p.modules[0]) : null;
   const sections = activeMod ? activeMod.sections : p.sections;
 
@@ -1729,7 +1737,8 @@ function renderProjectDetail(key, modIdx){
 }
 
 function showProject(key, modIdx){
-  document.getElementById('ovTag').textContent = `UX · ${PROJECTS[key].title}`;
+  const contextLabel = _activeSection?.section === 'art' ? 'CODE' : 'UX';
+  document.getElementById('ovTag').textContent = `${contextLabel} · ${PROJECTS[key].title}`;
   document.getElementById('ovTitle').textContent = PROJECTS[key].title;
   document.getElementById('ovBody').innerHTML = renderProjectDetail(key, modIdx||0);
   document.querySelector('.detail').scrollTop = 0;
@@ -1738,16 +1747,18 @@ function backToProjects(){
   if (!_activeSection) return;
   document.getElementById('ovTag').textContent = _activeSection.en;
   document.getElementById('ovTitle').textContent = _activeSection.label;
-  document.getElementById('ovBody').innerHTML = renderProjectList();
+  const content = SECTION_HTML[_activeSection.section];
+  document.getElementById('ovBody').innerHTML = typeof content === 'function' ? content() : (content || '');
   document.querySelector('.detail').scrollTop = 0;
 }
 
 document.getElementById('ovBody').addEventListener('click', (e)=>{
-  const card = e.target.closest('.pf-card');
+  const card = e.target.closest('.pf-card, [data-project-key]');
   if (card){
-    const project = PROJECTS[card.dataset.key];
+    const key = card.dataset.key || card.dataset.projectKey;
+    const project = PROJECTS[key];
     if (project?.detailUrl){ window.location.href = project.detailUrl; return; }
-    showProject(card.dataset.key);
+    showProject(key);
     return;
   }
   const back = e.target.closest('[data-back-list]');
