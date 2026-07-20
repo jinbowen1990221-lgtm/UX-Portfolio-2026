@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+SC:wght@400;600;700;900&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=4" />
+  <link rel="stylesheet" href="styles.css?v=5" />
 </head>
 <body>
   <a class="skip-link" href="#content">跳到正文</a>
@@ -97,6 +97,46 @@
           <img src="sample-report/tennis-report-mobile.png" alt="网球动作分析报告长图预览" loading="lazy" />
           <figcaption>示例报告 · 动作能力测试与动力链分析</figcaption>
         </figure>
+      </div>
+    </section>
+
+    <section class="section clips-section" aria-labelledby="clips-title">
+      <div class="shell clips-layout">
+        <div class="clips-copy">
+          <p class="eyebrow dark">INTERACTIVE ASSET / 交互分析素材</p>
+          <h2 id="clips-title">报告之外，还能生成可播放的片段浏览器</h2>
+          <p>系统把原始训练视频自动整理为正常速度、慢动作和复核片段。每段都绑定时间区间、动作说明与证据边界，用户可以直接播放、调速、收藏或下载。</p>
+          <ul class="clips-features" aria-label="片段浏览器能力">
+            <li><strong>自动切分</strong><span>从长视频中提取可独立复盘的候选片段</span></li>
+            <li><strong>分段分析</strong><span>按准备、动力传导、触球与回位说明动作</span></li>
+            <li><strong>复盘操作</strong><span>支持 0.5x-2x 倍速、收藏与片段下载</span></li>
+          </ul>
+          <a class="report-cta clips-cta" href="rally-viewer/">
+            <span>打开交互式片段浏览器</span><strong aria-hidden="true">↗</strong>
+          </a>
+        </div>
+
+        <a class="clips-preview" href="rally-viewer/" aria-label="打开网球片段浏览器，查看三个可播放的动作分析片段">
+          <div class="clips-preview-head">
+            <span>RALLY REVIEW</span>
+            <strong>3 个候选片段</strong>
+          </div>
+          <div class="clips-frames" aria-hidden="true">
+            <figure>
+              <img src="rally-viewer/posters/rally_001_t000000-000009.jpg" alt="" loading="lazy" />
+              <figcaption>正常速度</figcaption>
+            </figure>
+            <figure class="is-active">
+              <img src="rally-viewer/posters/rally_002_t000009-000020.jpg" alt="" loading="lazy" />
+              <figcaption>慢动作分析</figcaption>
+            </figure>
+            <figure>
+              <img src="rally-viewer/posters/rally_003_t000020-000030.jpg" alt="" loading="lazy" />
+              <figcaption>动作复核</figcaption>
+            </figure>
+          </div>
+          <div class="clips-preview-foot"><span>0.5x-2x 倍速</span><span>收藏</span><span>下载</span></div>
+        </a>
       </div>
     </section>
 
