@@ -754,7 +754,7 @@ const SECTION_HTML = {
 
     <div class="grid">
       <a class="work work-link" href="case-studies/tennis-video-coach/">
-        <div class="ph tennis-skill-preview"><img src="assets/tennis_skill_cover.png" alt="像素风网球选手挥拍插画" loading="lazy"/><span>CODEX SKILL</span></div>
+        <div class="ph pixel-art ph-tennis" role="img" aria-label="像素风网球拍和网球插画"><span>CODEX SKILL</span></div>
         <p><b>网球视频教练报告 Skill</b><br/>把训练视频转化为有证据链的动作诊断、动力链分析、慢动作片段与可分享报告。<br/>
         <span class="kpi">视频分析</span> <span class="kpi">动作诊断</span> <span class="kpi">HTML / PNG / PDF</span></p>
       </a>

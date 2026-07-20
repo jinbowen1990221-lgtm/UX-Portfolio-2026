@@ -32,8 +32,8 @@ h1, h2, h3, p, figure { margin: 0; }
 .brand-mark { width: 30px; height: 30px; display: grid; place-items: center; background: var(--lime); color: var(--ink); font-family: var(--font-display); font-weight: 800; }
 .nav-link { padding: 10px 14px; border: 1px solid var(--ink); }
 
-.hero { position: relative; min-height: 620px; display: flex; align-items: end; overflow: hidden; background: url("sample-report/assets/freeze_annotated.jpg") center 62% / cover no-repeat; color: #fff; }
-.hero::before { content: ""; position: absolute; inset: 0; background: rgba(7, 18, 15, .68); }
+.hero { position: relative; min-height: 620px; display: flex; align-items: end; overflow: hidden; background: url("../../assets/tennis_skill_cover.png") center / cover no-repeat; color: #fff; }
+.hero::before { content: ""; position: absolute; inset: 0; background: rgba(7, 18, 15, .46); }
 .hero-copy { position: relative; z-index: 1; padding-block: 88px; }
 .eyebrow { color: var(--lime); font-family: var(--font-mono); font-size: 11px; font-weight: 700; letter-spacing: .12em; }
 .eyebrow.dark { color: var(--green); }
@@ -127,7 +127,7 @@ h1, h2, h3, p, figure { margin: 0; }
   .case-brand strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .brand-mark { flex: 0 0 auto; }
   .nav-link { display: none; }
-  .hero { min-height: 570px; background-position: 49% 62%; }
+  .hero { min-height: 570px; background-position: center; }
   .hero-copy { padding-block: 64px; }
   .hero h1 { font-size: 44px; }
   .hero-lead { font-size: 16px; }

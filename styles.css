@@ -715,9 +715,8 @@ body.detail-open .subbar{ pointer-events:none; }
 .detail-body .work-link:focus-visible{outline:2px solid var(--detail-accent);outline-offset:4px}
 .detail-body .work-pending{cursor:default}
 .detail-body .work-pending:hover{transform:none;border-color:var(--detail-line);box-shadow:none}
-.tennis-skill-preview{position:relative;overflow:hidden;background:#caff36}
-.tennis-skill-preview img{width:100%;height:100%;object-fit:cover;object-position:center}
-.tennis-skill-preview span{position:absolute;left:12px;top:12px;padding:5px 8px;background:#caff36;color:#10201a;font-family:"JetBrains Mono",monospace;font-size:9px;font-weight:800;letter-spacing:.12em}
+.ph-tennis{position:relative;background-color:#141a32;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 9' shape-rendering='crispEdges'><g fill='%23caff36'><rect x='2' y='4' width='1' height='1'/><rect x='3' y='3' width='1' height='1'/><rect x='4' y='2' width='1' height='1'/><rect x='5' y='2' width='2' height='2'/></g><g fill='%23f3f1df'><rect x='10' y='1' width='4' height='1'/><rect x='9' y='2' width='1' height='3'/><rect x='14' y='2' width='1' height='3'/><rect x='10' y='5' width='4' height='1'/></g><g fill='%2336f5c8'><rect x='11' y='2' width='1' height='3'/><rect x='13' y='2' width='1' height='3'/><rect x='10' y='3' width='4' height='1'/></g><g fill='%23ff79c1'><rect x='11' y='6' width='2' height='1'/><rect x='12' y='7' width='2' height='1'/></g></svg>")}
+.ph-tennis span{position:absolute;left:12px;top:12px;padding:5px 8px;background:#caff36;color:#10201a;font-family:"JetBrains Mono",monospace;font-size:9px;font-weight:800;letter-spacing:.12em}
 .kpi{
   display:inline-block;background:rgba(255,255,255,.06);color:var(--detail-accent);
   font-family:"JetBrains Mono",monospace;font-size:11px;
