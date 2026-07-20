@@ -1,0 +1,4 @@
+:HL["./_next/static/css/99a609ed997c5aed.css","style"]
+:HL["jiligaga/course-animation.png","image"]
+:HL["jiligaga/child-thinking.png","image"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"aUDFvwlosqRfKIDE-yK2I"}

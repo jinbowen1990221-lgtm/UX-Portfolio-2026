@@ -959,6 +959,7 @@ const PROJECTS = {
     subtitle: '叽里呱啦海外英语启蒙产品 · 主导出海业务核心体验设计，台湾市场 0→1 落地',
     accent: '#02CC6B',
     style: 'cute',
+    detailUrl: 'case-studies/jiligaga/',
     meta: [['时间','2022.04 — 2024.02'],['角色','资深产品设计师'],['市场','台湾 / 日本'],['对象','3-6 岁儿童']],
     sections: [
       { cuteIntro:{
@@ -1745,7 +1746,12 @@ function backToProjects(){
 
 document.getElementById('ovBody').addEventListener('click', (e)=>{
   const card = e.target.closest('.pf-card');
-  if (card){ showProject(card.dataset.key); return; }
+  if (card){
+    const project = PROJECTS[card.dataset.key];
+    if (project?.detailUrl){ window.location.href = project.detailUrl; return; }
+    showProject(card.dataset.key);
+    return;
+  }
   const back = e.target.closest('[data-back-list]');
   if (back){ backToProjects(); return; }
   const navItem = e.target.closest('.pf-nav-item[data-key]');
