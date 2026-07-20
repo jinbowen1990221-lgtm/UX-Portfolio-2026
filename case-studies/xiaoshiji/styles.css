@@ -62,11 +62,7 @@ p, h1, h2, h3, blockquote, figure { margin: 0; }
 .back-link:hover, .back-link:focus-visible { border-color: var(--ink); }
 .case-mark { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
 .case-mark strong { font-size: 14px; letter-spacing: 0; }
-.mark-symbol { position: relative; width: 30px; height: 20px; display: block; }
-.mark-symbol i { position: absolute; bottom: 0; width: 8px; background: var(--mint); }
-.mark-symbol i:nth-child(1) { left: 0; height: 12px; }
-.mark-symbol i:nth-child(2) { left: 10px; height: 20px; background: var(--yellow); }
-.mark-symbol i:nth-child(3) { left: 20px; height: 16px; background: var(--coral); }
+.case-logo { width: 35px; height: 33px; object-fit: contain; }
 .section-links { display: flex; justify-content: center; gap: 36px; }
 .section-links a { position: relative; padding: 25px 2px 23px; color: #657078; font-size: 13px; font-weight: 700; }
 .section-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--mint); transform: scaleX(0); transform-origin: left; transition: transform .2s ease; }
@@ -242,10 +238,6 @@ p, h1, h2, h3, blockquote, figure { margin: 0; }
 .comparison-row p:last-child { color: var(--ink); font-weight: 700; background: var(--mint-soft); }
 .comparison-row.table-head { min-height: 62px; color: #fff; background: var(--ink); }
 .comparison-row.table-head strong:last-child { color: var(--mint); }
-.source-wide.compact { max-width: 900px; margin: 50px auto 0; border-color: var(--line); background: #fff; }
-.source-wide.compact figcaption { color: #727e84; }
-.source-wide.compact figcaption span { color: var(--mint-dark); }
-
 .evidence-section { background: var(--mint-soft); }
 .evidence-heading { display: grid; grid-template-columns: minmax(0, 1fr) minmax(400px, .55fr); gap: 80px; align-items: end; }
 .evidence-heading h2 { max-width: 700px; margin-top: 18px; font-size: 60px; line-height: 1.1; }
@@ -346,8 +338,7 @@ p, h1, h2, h3, blockquote, figure { margin: 0; }
   .back-link { min-height: 34px; padding-inline: 10px; }
   .back-link span:last-child { display: none; }
   .case-mark strong { overflow: hidden; max-width: 92px; text-overflow: ellipsis; }
-  .mark-symbol { width: 25px; }
-  .mark-symbol i:nth-child(3) { left: 18px; }
+  .case-logo { width: 31px; height: 29px; }
   .experience-link { min-height: 34px; padding-inline: 10px; font-size: 9px; }
   .hero { padding: 68px 0 58px; }
   .hero::before { top: -105px; right: -100px; width: 260px; height: 260px; border-width: 38px; }
