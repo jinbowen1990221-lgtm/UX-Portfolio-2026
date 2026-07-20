@@ -1,5 +1,5 @@
-:HL["./_next/static/css/fdbd09dfd9855b5e.css","style"]
+:HL["./_next/static/css/8f624a6e37b274d6.css","style"]
 :HL["jiligaga/course-animation.png","image"]
 :HL["jiligaga/child-thinking.png","image"]
 :HL["jiligaga/gua-onboarding.png","image"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"NCDW3geLpMMLBCFEwZW87"}
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}},"staleTime":300,"buildId":"Dz--aKh72QbIjfDVPRBl_"}
