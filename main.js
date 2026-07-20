@@ -759,17 +759,17 @@ const SECTION_HTML = {
         <span class="kpi">视频分析</span> <span class="kpi">动作诊断</span> <span class="kpi">HTML / PNG / PDF</span></p>
       </a>
 
+      <a class="work work-link" href="case-studies/chomper-rush/">
+        <div class="ph pixel-art ph-pacman" role="img" aria-label="像素风吃豆人与幽灵插画"><span>GAME</span></div>
+        <p><b>吃豆人大作战 · 可试玩原型</b><br/>把经典吃豆重构为资源争夺、成长反杀与限时冲榜的移动横屏竞技体验。<br/>
+        <span class="kpi">街机竞技</span> <span class="kpi">AI 对手</span> <span class="kpi">在线试玩</span></p>
+      </a>
+
       <button class="work work-project" type="button" data-project-key="vibecoding">
         <div class="ph pixel-art ph-xiaoman" role="img" aria-label="像素风记录本、预感星光与新芽插画"><span>VIBE CODING</span></div>
         <p><b>小满 · AI 陪伴记录 App</b><br/>通过每日记录与情绪标签形成趋势分析，并生成对明天状态的概率预感。<br/>
         <span class="kpi">AI 陪伴</span> <span class="kpi">情绪预测</span> <span class="kpi">MVP 已上线</span></p>
       </button>
-
-      <a class="work work-link" href="case-studies/chomper-rush/">
-        <div class="ph pixel-art ph-pacman" role="img" aria-label="像素风吃豆人与幽灵插画"></div>
-        <p><b>吃豆人大作战 · 可试玩原型</b><br/>把经典吃豆重构为资源争夺、成长反杀与限时冲榜的移动横屏竞技体验。<br/>
-        <span class="kpi">Canvas 2D</span> <span class="kpi">AI 对手</span> <span class="kpi">在线试玩</span></p>
-      </a>
     </div>`,
 };
 
