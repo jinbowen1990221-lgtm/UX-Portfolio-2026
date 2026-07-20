@@ -749,21 +749,18 @@ const SECTION_HTML = {
   ux: () => renderProjectList(),
 
   art: `
-    <h3>编程小游戏 · Vibe Coding</h3>
-    <p>设计师也能造游戏。这里是我用 AI 辅助编程（Vibe Coding）做出来的可玩作品 —
-    从想法到上线，不写一行传统意义上的"手写代码"，全靠对话与设计判断。</p>
+    <h3>编程作品 · Vibe Coding</h3>
+    <p>用 AI 辅助编程，把专业方法、设计判断和可运行代码组合成真正可以使用的产品。</p>
 
     <div class="grid">
-      <div class="work"><div class="ph pixel-art ph-pikachu"></div>
-        <p><b>GameBoy 作品集（本站）</b><br/>你现在玩的这个网站本身就是作品 #1：Three.js 实机 3D GameBoy、可插拔卡带、主题切换与像素 IP 动画，全程 Vibe Coding 完成。<br/>
-        <span class="kpi">Three.js</span> <span class="kpi">USDZ 3D</span> <span class="kpi">零手写代码</span></p></div>
+      <a class="work work-link" href="case-studies/tennis-video-coach/">
+        <div class="ph tennis-skill-preview"><img src="case-studies/tennis-video-coach/sample-report/assets/freeze_annotated.jpg" alt="网球动作标注帧" loading="lazy"/><span>CODEX SKILL</span></div>
+        <p><b>网球视频教练报告 Skill</b><br/>把训练视频转化为有证据链的动作诊断、动力链分析、慢动作片段与可分享报告。<br/>
+        <span class="kpi">视频分析</span> <span class="kpi">动作诊断</span> <span class="kpi">HTML / PNG / PDF</span></p>
+      </a>
 
-      <div class="work"><div class="ph pixel-art ph-triforce"></div>
-        <p><b>领标 AI · 可交互原型</b><br/>用 Bolt 把 B 端 SaaS 的 7 步标书生成流程做成了可点击走通的"游戏关卡"，在 UX 作品集的领标 AI 详情页可在线体验。<br/>
-        <span class="kpi">Bolt</span> <span class="kpi">可在线试玩</span></p></div>
-
-      <div class="work"><div class="ph pixel-art ph-kirby"></div>
-        <p><b>更多游戏 · 装填中</b><br/>新的小游戏正在制作中，敬请期待。<br/>
+      <div class="work work-pending"><div class="ph pixel-art ph-pacman"></div>
+        <p><b>吃豆人大作战 · 开发中</b><br/>项目仍在完善，完成后再补充玩法与项目说明。<br/>
         <span class="kpi">COMING SOON</span></p></div>
     </div>`,
 };
