@@ -1218,7 +1218,7 @@ const PROJECTS = {
     ],
   },
 };
-const PROJECT_ORDER = ['lingbiao','xiaoshiji','jiligaga','ximalaya','weimob','vibecoding'];
+const PROJECT_ORDER = ['jiligaga','ximalaya','weimob','lingbiao','xiaoshiji','vibecoding'];
 
 function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
