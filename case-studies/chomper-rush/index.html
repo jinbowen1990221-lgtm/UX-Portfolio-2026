@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="吃豆人大作战：移动端横屏复古港口吃豆竞技游戏原型案例。" />
+  <title>吃豆人大作战 | 靳博文作品集</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+SC:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=1" />
+</head>
+<body>
+  <a class="skip-link" href="#content">跳到正文</a>
+
+  <header class="case-header">
+    <a class="back-link" href="../../index.html">← 返回作品集</a>
+    <a class="case-brand" href="#top" aria-label="吃豆人大作战页面顶部">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <strong>CHOMPER RUSH</strong>
+    </a>
+    <nav class="case-nav" aria-label="案例导航">
+      <a href="#overview">概览</a>
+      <a href="#loop">循环</a>
+      <a href="#experience">体验</a>
+      <a href="#system">系统</a>
+    </nav>
+    <a class="header-play" href="https://jinbowen1990221-lgtm.github.io/chomper-rush/" target="_blank" rel="noreferrer">在线试玩 ↗</a>
+  </header>
+
+  <main id="content">
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero-index" aria-hidden="true">01</div>
+      <div class="shell hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow inverse">PLAYABLE PROTOTYPE · MOBILE LANDSCAPE</p>
+          <img class="hero-logo" src="assets/title.webp" alt="吃豆人大作战" width="1100" height="357" fetchpriority="high" />
+          <h1 id="hero-title">把经典吃豆，重构成一场会成长、会反杀的资源争夺战</h1>
+          <p class="hero-lead">面向手机横屏的复古港口竞技原型。玩家从收集豆子开始，靠成长、道具和路线判断冲榜；排名越高，越容易成为 AI 猎手的目标。</p>
+          <dl class="hero-meta">
+            <div><dt>角色</dt><dd>独立设计 + 开发</dd></div>
+            <div><dt>状态</dt><dd>可试玩原型</dd></div>
+            <div><dt>技术</dt><dd>HTML / CSS / JavaScript</dd></div>
+            <div><dt>时间</dt><dd>2026</dd></div>
+          </dl>
+          <div class="hero-actions">
+            <a class="button button-primary" href="https://jinbowen1990221-lgtm.github.io/chomper-rush/" target="_blank" rel="noreferrer">横屏开始游戏 <span>↗</span></a>
+            <a class="button button-secondary" href="https://github.com/jinbowen1990221-lgtm/chomper-rush" target="_blank" rel="noreferrer">查看 GitHub <span>↗</span></a>
+          </div>
+        </div>
+        <img class="hero-character" src="assets/character.webp" alt="戴皇冠和披风的黑豆王游戏角色" width="800" height="696" fetchpriority="high" />
+      </div>
+      <p class="hero-note shell">建议使用手机横屏体验 · 桌面端支持方向键 / WASD 与空格键</p>
+    </section>
+
+    <section class="config-band" aria-label="原型配置概览">
+      <div class="shell config-grid">
+        <div><strong>2</strong><span>无尽 / 排位模式</span></div>
+        <div><strong>34</strong><span>最高活跃 AI 数量</span></div>
+        <div><strong>5</strong><span>战术道具类型</span></div>
+        <div><strong>180s</strong><span>排位单局时长</span></div>
+      </div>
+      <p class="config-source shell">PROTOTYPE CONFIG · 数据来自当前版本代码配置，不代表用户或商业结果</p>
+    </section>
+
+    <section class="section overview-section" id="overview">
+      <div class="shell">
+        <header class="section-heading split-heading">
+          <div><p class="eyebrow">01 / OVERVIEW</p><h2>分数既是奖励，<br />也是被围猎的理由</h2></div>
+          <div class="heading-copy">
+            <p>传统吃豆的目标是清场；这个原型把目标改成动态排名。玩家需要在“继续发育”和“主动攻击”之间不断选择。</p>
+            <p>核心设计张力：你越强，拾取范围和战斗收益越高，但高分也会吸引更多猎手，安全路线随排名实时变化。</p>
+          </div>
+        </header>
+
+        <div class="snapshot" aria-label="项目快照">
+          <div><span>产品</span><strong>移动端横屏竞技游戏</strong></div>
+          <div><span>体验目标</span><strong>资源争夺、成长、反杀、冲榜</strong></div>
+          <div><span>输入</span><strong>虚拟摇杆 + BOOST</strong></div>
+          <div><span>技术边界</span><strong>原生 Canvas 单页原型</strong></div>
+        </div>
+
+        <figure class="screen-figure home-figure">
+          <img src="assets/home-mobile.jpg" alt="吃豆人大作战手机横屏首页，包含角色、无尽模式和排位模式入口" width="932" height="430" loading="lazy" />
+          <figcaption><span>REAL BUILD / 01</span> 首页把角色、模式和玩家资产压缩在一个横屏视野内，减少进入对局前的层级。</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="loop-section" id="loop">
+      <div class="shell loop-layout">
+        <header class="loop-copy">
+          <p class="eyebrow inverse">02 / CORE LOOP</p>
+          <h2>让每一次收集，<br />都改变下一步风险</h2>
+          <p>玩法不是“吃得越多越好”的单线成长，而是一条持续升压的反馈回路：发育带来能力，也把玩家暴露给更强的追击。</p>
+        </header>
+        <ol class="loop-steps">
+          <li><span>01</span><div><strong>收集</strong><p>豆子、金币与高价值资源点提供得分和成长。</p></div></li>
+          <li><span>02</span><div><strong>成长</strong><p>体型、拾取范围与战斗收益随成长值提升。</p></div></li>
+          <li><span>03</span><div><strong>武装</strong><p>能量豆与道具把追逐关系暂时反转。</p></div></li>
+          <li><span>04</span><div><strong>冲榜</strong><p>排名上升带来更高目标价值和悬赏收益。</p></div></li>
+          <li><span>05</span><div><strong>被围猎</strong><p>高分玩家触发更多 AI 猎手，迫使路线重新规划。</p></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section experience-section" id="experience">
+      <div class="shell">
+        <header class="section-heading">
+          <p class="eyebrow">03 / PLAY EXPERIENCE</p>
+          <h2>一个横屏里，同时看见操作、成长、威胁和排名</h2>
+          <p class="section-lead">HUD 把高频判断放在画面上缘；排行榜保持在左侧；摇杆与 BOOST 分居两端，减少拇指遮挡中心战场。</p>
+        </header>
+
+        <figure class="gameplay-stage">
+          <img src="assets/gameplay-mobile.jpg" alt="吃豆人大作战实战界面，展示排行榜、成长 HUD、虚拟摇杆、BOOST 与港口迷宫" width="932" height="430" loading="lazy" />
+          <figcaption>真实原型画面 · 无尽模式实战</figcaption>
+        </figure>
+
+        <div class="decision-grid">
+          <article><span>01</span><h3>拇指操作不遮战场</h3><p>左右控制布局可在设置中互换，兼顾不同握持习惯；桌面端同步支持键盘。</p></article>
+          <article><span>02</span><h3>状态常驻而非临时弹窗</h3><p>分数、生命、连击、能量、成长、在线人数与排名保持可见，避免战斗中断读。</p></article>
+          <article><span>03</span><h3>危险通过追逐关系表达</h3><p>守卫、精英 AI 和高分猎手不是静态障碍，而是会根据玩家状态切换目标的对手。</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="modes-section" aria-labelledby="modes-title">
+      <div class="shell">
+        <header class="section-heading modes-heading">
+          <div><p class="eyebrow">04 / MODES</p><h2 id="modes-title">同一套核心循环，服务两种游戏节奏</h2></div>
+          <p class="section-lead">无尽模式强调持续发育和生存；排位模式把时间压缩到 180 秒，让资源点、悬赏和击败时机更关键。</p>
+        </header>
+        <div class="mode-grid">
+          <figure class="mode-item endless-mode">
+            <img src="assets/endless.webp" alt="无尽模式入口视觉" width="1100" height="463" loading="lazy" />
+            <figcaption><span>ENDLESS</span><strong>持续成长</strong><p>开放地图内长期积累，适合熟悉操作、道具和成长节奏。</p></figcaption>
+          </figure>
+          <figure class="mode-item ranked-mode">
+            <img src="assets/ranked.webp" alt="排位模式入口视觉" width="1100" height="506" loading="lazy" />
+            <figcaption><span>RANKED · 180s</span><strong>限时抢榜</strong><p>有限时间放大路线效率、击败收益和最后阶段的风险判断。</p></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section system-section" id="system">
+      <div class="shell">
+        <header class="section-heading split-heading">
+          <div><p class="eyebrow">05 / SYSTEM DESIGN</p><h2>AI 不只追你，<br />它们有不同生存策略</h2></div>
+          <div class="heading-copy"><p>AI 每约 400ms 重算一次意图，在生存、争夺资源、伏击和发育之间选择。不同性格让场上压力不只来自速度差。</p></div>
+        </header>
+
+        <div class="system-grid">
+          <article><p class="system-tag">HUNTER</p><h3>猎手</h3><p>主动追击玩家和高分目标；拥有战斗资源时更倾向持续锁定。</p></article>
+          <article><p class="system-tag">FARMER</p><h3>发育者</h3><p>优先收集豆子和金币，靠稳定资源效率进入中后期竞争。</p></article>
+          <article><p class="system-tag">RAIDER</p><h3>掠夺者</h3><p>绕行获取能量豆或控制道具，再寻找伏击和反杀机会。</p></article>
+          <article><p class="system-tag">COWARD / ELITE</p><h3>逃生者与精英</h3><p>一类主动规避威胁，另一类制造高位排名压力，让战局保持层次。</p></article>
+        </div>
+
+        <div class="pickup-band" aria-label="五类战术道具">
+          <div><span>01</span><strong>加速</strong></div>
+          <div><span>02</span><strong>护盾</strong></div>
+          <div><span>03</span><strong>磁吸</strong></div>
+          <div><span>04</span><strong>冰冻</strong></div>
+          <div><span>05</span><strong>伪装</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="architecture-section">
+      <div class="shell architecture-layout">
+        <header>
+          <p class="eyebrow">06 / IMPLEMENTATION</p>
+          <h2>用原生 Web 技术，把设计判断直接变成可玩的版本</h2>
+          <p>没有框架和服务端依赖。当前版本聚焦横屏渲染、触控反馈、AI 决策、音效和本地进度，适合快速验证核心玩法。</p>
+        </header>
+        <ol class="architecture-flow">
+          <li><span>INPUT</span><strong>Pointer / Keyboard</strong><p>摇杆、BOOST、WASD 与方向键</p></li>
+          <li><span>STATE</span><strong>JavaScript Loop</strong><p>成长、道具、碰撞、排名与 AI 意图</p></li>
+          <li><span>RENDER</span><strong>Canvas 2D</strong><p>迷宫、角色、资源、粒子与摄像机</p></li>
+          <li><span>FEEDBACK</span><strong>Web Audio</strong><p>程序化背景音乐和拾取、攻击音效</p></li>
+          <li><span>MEMORY</span><strong>localStorage</strong><p>金币、段位、皮肤和操作设置</p></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="boundary-section">
+      <div class="shell boundary-layout">
+        <div>
+          <p class="eyebrow">07 / PROTOTYPE BOUNDARY</p>
+          <h2>当前版本证明了什么，仍缺什么</h2>
+        </div>
+        <div class="boundary-columns">
+          <article>
+            <p class="boundary-status">VALIDATED IN BUILD</p>
+            <h3>已在原型中实现</h3>
+            <ul><li>手机横屏布局与双侧触控</li><li>吃豆成长、道具、战斗与冲榜闭环</li><li>多性格 AI、精英、守卫与悬赏压力</li><li>结算、设置、段位与本地存档</li></ul>
+          </article>
+          <article>
+            <p class="boundary-status">NEXT VALIDATION</p>
+            <h3>下一阶段验证</h3>
+            <ul><li>当前对手为 AI 模拟，不是真实联网匹配</li><li>尚未进行正式玩家测试与留存测量</li><li>需补充服务端状态、反作弊和多设备同步</li><li>继续验证局长、成长速度与追击强度平衡</li></ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="closing-section">
+      <div class="shell closing-inner">
+        <div><p class="eyebrow inverse">READY PLAYER ONE</p><h2>最好的说明，是亲手吃掉第一颗豆子</h2></div>
+        <div class="closing-actions">
+          <a class="button button-primary" href="https://jinbowen1990221-lgtm.github.io/chomper-rush/" target="_blank" rel="noreferrer">在线试玩 ↗</a>
+          <a class="button button-secondary" href="https://github.com/jinbowen1990221-lgtm/chomper-rush" target="_blank" rel="noreferrer">GitHub 仓库 ↗</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="case-footer">
+    <div class="shell"><span>JIN BOWEN · PORTFOLIO 2026</span><a href="#top">回到顶部 ↑</a></div>
+  </footer>
+</body>
+</html>
