@@ -140,14 +140,34 @@ p, h1, h2, h3, blockquote, figure { margin: 0; }
 .section-heading.narrow h2 { margin-top: 18px; }
 .section-heading.narrow > p:last-child { max-width: 760px; margin-top: 24px; }
 .problem-section { background: #fff; }
-.problem-layout { display: grid; grid-template-columns: minmax(350px, .75fr) minmax(0, 1.25fr); align-items: start; gap: 38px; }
-.quote-stack { display: grid; gap: 12px; }
-.quote-stack blockquote { position: relative; min-height: 152px; padding: 26px 26px 24px 72px; border: 1px solid var(--line); background: #fafbf8; }
-.quote-stack blockquote > span { position: absolute; left: 24px; top: 27px; color: var(--mint-dark); font-family: var(--font-mono); font-size: 11px; }
-.quote-stack blockquote p { font-size: 16px; font-weight: 700; line-height: 1.7; }
-.quote-stack blockquote cite { display: block; margin-top: 14px; color: #798489; font-size: 11px; font-style: normal; }
-.quote-stack blockquote.critical { border-color: rgba(255, 101, 72, .35); background: #fff4f0; }
-.quote-stack blockquote.critical > span { color: var(--coral); }
+.problem-layout { width: 100%; }
+.user-voices { padding: 38px; background: var(--ink); color: #fff; }
+.voices-heading { display: flex; align-items: end; justify-content: space-between; gap: 48px; padding-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,.15); }
+.voices-heading > div { flex: 0 0 auto; }
+.voices-eyebrow { display: flex; align-items: center; gap: 10px; color: var(--mint); font-family: var(--font-mono); font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+.voices-eyebrow span { width: 7px; height: 7px; border-radius: 50%; background: var(--mint); box-shadow: 0 0 0 5px rgba(8,200,139,.12); }
+.voices-heading h3 { margin-top: 10px; font-size: 31px; }
+.voices-heading > p { max-width: 460px; color: rgba(255,255,255,.55); font-size: 13px; line-height: 1.7; }
+.quote-stack { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 24px; }
+.quote-stack blockquote { position: relative; min-height: 310px; display: flex; flex-direction: column; padding: 24px; border: 1px solid rgba(13,29,42,.12); background: #f9fbf8; color: var(--ink); }
+.quote-stack blockquote::before { content: "“"; position: absolute; right: 20px; top: 45px; color: rgba(8,200,139,.15); font-family: Georgia, serif; font-size: 96px; line-height: 1; }
+.voice-person { position: relative; z-index: 1; display: grid; grid-template-columns: 42px 1fr auto; align-items: center; gap: 12px; }
+.voice-avatar { width: 42px; height: 42px; display: grid; place-items: center; border: 1px solid rgba(13,29,42,.15); border-radius: 50%; background: var(--mint-soft); color: var(--mint-dark); font-family: var(--font-mono); font-size: 12px; font-weight: 800; }
+.voice-person cite { display: block; font-style: normal; }
+.voice-person cite strong, .voice-person cite small { display: block; }
+.voice-person cite strong { font-size: 14px; }
+.voice-person cite small { margin-top: 4px; color: #7a868b; font-size: 9px; }
+.voice-id { color: #879196; font-family: var(--font-mono); font-size: 10px; }
+.quote-stack blockquote > p { position: relative; z-index: 1; margin-top: 40px; font-size: 18px; font-weight: 700; line-height: 1.72; }
+.quote-stack blockquote footer { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-top: auto; padding-top: 22px; border-top: 1px solid var(--line); }
+.quote-stack blockquote footer span { color: #849095; font-family: var(--font-mono); font-size: 8px; letter-spacing: .08em; }
+.quote-stack blockquote footer strong { color: var(--mint-dark); font-size: 11px; }
+.quote-stack blockquote:nth-child(2) { background: var(--yellow-soft); }
+.quote-stack blockquote:nth-child(2) .voice-avatar { background: var(--yellow); color: var(--ink); }
+.quote-stack blockquote.critical { border-color: rgba(255,101,72,.38); background: #fff0eb; }
+.quote-stack blockquote.critical::before { color: rgba(255,101,72,.14); }
+.quote-stack blockquote.critical .voice-avatar { background: var(--coral); color: #fff; }
+.quote-stack blockquote.critical footer strong { color: #c53b22; }
 .source-frame { overflow: hidden; border: 1px solid var(--line); background: #fff; }
 .source-frame img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
 .source-frame figcaption { display: flex; align-items: center; gap: 14px; min-height: 48px; padding: 10px 16px; color: #727e84; font-size: 11px; }
@@ -331,6 +351,11 @@ p, h1, h2, h3, blockquote, figure { margin: 0; }
   .experience-grid { grid-template-columns: 1fr 300px; gap: 70px; }
 }
 
+@media (max-width: 900px) {
+  .quote-stack { grid-template-columns: 1fr; }
+  .quote-stack blockquote { min-height: 260px; }
+}
+
 @media (max-width: 760px) {
   :root { --nav-height: 62px; --shell: calc(100vw - 32px); }
   .case-nav { grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding-inline: 12px; }
@@ -366,7 +391,12 @@ p, h1, h2, h3, blockquote, figure { margin: 0; }
   .section-heading { margin-bottom: 42px; }
   .section-heading h2, .opportunity-copy h2, .evidence-heading h2, .reflection-copy h2 { font-size: 38px; }
   .section-heading > p:last-child, .opportunity-copy > p:not(.eyebrow) { font-size: 15px; }
-  .quote-stack blockquote { padding: 22px 20px 20px 58px; }
+  .user-voices { padding: 26px 16px 16px; }
+  .voices-heading { align-items: flex-start; flex-direction: column; gap: 18px; padding-inline: 6px; }
+  .voices-heading h3 { font-size: 27px; }
+  .quote-stack blockquote { min-height: 270px; padding: 22px 18px; }
+  .quote-stack blockquote > p { margin-top: 32px; font-size: 17px; }
+  .quote-stack blockquote footer { align-items: flex-start; flex-direction: column; gap: 7px; }
   .pain-synthesis { grid-template-columns: 1fr; }
   .pain-synthesis article { min-height: 0; padding: 26px 0; }
   .pain-synthesis article + article { border-top: 1px solid var(--line); border-left: 0; }
