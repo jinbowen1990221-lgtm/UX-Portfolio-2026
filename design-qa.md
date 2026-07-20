@@ -1,13 +1,14 @@
 # Jiligaga Case Study Integration QA
 
 - Source visual truth: `http://localhost:3000/` from `/Users/jinbowen/Documents/Codex/2026-07-13/build-premium-uiux-portfolio-users-jinbowen`
+- Header design target: the existing portfolio detail header in `index.html` and `styles.css` (`.detail-top`, `.back-btn`, `.detail-tag`, `.detail-meta`)
 - Exported implementation: `case-studies/jiligaga/index.html`
 - Intended viewports: desktop and mobile responsive layouts
 - State: Jiligaga project card opens the exported case study
 
 ## Full-view comparison evidence
 
-The source project was exported directly from its React/Next.js implementation, preserving its HTML, CSS, client interactions, and original image assets. Browser navigation to the local source and exported page was blocked by the active browser policy, so a same-viewport visual comparison could not be captured.
+The source project was exported directly from its React/Next.js implementation, preserving its HTML, CSS, client interactions, and original image assets. The top navigation now reuses the portfolio detail header's dark surface, outlined back control, accent tag, and mono metadata treatment. Browser navigation to the local source and exported page was blocked by the active browser policy, so a same-viewport visual comparison could not be captured.
 
 ## Focused region comparison evidence
 
@@ -23,7 +24,7 @@ No focused screenshot comparison was possible for the same browser-policy reason
 
 ## Required fidelity surfaces
 
-- Fonts and typography: preserved CSS hierarchy; Google-hosted Geist was replaced with system sans/mono fallbacks so the static build does not depend on a blocked font download.
+- Fonts and typography: preserved CSS hierarchy; the header uses the same mono role and letter spacing as other portfolio detail headers. Google-hosted Geist was replaced with system sans/mono fallbacks so the static build does not depend on a blocked font download.
 - Spacing and layout rhythm: original responsive CSS is included unchanged; rendered verification is blocked.
 - Colors and visual tokens: original case-study tokens and styles are included unchanged.
 - Image quality and asset fidelity: original image files are copied without recompression; all referenced local files exist.
@@ -32,6 +33,7 @@ No focused screenshot comparison was possible for the same browser-policy reason
 ## Comparison history
 
 - Pass 1: production static export succeeded; resource references and JavaScript syntax passed; browser-rendered comparison was blocked before capture.
+- Pass 2: replaced the light product header with the portfolio detail-header language, retained active-section navigation, added a working return action, rebuilt the static export, and rechecked all local resource references. Browser-rendered comparison remains blocked.
 
 ## Final result
 
