@@ -761,7 +761,7 @@ const SECTION_HTML = {
 
       <a class="work work-link" href="case-studies/chomper-rush/">
         <div class="ph pixel-art ph-pacman" role="img" aria-label="像素风吃豆人与幽灵插画"><span>GAME</span></div>
-        <p><b>吃豆人大作战 · 可试玩原型</b><br/>把经典吃豆重构为资源争夺、成长反杀与限时冲榜的移动横屏竞技体验。<br/>
+        <p><b>吃豆人大作战</b><br/>把经典吃豆重构为资源争夺、成长反杀与限时冲榜的移动横屏竞技体验。<br/>
         <span class="kpi">街机竞技</span> <span class="kpi">AI 对手</span> <span class="kpi">在线试玩</span></p>
       </a>
 
