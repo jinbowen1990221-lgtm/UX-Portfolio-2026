@@ -1031,15 +1031,24 @@ body.detail-open .subbar{ pointer-events:none; }
 .pf-intro-visual--cutout{
   height:clamp(480px,35vw,620px);display:flex;
   align-items:flex-end;justify-content:center;align-self:stretch;
+  position:relative;isolation:isolate;
+}
+.pf-intro-visual--cutout::before{
+  content:'';position:absolute;inset:8% -8% 2%;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 62% 58%,rgba(255,184,107,.17) 0%,rgba(255,121,193,.07) 38%,rgba(22,22,42,0) 72%);
+  filter:blur(14px);
 }
 .pf-intro-visual--cutout .pf-intro-shot{
   width:100%;height:100%;padding:0;background:transparent;border:0;
   box-shadow:none;display:flex;align-items:flex-end;justify-content:center;
+  position:relative;z-index:1;
 }
 .pf-intro-visual--cutout .pf-intro-shot::before{display:none}
 .pf-intro-visual--cutout .pf-intro-shot img{
   width:auto;height:100%;max-width:100%;object-fit:contain;object-position:center bottom;
   border-radius:0;filter:drop-shadow(0 24px 28px rgba(0,0,0,.28));
+  -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 78%,rgba(0,0,0,.92) 84%,rgba(0,0,0,.55) 92%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 0%,#000 78%,rgba(0,0,0,.92) 84%,rgba(0,0,0,.55) 92%,transparent 100%);
 }
 .pf-intro-visual--cutout .pf-intro-shot:hover{border-color:transparent;transform:none}
 .pf-intro-stats{
