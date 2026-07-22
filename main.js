@@ -1170,6 +1170,9 @@ const PROJECTS = {
           { h:'小满是什么?', p:'小满是一款"预测你明天"的 AI 陪伴记录 App。设计初衷来自《黑镜》——如果有一个软件能预测你的未来呢?以现有的技术看，预测未来唯一可行的路径是：让它足够了解你的现在。于是小满把"预测"做成了"陪伴"：你随手记下此刻的一句话，它替你看见情绪的趋势。' },
           { h:'它怎么工作?', p:'你每天对它说一句话——打字或语音都行，小满会记住、整理，并写成一封回信。基于你的记录与情绪标签，它给出"今日趋势"和"小满的预感"：对你明天心情的概率预测，辅助你做决策，甚至给你一点买彩票式的灵感。陪伴是入口，预测是回报。' },
         ],
+        image:'assets/xm_hand_phone.png',
+        imageAlt:'手持手机展示小满首页界面',
+        visualClass:'pf-intro-visual--cutout',
         stats:[
           ['0 行','手写代码'],
           ['1 人','设计 + 开发 + 部署'],
@@ -1271,8 +1274,8 @@ function renderSection(s){
             `).join('')}
           </div>
           ${it.image ? `
-            <div class="pf-intro-visual">
-              <div class="pf-intro-shot"><img src="${escapeHtml(it.image)}" alt="${escapeHtml(it.title||'')}" loading="lazy"/></div>
+            <div class="pf-intro-visual${it.visualClass ? ` ${escapeHtml(it.visualClass)}` : ''}">
+              <div class="pf-intro-shot"><img src="${escapeHtml(it.image)}" alt="${escapeHtml(it.imageAlt||it.title||'')}" loading="lazy"/></div>
             </div>
           ` : ''}
         </div>
