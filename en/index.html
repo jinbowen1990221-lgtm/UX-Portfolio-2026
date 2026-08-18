@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Archivo+Black&family=JetBrains+Mono:wght@400;700&family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
 <base href="../" />
-<link rel="stylesheet" href="styles.css?v=51" />
+<link rel="stylesheet" href="styles.css?v=52" />
 <link rel="stylesheet" href="en/english.css?v=5" />
 </head>
 <body class="theme-default booting">
@@ -98,6 +98,12 @@
     <section class="console">
       <div class="console-wrap" id="consoleWrap">
         <canvas id="gbCanvas"></canvas>
+        <div class="console-preview" aria-hidden="true">
+          <div class="console-preview-screen"><span>INSERT</span><small>CARTRIDGE</small></div>
+          <div class="console-preview-dpad"></div>
+          <div class="console-preview-buttons"><i></i><i></i></div>
+          <div class="console-preview-speaker"></div>
+        </div>
         <div class="rotate-hint mono" id="rotateHint" aria-hidden="true">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" width="13" height="13"><path d="M2.5 8a5.5 5.5 0 1 1 1.6 3.9"/><polyline points="2.2,8.6 2.5,11.6 5.4,10.7"/></svg>
           360° DRAG TO ROTATE
@@ -171,7 +177,7 @@
     </footer>
   </section>
 
-<script type="module" src="main.js?v=67"></script>
+<script type="module" src="main.js?v=68"></script>
 <script src="en/translate.js?v=7"></script>
 </body>
 </html>

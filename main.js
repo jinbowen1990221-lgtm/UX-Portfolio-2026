@@ -154,7 +154,8 @@ const LCD = {
 /* ---------- tiny viewer factory ---------- */
 function makeViewer(canvas, { alpha=true } = {}){
   const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha });
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  // A 1.5x cap preserves the small 3D scenes while avoiding expensive 2x canvases.
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.05;
@@ -233,14 +234,12 @@ function frame(camera, box, { offset=1.3, dir=new THREE.Vector3(0.0,0.18,1) } = 
 
 /* ---------- textures (applied manually; USDZLoader doesn't wire them) ---------- */
 const TEX = {
-  gameboy:{ b:'assets/tex/gameboy/lambert1_baseColor.jpg', n:'assets/tex/gameboy/lambert1_normal.jpg',
-            m:'assets/tex/gameboy/lambert1_metallicRoughness_metal.jpg', r:'assets/tex/gameboy/lambert1_metallicRoughness_rough.jpg' },
-  Zelda:{   b:'assets/tex/cart/GBA_Zelda_MTL_baseColor.jpg', n:'assets/tex/cart/GBA_Zelda_MTL_normal.jpg',
-            m:'assets/tex/cart/GBA_Zelda_MTL_metallicRoughness_metal.jpg', r:'assets/tex/cart/GBA_Zelda_MTL_metallicRoughness_rough.jpg' },
-  Pokemon:{ b:'assets/tex/cart/GBA_Pokemon_MTL_baseColor.jpg', n:'assets/tex/cart/GBA_Pokemon_MTL_normal.jpg',
-            m:'assets/tex/cart/GBA_Pokemon_MTL_metallicRoughness_metal.jpg', r:'assets/tex/cart/GBA_Pokemon_MTL_metallicRoughness_rough.jpg' },
-  Kirby:{   b:'assets/tex/cart/GBA_Kirby_MTL_baseColor.jpg', n:'assets/tex/cart/GBA_Kirby_MTL_normal.jpg',
-            m:'assets/tex/cart/GBA_Kirby_MTL_metallicRoughness_metal.jpg', r:'assets/tex/cart/GBA_Kirby_MTL_metallicRoughness_rough.jpg' },
+  // The USDZ files already carry their source textures. Re-requesting normal and
+  // roughness maps doubled the initial 3D payload, with little visible benefit.
+  gameboy:{ b:'assets/tex/gameboy/lambert1_baseColor.jpg' },
+  Zelda:{   b:'assets/tex/cart/GBA_Zelda_MTL_baseColor.jpg' },
+  Pokemon:{ b:'assets/tex/cart/GBA_Pokemon_MTL_baseColor.jpg' },
+  Kirby:{   b:'assets/tex/cart/GBA_Kirby_MTL_baseColor.jpg' },
 };
 const _texCache = new Map();
 function tex(url, srgb){
@@ -258,9 +257,7 @@ function material(key){
   if(_matCache.has(key)) return _matCache.get(key);
   const s = TEX[key];
   const m = new THREE.MeshStandardMaterial({
-    map: tex(s.b,true), normalMap: tex(s.n,false),
-    roughnessMap: tex(s.r,false), metalnessMap: tex(s.m,false),
-    metalness:1, roughness:1, envMapIntensity:1.0,
+    map: tex(s.b,true), metalness:0.18, roughness:0.62, envMapIntensity:0.9,
   });
   _matCache.set(key, m);
   return m;
@@ -515,6 +512,9 @@ function startAnimationLoop(){
 
 function ensureCartridgeModels(){
   if(cartridgeLoadPromise) return cartridgeLoadPromise;
+  cartViewers.forEach(v=>{
+    if(v.fallback) v.fallback.textContent = IS_ENGLISH ? 'LOADING 3D' : '加载 3D 中';
+  });
   cartridgeObserver?.disconnect();
   cartridgeObserver = null;
   cartridgeLoadPromise = loadThreeModules()
@@ -544,7 +544,7 @@ function armCartridgeLoading(){
 async function loadCartridgeModels(){
   if(!pageActive) return;
   try{
-    const cartRoot = await loadUSDZ('assets/cartridges.usdz?v=2');
+    const cartRoot = await loadUSDZ('assets/cartridges-optimized.usdz?v=1');
     if(!pageActive) return;
     pruneGhosts(cartRoot);
     const pickCart = (name)=> name.includes('Zelda') ? 'Zelda'
@@ -604,7 +604,7 @@ async function initMainModel(){
     if(hint) hint.classList.add('hide');
   }, { once:true });
   try{
-    const gb = await loadUSDZ('assets/gameboy.usdz?v=2');
+    const gb = await loadUSDZ('assets/gameboy-optimized.usdz?v=1');
     if(!pageActive) return;
     pruneGhosts(gb);
     applyMaterial(gb, ()=> 'gameboy');
@@ -642,6 +642,7 @@ function finishMainModelSetup(model){
   });
   loadingEl.hidden = true;
   document.body.classList.remove('booting');
+  document.body.classList.add('model-ready');
 }
 
 function createGameBoyFallback(){
@@ -683,8 +684,7 @@ function startMainModelLoad(){
       console.error('3D modules load failed', error);
       loadingEl.textContent = IS_ENGLISH ? '3D UNAVAILABLE' : '3D 暂不可用';
       document.body.classList.remove('booting');
-    })
-    .finally(armCartridgeLoading);
+    });
   return mainModelLoadPromise;
 }
 
@@ -693,7 +693,11 @@ function init(){
   pageInitialized = true;
   setIp('default');
   buildCards();
-  requestAnimationFrame(startMainModelLoad);
+  // Let the HTML and CSS paint before parsing the 3D scene on the main thread.
+  const schedule = window.requestIdleCallback
+    ? (callback)=>window.requestIdleCallback(callback, { timeout:1200 })
+    : (callback)=>window.setTimeout(callback, 250);
+  schedule(startMainModelLoad);
 }
 
 function buildCards(){
@@ -705,7 +709,7 @@ function buildCards(){
     card.innerHTML = `
       <div class="card-canvas-wrap">
         <canvas></canvas>
-        <div class="loading mono">LOADING</div>
+        <div class="loading mono">${IS_ENGLISH ? 'HOVER TO LOAD' : '悬停加载 3D'}</div>
       </div>
       <div class="card-label">
         <span class="card-ico">${ICON[c.ico] || ''}</span>
