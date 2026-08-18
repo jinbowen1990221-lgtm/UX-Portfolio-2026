@@ -7,7 +7,7 @@
   document.documentElement.lang = 'en';
 
   const PHRASES = {
-    '靳博文的游戏世界 · Portfolio': "Jin Bowen's Game World · Portfolio",
+    '靳博文的游戏世界 · Portfolio': "Bowen Jin’s Game World",
     '吃豆人大作战 | 靳博文作品集': 'Chomper Rush | Jin Bowen Portfolio',
     '吃豆人大作战': 'Chomper Rush',
     'Tennis Video Coach Report | 靳博文作品集': 'Tennis Video Coach Report | Jin Bowen Portfolio',
