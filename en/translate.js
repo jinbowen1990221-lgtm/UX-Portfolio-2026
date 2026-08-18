@@ -797,7 +797,7 @@
       'Three primary problems: narrow scenarios and feature coverage, no independent admin for convenient data access, and weak brand perception. These problems defined the design goals:',
       'modularize the product, build an accessible independent admin, and strengthen brand perception.',
       'Exploratory · mapping problems to design goals', 'Mood board', 'After defining the global problems, three keywords emerged —', 'easy, immersive, joyful', '. They formed the mood board and visual direction.',
-      'Mood Board · easy / immersive / joyful', 'Goal derivation', 'young, optimistic professionals', '; their learning need was', 'efficient and sustainable', '; the content connection emphasized', 'authentic and practical.',
+      'Mood Board · easy / immersive / joyful', 'Goal derivation', 'Young, optimistic professionals', ' needed learning that was', 'efficient and sustainable', ', supported by', 'authentic, practical content.',
       'Goal Derivation · path from user insight', 'Industry product analysis', 'Deep analysis of leading products produced three strategies:',
       'create peak moments, establish differentiated design, and carry the brand across scenarios.', 'These became the three core strategies.', 'Product Analysis · leading product experiences',
       'Home page', 'The learning path follows the user mental model. Course themes configure the page color; a smaller hero banner improves information density, a location menu shows progress, and the primary action returns directly to the last learning task.',
@@ -812,7 +812,7 @@
     ],
     'weimob-0': [
       'Weimob Storefront consumer-component redesign', 'OFF-WHITE shopping module', 'Projects', '3', 'Storefront component redesign · cover',
-      'The SaaS storefront offered limited, inconsistent templates. Merchants struggled to differentiate their stores, and consumer quality varied. The component library needed a standardized rebuild.',
+      'The SaaS storefront offered limited, inconsistent templates. Merchants struggled to differentiate their stores, and the quality of the consumer experience varied. The component library needed a standardized rebuild.',
       'Component standardization', 'Rebuild core live-stream, product, and visual-navigation components with unified interaction and visual rules.',
       'Personalization', 'Support recommendation components driven by user tags to improve click-through.',
       'Graduated options', 'Provide large, medium, and small presets to lower the barrier to merchant customization.',
@@ -839,7 +839,7 @@
       'Page showcase', 'Delivered OFF-WHITE China storefront pages across product detail, orders, home, and categories.',
       'Product detail / wishlist — title bar, SKU wheel, and image-information switching',
       'Order detail — confirmation, product information, and order hierarchy',
-      'Home delivery — Tannin Series / Spring Limited / Band News',
+      'Homepage — Tannin Series / Spring Limited / Band News',
       'Efficient components — product cards, SKU popups, and cart item controls',
       'Luxury e-commerce', 'Shopping module', 'Brand customization', 'Mobile'
     ],
@@ -852,13 +852,13 @@
       'Bidding is an entry point for B2B business. China sees more than RMB 30 trillion in bids annually, yet proposal writing still depends heavily on people. One technical proposal averages',
       '12.3 days', ', needs 3–5 collaborators; about', 'of its content comes from earlier proposals but is still found and copied manually; average failed-bid rework reaches', '3.2 cycles.',
       'Twelve interviews, three field observations, nine competitor reviews, and 218 survey responses produced three core user profiles.',
-      'WANG', 'Proposal engineer · Manager Wang', 'P1 · frequent user', 'State-owned enterprise · bidding team · 5 years experience',
+      'WANG', 'Proposal engineer · Manager Wang', 'P1 · frequent user', 'State-owned enterprise · bidding team · 5 years’ experience',
       'DAILY WORK', 'Owns 80+ bidding documents per year. Strong writer, limited energy, and highly intolerant of repetitive work.',
       'CARES MOST', 'Efficiency, control, professional expression, and traceability. AI cannot invent facts or it creates more repair work.',
       'WILLINGNESS TO PAY', '“Turning a week into a day saves 80 hours every month—I can calculate exactly what that is worth.”',
       'LI', 'Sales director · Director Li', 'P2 · medium-frequency user', 'Mid-size technology company · sales lead · also writes technical proposals',
       'Sales comes first, but 5–10 times per quarter he personally writes a proposal. He is not a specialist, but the work must be done.',
-      'Low effort and deliverable quality. Template polish and image quality directly affect persuasion.',
+      'Low effort and high-quality deliverables. Template polish and image quality directly affect persuasion.',
       '“I cannot hire a proposal consultant every week. Just give me a first draft I can use.”',
       'ZHANG', 'Business owner · Mr. Zhang', 'P3 · infrequent, high-stakes decision maker', 'SME owner · occasional proposal writer',
       'There is no dedicated specialist. He writes important proposals himself fewer than ten times a year, and every one matters.',
@@ -896,7 +896,7 @@
       'Every option has a sensible default. Beginners can continue directly; experts can expand controls.',
       'Place similarity, compliance, and length checks before generation—do not reveal errors afterward.',
       'Interruptible and resumable', 'Long tasks can pause, roll back, and preserve state.',
-      'Upload and parse', 'Upload tender documents, choose industry, add material, and attach a knowledge base.',
+      'Upload and parse', 'Upload tender documents, choose an industry, add materials, and attach a knowledge base.',
       'Configure and confirm', 'Length / quality, style / tables / imagery, similarity checks, and risk strategy.',
       'Generate and edit outline', 'AI-generated chapter outline, key-section markers, editing, reordering, and AI suggestions.',
       'Draft and review body', 'Streaming generation, selected-text rewrite, chapter expansion or compression, similarity review, and export.',
@@ -920,7 +920,7 @@
       'Manage the enterprise’s most valuable asset', 'The knowledge base is a core product, not an add-on. Historical proposals are both the hardest and most valuable enterprise asset to manage.',
       'Dual-track structure', '“My proposals + Template library” captures company history while adding industry best practices for cold start.',
       'Smart classification', 'Automatic tags by industry, year, and purpose cut search time from 35% of the flow to 5%.',
-      'Tone training', 'Uploads teach the system company expression so generated content sounds like the company, not a generic press release.',
+      'Tone training', 'Uploaded documents teach the system the company’s voice so generated content sounds like the company, not a generic press release.',
       'Make similarity review a product capability', 'Similarity is not an afterthought. During generation, make risk visible, editable, and rewritable.',
       'Side-by-side document comparison', 'Compare tender and proposal side by side with automatic duplicate highlighting instead of manual page-by-page inspection.',
       'Three-level risk color', 'Red, yellow, and green separate must-fix from should-fix issues so attention is allocated efficiently.',
@@ -950,7 +950,7 @@
       'Forecast, not assertion', 'Use probabilistic language such as 70% confidence—a friend’s intuition, not a fortune teller’s claim.',
       'Restrained companionship', 'AI does not interrupt or lecture. When you speak it keeps the thought; when you do not, it waits quietly.',
       'Vibe Coding workflow', 'Product definition', 'Start from a Black Mirror future-prediction hypothesis and derive the practical path of a companion journal.',
-      'Design driven', 'Create high-fidelity designs first, then give AI a visual specification: warm cream, rounded corners, generous space, and serif accents.',
+      'Design-driven', 'Create high-fidelity designs first, then give AI a visual specification: warm cream, rounded corners, generous space, and serif accents.',
       'Conversation as programming', 'Use Claude Code to build a Next.js App Router + Tailwind full-stack app with pluggable Supabase, AI, and SMS modules.',
       'Iterate and ship', 'Produce one usable version each day, test it on a real phone, then return to the conversation to revise—no waiting between design and validation.',
       'Page showcase', 'Three core screens: today’s forecast, a one-sentence journal, and a letter from Xiaoman.',
@@ -960,7 +960,7 @@
       'Prediction software works in Black Mirror because it knows enough about you. With current technology, users must willingly provide input. Xiaoman packages prediction as companionship: one sentence each day makes the forecast more accurate. Companionship is the method; prediction is the product’s soul.',
       'The Xiaoman MVP is deployed and available to experience.', '◉ LIVE · ONLINE VERSION', 'Xiaoman · online MVP', '▶ LAUNCH LIVE PROTOTYPE',
       '※ Hosted overseas; access from mainland China requires a VPN or other international connection.', 'LIVE PROTOTYPE · Xiaoman MVP (VPN required)',
-      'No-code full stack', 'Design-driven development'
+      'No-code full-stack', 'Design-driven development'
     ]
   };
 
