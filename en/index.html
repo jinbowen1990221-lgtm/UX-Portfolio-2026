@@ -6,10 +6,24 @@
 <title>Bowen Jin’s Game World</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://unpkg.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Archivo+Black&family=JetBrains+Mono:wght@400;700&family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet" />
 <base href="../" />
+<link rel="modulepreload" href="https://unpkg.com/three@0.160.0/build/three.module.js" crossorigin />
+<link rel="modulepreload" href="https://unpkg.com/three@0.160.0/examples/jsm/loaders/USDZLoader.js" crossorigin />
+<link rel="modulepreload" href="https://unpkg.com/three@0.160.0/examples/jsm/environments/RoomEnvironment.js" crossorigin />
+<link rel="modulepreload" href="https://unpkg.com/three@0.160.0/examples/jsm/controls/OrbitControls.js" crossorigin />
+<link rel="preload" href="assets/gameboy.usdz?v=2" as="fetch" crossorigin />
 <link rel="stylesheet" href="styles.css?v=50" />
 <link rel="stylesheet" href="en/english.css?v=4" />
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+  }
+}
+</script>
 </head>
 <body class="theme-default booting">
 
@@ -37,8 +51,8 @@
     <!-- Left: personal info -->
     <section class="info">
       <h1 class="headline">
-        <span class="line glitch" data-text="JIN BOWEN'S">JIN BOWEN'S</span>
-        <span class="line glitch" data-text="GAME WORLD">GAME WORLD</span>
+        <span class="line glitch" data-text="Bowen Jin’s">Bowen Jin’s</span>
+        <span class="line glitch" data-text="Game World">Game World</span>
       </h1>
 
       <div class="bubble">
