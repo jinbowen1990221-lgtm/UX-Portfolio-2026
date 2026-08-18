@@ -1917,7 +1917,16 @@ document.getElementById('ovBody').addEventListener('click', (e)=>{
   if (card){
     const key = card.dataset.key || card.dataset.projectKey;
     const project = PROJECTS[key];
-    if (project?.detailUrl){ window.location.href = project.detailUrl; return; }
+    if (project?.detailUrl){
+      const pathname = window.location.pathname;
+      const englishRoute = pathname.includes('/en/') || pathname.endsWith('/en/index.html');
+      const englishMarker = pathname.indexOf('/en/');
+      const siteRoot = englishMarker >= 0
+        ? pathname.slice(0, englishMarker)
+        : pathname.replace(/\/(?:index\.html)?$/, '').replace(/\/$/, '');
+      window.location.href = `${siteRoot}${englishRoute ? '/en' : ''}/${project.detailUrl}`;
+      return;
+    }
     showProject(key);
     return;
   }

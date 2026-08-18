@@ -1184,6 +1184,42 @@
     });
   }
 
+  function normalizeLocaleLinks(root) {
+    const pathname = location.pathname;
+    const englishRoute = pathname.includes('/en/') || pathname.endsWith('/en/index.html');
+    const englishMarker = pathname.indexOf('/en/');
+    const siteRoot = englishMarker >= 0
+      ? pathname.slice(0, englishMarker)
+      : pathname.replace(/\/(?:index\.html)?$/, '').replace(/\/$/, '');
+    const localeCaseRoot = `${siteRoot}${englishRoute ? '/en' : ''}/case-studies/`;
+    includingRoot(root, 'a[href]').forEach((link) => {
+      const raw = link.getAttribute('href') || '';
+      if (!raw || raw.startsWith('#') || /^(?:https?:|mailto:|tel:|javascript:)/i.test(raw)) return;
+      if (englishRoute) {
+        const normalized = raw.replace(/^\/?case-studies\//, localeCaseRoot);
+        if (normalized !== raw) link.setAttribute('href', normalized);
+      } else {
+        const normalized = raw.replace(/^\/?en\/case-studies\//, localeCaseRoot);
+        if (normalized !== raw) link.setAttribute('href', normalized);
+      }
+    });
+  }
+
+  function installCaseBack(root) {
+    const back = root.querySelector?.('.case-back');
+    if (!back || back.dataset.localeBackInstalled) return;
+    back.dataset.localeBackInstalled = 'true';
+    back.addEventListener('click', () => {
+      const pathname = location.pathname;
+      const englishRoute = pathname.includes('/en/');
+      const englishMarker = pathname.indexOf('/en/');
+      const siteRoot = englishMarker >= 0
+        ? pathname.slice(0, englishMarker)
+        : pathname.replace(/\/(?:index\.html)?$/, '').replace(/\/$/, '');
+      window.location.href = `${siteRoot}${englishRoute ? '/en/' : '/'}`;
+    });
+  }
+
   function englishAttributeFallback(el, attr) {
     if (attr === 'alt') {
       const caption = el.closest('figure')?.querySelector('figcaption')?.textContent.trim();
@@ -1262,6 +1298,8 @@
       }
     });
     optimizeMedia(root);
+    normalizeLocaleLinks(root);
+    installCaseBack(root);
     if (!hashRoutingInstalled) {
       hashRoutingInstalled = true;
       document.addEventListener('click', (event) => {
@@ -1275,16 +1313,25 @@
         history.replaceState(null, '', `${location.pathname}${location.search}${hash}`);
       }, true);
     }
-    if (location.pathname === '/en/' || location.pathname.endsWith('/en/index.html')) {
+    if (location.pathname.includes('/en/') || location.pathname.endsWith('/en/index.html')) {
       root.querySelectorAll?.('a[href^="case-studies/"]').forEach((link) => {
-        link.setAttribute('href', `en/${link.getAttribute('href')}`);
+        const pathname = location.pathname;
+        const marker = pathname.indexOf('/en/');
+        const siteRoot = marker >= 0 ? pathname.slice(0, marker) : '';
+        link.setAttribute('href', `${siteRoot}/en/${link.getAttribute('href')}`);
       });
       if (!homeRoutingInstalled) {
         homeRoutingInstalled = true;
         document.addEventListener('click', (event) => {
           const card = event.target.closest?.('[data-key]');
           if (!card) return;
-          const destinations = { jiligaga: 'en/case-studies/jiligaga/', xiaoshiji: 'en/case-studies/xiaoshiji/' };
+          const pathname = location.pathname;
+          const marker = pathname.indexOf('/en/');
+          const siteRoot = marker >= 0 ? pathname.slice(0, marker) : '';
+          const destinations = {
+            jiligaga: `${siteRoot}/en/case-studies/jiligaga/`,
+            xiaoshiji: `${siteRoot}/en/case-studies/xiaoshiji/`
+          };
           if (destinations[card.dataset.key]) {
             event.preventDefault();
             event.stopImmediatePropagation();
