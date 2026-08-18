@@ -1,0 +1,1503 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>网球动作报告：脚下支撑到拍头释放</title>
+  <style>
+    * { box-sizing: border-box; }
+    html {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      scrollbar-width: none;
+    }
+    html::-webkit-scrollbar, body::-webkit-scrollbar { width: 0; height: 0; }
+    body {
+      margin: 0;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      min-height: 100vh;
+      background: #0c101c;
+      color: #eef3ff;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", Arial, sans-serif;
+    }
+    .page {
+      width: min(100%, 900px);
+      max-width: 100%;
+      min-width: 0;
+      margin: 0 auto;
+      padding: 64px 26px 44px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(46, 82, 150, .18), transparent 34%),
+        linear-gradient(180deg, #0b0f1b 0%, #151929 52%, #0d1220 100%);
+    }
+    .panel {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      overflow: hidden;
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(39,44,61,.96), rgba(32,37,54,.96));
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: 0 18px 40px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.05);
+      margin-bottom: 24px;
+    }
+    .analysis-card {
+      padding: 28px 28px 30px;
+      text-align: center;
+    }
+    .eyebrow {
+      margin: 0 0 18px;
+      color: #aeb7c9;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0;
+    }
+    .score-line {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .score-line strong {
+      font-size: 78px;
+      line-height: .86;
+      font-weight: 900;
+      letter-spacing: 0;
+      color: #ffffff;
+    }
+    .score-line span {
+      font-size: 26px;
+      color: #d7ddea;
+      font-weight: 800;
+    }
+    .stage {
+      margin: 0 auto 18px;
+      max-width: 690px;
+      color: #4ee074;
+      font-size: 21px;
+      line-height: 1.45;
+      font-weight: 800;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 24px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #ff9c22, #ff6f23);
+      color: white;
+      font-weight: 900;
+      font-size: 18px;
+      margin: 0 0 20px;
+      box-shadow: 0 12px 24px rgba(255, 117, 30, .28);
+    }
+    .chips {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .chip {
+      padding: 8px 15px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.1);
+      color: #e6ecf8;
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .chip.primary {
+      background: rgba(0,145,255,.18);
+      color: #2da4ff;
+    }
+    h1, h2, h3, h4, p { letter-spacing: 0; }
+    .analysis-card h1 {
+      margin: 0 0 14px;
+      font-size: 27px;
+      line-height: 1.22;
+      color: #fff;
+    }
+    .analysis-card p {
+      margin: 0;
+      color: #d3d9e8;
+      font-size: 19px;
+      line-height: 1.62;
+    }
+    .replay {
+      padding: 18px;
+    }
+    .replay-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url("assets/freeze_raw-2.jpg");
+      background-size: cover;
+      background-position: center;
+      filter: blur(18px) brightness(.7);
+      transform: scale(1.08);
+      opacity: .75;
+    }
+    .review-shell {
+      position: relative;
+      z-index: 2;
+      width: 82%;
+      margin: 0 auto;
+    }
+    .review-shell img, .review-shell video {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      display: block;
+      object-fit: cover;
+      border-radius: 14px;
+      box-shadow: 0 14px 38px rgba(0,0,0,.32);
+      background: #101626;
+    }
+    .replay-label {
+      position: absolute;
+      z-index: 3;
+      top: 28px;
+      left: 110px;
+      padding: 8px 13px;
+      border-radius: 999px;
+      background: rgba(22, 27, 41, .74);
+      color: white;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .review-note {
+      position: relative;
+      z-index: 2;
+      width: 82%;
+      margin: 12px auto 0;
+      padding: 11px 14px;
+      border-radius: 14px;
+      background: rgba(16, 22, 37, .74);
+      color: #dfe8f7;
+      font-size: 15px;
+      line-height: 1.5;
+      font-weight: 750;
+    }
+    .chain-overlay {
+      position: relative;
+      z-index: 2;
+      width: 82%;
+      margin: 12px auto 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .chain-step {
+      min-height: 78px;
+      padding: 10px;
+      border-radius: 13px;
+      background: rgba(14, 20, 34, .78);
+      border: 1px solid rgba(255,255,255,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .chain-step b {
+      display: inline-grid;
+      place-items: center;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #2196ff;
+      color: #fff;
+      font-size: 12px;
+      margin-bottom: 7px;
+    }
+    .chain-step.good b { background: #24d86c; }
+    .chain-step.watch b, .chain-step.warn b { background: #ffad22; }
+    .chain-step.fix b { background: #ff3f4f; }
+    .chain-step span {
+      display: block;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 4px;
+    }
+    .chain-step small {
+      display: block;
+      color: #b9c4d6;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+    .kinetic-lab {
+      display: grid;
+      grid-template-columns: 1.25fr .85fr;
+      gap: 14px;
+      align-items: stretch;
+      margin-bottom: 14px;
+    }
+    .kinetic-visual {
+      position: relative;
+      min-height: 280px;
+      overflow: hidden;
+      border-radius: 18px;
+      background:
+        radial-gradient(circle at 48% 44%, rgba(67, 215, 255, .24), transparent 32%),
+        linear-gradient(135deg, rgba(23, 31, 56, .94), rgba(60, 38, 86, .82));
+      border: 1px solid rgba(177, 211, 255, .22);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 16px 34px rgba(0,0,0,.22);
+    }
+    .kinetic-visual > img,
+    .kinetic-visual > video {
+      width: 100%;
+      height: 100%;
+      min-height: 280px;
+      display: block;
+      object-fit: cover;
+      filter: saturate(1.06) contrast(1.02) brightness(.84);
+    }
+    .kinetic-visual > video {
+      aspect-ratio: 9 / 10;
+      background: #111a2c;
+    }
+    .kinetic-visual::after {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border: 1px solid rgba(218, 231, 255, .55);
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.02));
+      pointer-events: none;
+    }
+    .lab-badge {
+      position: absolute;
+      left: 22px;
+      top: 20px;
+      z-index: 3;
+      padding: 7px 11px;
+      border-radius: 999px;
+      background: rgba(11, 20, 38, .62);
+      border: 1px solid rgba(255,255,255,.2);
+      color: #fff;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .kinetic-empty {
+      min-height: 280px;
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,.72);
+      font-weight: 900;
+    }
+    .kinetic-data {
+      border-radius: 18px;
+      padding: 18px;
+      background: rgba(17, 24, 43, .82);
+      border: 1px solid rgba(177, 211, 255, .18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .kinetic-data h3 {
+      margin: 0 0 8px;
+      color: #fff;
+      font-size: 22px;
+    }
+    .kinetic-data p {
+      margin: 0 0 14px;
+      color: #c8d5ea;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .kinetic-data .tracking-note {
+      margin-top: -3px;
+      padding: 9px 10px;
+      border-radius: 9px;
+      background: rgba(83, 183, 255, .10);
+      border: 1px solid rgba(108, 202, 255, .20);
+      color: #b9d9f7;
+      font-size: 11px;
+    }
+    .lab-stats {
+      display: grid;
+      gap: 11px;
+    }
+    .lab-stat span, .lab-stat strong {
+      display: block;
+    }
+    .lab-stat span {
+      color: #9fb0cb;
+      font-size: 12px;
+      font-weight: 850;
+      margin-bottom: 2px;
+    }
+    .lab-stat strong {
+      color: #ffffff;
+      font-size: 19px;
+      margin-bottom: 6px;
+    }
+    .lab-stat i {
+      display: block;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      overflow: hidden;
+    }
+    .lab-stat i b {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #7ce8ff, #ffdf47);
+    }
+    .lab-chain-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .lab-chain-card {
+      min-height: 104px;
+      padding: 13px;
+      border-radius: 15px;
+      background: rgba(20, 25, 39, .72);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .lab-chain-card span {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #2aa6ff;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 950;
+      margin-bottom: 8px;
+    }
+    .lab-chain-card.good span { background: #27d96d; }
+    .lab-chain-card.watch span { background: #ffad22; }
+    .lab-chain-card.fix span { background: #ff4254; }
+    .lab-chain-card strong {
+      display: block;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.3;
+      margin-bottom: 5px;
+    }
+    .lab-chain-card small {
+      color: #b8c4d8;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+    .lab-thumbs {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .lab-thumbs figure {
+      margin: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      background: rgba(20, 25, 39, .72);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .lab-thumbs img {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      display: block;
+    }
+    .lab-thumbs figcaption {
+      padding: 6px 8px;
+      color: #d9e4f4;
+      font-size: 11px;
+      font-weight: 850;
+      text-align: center;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      color: #f3f6ff;
+      font-size: 23px;
+      line-height: 1.2;
+    }
+    .title-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #168cff;
+      box-shadow: 0 0 16px rgba(22,140,255,.8);
+      display: inline-grid;
+      place-items: center;
+      flex: 0 0 auto;
+    }
+    .section-body { padding: 24px; }
+    .focus-list, .moment-list, .insight-list {
+      display: grid;
+      gap: 14px;
+    }
+    .focus-item, .moment-dark, .insight-card {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 15px;
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(20, 25, 39, .72);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .icon-shell {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      margin-top: 2px;
+      background: #168cff;
+      box-shadow: 0 0 18px rgba(22,140,255,.45);
+      display: inline-grid;
+      place-items: center;
+    }
+    .title-icon svg, .icon-shell svg, .badge svg {
+      width: 18px;
+      height: 18px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .title-icon svg { width: 14px; height: 14px; }
+    .badge svg { width: 20px; height: 20px; }
+    .icon-shell svg [fill]:not([fill="none"]) { fill: #fff; }
+    .icon-shell svg [stroke] { stroke: #fff; }
+    .focus-item.good .icon-shell { background: #24d86c; }
+    .focus-item.warn .icon-shell { background: #ffad22; }
+    .focus-item.info .icon-shell { background: #168cff; }
+    .insight-card:nth-child(1) .icon-shell { background: #9b4dff; }
+    .insight-card:nth-child(2) .icon-shell { background: #18a8c9; }
+    .insight-card:nth-child(3) .icon-shell { background: #ff3f4f; }
+    .focus-item h3, .focus-item h4, .insight-card h3, .moment-dark h3, .moment-dark h4 {
+      margin: 0;
+    }
+    .focus-item h3 {
+      color: #fff;
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+    .focus-item h4, .moment-dark h4 {
+      color: #eef3ff;
+      font-size: 17px;
+      line-height: 1.35;
+      margin-bottom: 7px;
+    }
+    .focus-item p, .moment-dark p, .insight-card p {
+      margin: 0;
+      color: #c9d1e1;
+      font-size: 16px;
+      line-height: 1.58;
+    }
+    .radar-wrap {
+      display: grid;
+      width: 100%;
+      min-width: 0;
+      justify-items: center;
+      gap: 10px;
+    }
+    .radar {
+      width: min(100%, 400px);
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto 6px;
+    }
+    .radar text {
+      fill: #dce6f8;
+      font-size: 14px;
+      font-weight: 800;
+    }
+    .metric-list {
+      width: 100%;
+      min-width: 0;
+      display: grid;
+      gap: 10px;
+      margin-top: 6px;
+    }
+    .metric-row {
+      display: grid;
+      grid-template-columns: 96px 1fr 38px;
+      gap: 10px;
+      align-items: center;
+      color: #dce4f3;
+      font-size: 15px;
+      font-weight: 800;
+    }
+    .metric-track {
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      overflow: hidden;
+    }
+    .metric-track i {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #147cff, #20a8ff);
+    }
+    .metric-row b {
+      color: #1da1ff;
+      font-size: 14px;
+      text-align: right;
+    }
+    .score-note {
+      width: 100%;
+      margin: 10px 0 0;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(20, 25, 39, .62);
+      color: #aeb9cc;
+      font-size: 13px;
+      line-height: 1.45;
+      text-align: left;
+    }
+    .speed-hero {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: center;
+      justify-items: center;
+      padding: 18px;
+      border-radius: 16px;
+      background: rgba(20, 25, 39, .72);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+      margin-bottom: 14px;
+      text-align: center;
+    }
+    .speed-score {
+      width: 94px;
+      height: 94px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      background:
+        radial-gradient(circle at 50% 50%, #24334d 0 52%, transparent 53%),
+        conic-gradient(#20a8ff 0deg, #147cff 276deg, rgba(255,255,255,.12) 276deg 360deg);
+      box-shadow: 0 12px 28px rgba(20, 124, 255, .22);
+    }
+    .speed-score strong {
+      display: block;
+      font-size: 28px;
+      line-height: 1;
+      color: #fff;
+    }
+    .speed-score span {
+      color: #aeb9cc;
+      font-size: 12px;
+      font-weight: 900;
+    }
+    .speed-hero h3 {
+      margin: 2px 0 7px;
+      color: #fff;
+      font-size: 20px;
+      text-align: center;
+    }
+    .speed-hero p {
+      margin: 0;
+      color: #c9d1e1;
+      font-size: 15px;
+      line-height: 1.58;
+      text-align: center;
+    }
+    .speed-list {
+      display: grid;
+      gap: 11px;
+    }
+    .speed-row {
+      display: grid;
+      grid-template-columns: minmax(110px, 1fr) 1.2fr 34px;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: 14px;
+      background: rgba(20, 25, 39, .62);
+    }
+    .speed-row strong {
+      color: #fff;
+      font-size: 15px;
+    }
+    .speed-row p {
+      margin: 3px 0 0;
+      color: #aeb9cc;
+      font-size: 12px;
+      line-height: 1.35;
+    }
+    .speed-meter {
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      overflow: hidden;
+    }
+    .speed-meter i {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #15d4b3, #20a8ff);
+    }
+    .speed-row b {
+      color: #22b7ff;
+      text-align: right;
+      font-size: 13px;
+    }
+    .time-badge {
+      width: 58px;
+      min-height: 48px;
+      border-radius: 14px;
+      background: rgba(12, 74, 116, .62);
+      color: #ccefff;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      font-size: 13px;
+      font-weight: 900;
+    }
+    .time-badge span {
+      display: block;
+      color: #91b7d6;
+      font-weight: 800;
+      margin-top: 2px;
+    }
+    .insight-card h3, .moment-dark h3 {
+      color: #ffffff;
+      font-size: 20px;
+      margin-bottom: 7px;
+    }
+    .report-header {
+      position: relative;
+      min-height: 112px;
+      padding: 12px 8px 20px;
+      color: #fff;
+      text-align: left;
+    }
+    .report-header::before {
+      content: "";
+      position: absolute;
+      inset: -42px 0 auto;
+      height: 170px;
+      background:
+        radial-gradient(circle at 17% 42%, rgba(255,255,255,.24) 0 2px, transparent 3px),
+        radial-gradient(circle at 74% 22%, rgba(255,255,255,.28) 0 3px, transparent 4px),
+        linear-gradient(135deg, rgba(124, 188, 255, .55), rgba(82, 118, 238, .08));
+      opacity: .8;
+      pointer-events: none;
+    }
+    .report-title {
+      position: relative;
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.08;
+      font-weight: 950;
+      color: #fff;
+      text-shadow: 0 8px 22px rgba(38, 70, 150, .24);
+    }
+    .report-subtitle {
+      position: relative;
+      margin: 4px 0 0;
+      color: rgba(255,255,255,.78);
+      font-size: 20px;
+      font-weight: 800;
+      font-style: italic;
+    }
+    body {
+      background: #6594f2;
+      color: #26345c;
+    }
+    .page {
+      width: min(100%, 760px);
+      padding: 20px 22px 48px;
+      background:
+        radial-gradient(circle at 8% 8%, rgba(255,255,255,.22) 0 2px, transparent 3px),
+        radial-gradient(circle at 90% 12%, rgba(255,255,255,.22) 0 2px, transparent 3px),
+        linear-gradient(180deg, #6594f2 0%, #5d8ef0 48%, #5f91ee 100%);
+    }
+    .panel {
+      overflow: visible;
+      border-radius: 11px;
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(255,255,255,.75);
+      box-shadow: 0 9px 18px rgba(50, 91, 178, .16);
+      margin-bottom: 18px;
+      color: #324068;
+    }
+    .section-body, .analysis-card {
+      padding: 0 28px 26px;
+    }
+    .section-title,
+    .analysis-card .eyebrow,
+    .replay::before {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 230px;
+      max-width: calc(100% - 56px);
+      min-height: 48px;
+      margin: 0 auto 20px;
+      padding: 9px 18px 8px;
+      border-radius: 0 0 18px 18px;
+      background: linear-gradient(180deg, #eefaff, #d9f3ff);
+      color: #496cae;
+      font-size: 20px;
+      font-weight: 950;
+      box-shadow: 0 5px 10px rgba(75, 125, 215, .08);
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      gap: 0;
+    }
+    .title-icon {
+      display: none;
+      width: 0;
+      height: 0;
+      overflow: hidden;
+      box-shadow: none;
+      background: transparent;
+    }
+    .analysis-card {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 22px;
+      align-items: center;
+      text-align: left;
+    }
+    .analysis-card .eyebrow {
+      grid-column: 1 / -1;
+      justify-self: center;
+      font-size: 19px;
+      margin-bottom: 0;
+    }
+    .score-line {
+      grid-row: 2 / span 4;
+      justify-self: center;
+      width: 186px;
+      height: 186px;
+      margin: 4px 0 0;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      gap: 2px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%, #fff 0 56%, transparent 57%),
+        conic-gradient(#4768f4 0deg 328deg, #ffbd4a 328deg 278deg, #ff754f 278deg 360deg);
+      box-shadow: inset 0 0 0 12px rgba(235, 242, 255, .95), 0 8px 20px rgba(75, 105, 210, .18);
+    }
+    .score-line strong {
+      color: #405fde;
+      font-size: 46px;
+      line-height: 1;
+      font-weight: 950;
+    }
+    .score-line span {
+      color: #526181;
+      font-size: 14px;
+      font-weight: 900;
+    }
+    .stage {
+      margin: 0;
+      max-width: none;
+      color: #496cae;
+      font-size: 16px;
+      line-height: 1.55;
+      font-weight: 850;
+    }
+    .badge {
+      justify-self: start;
+      margin: 0;
+      padding: 8px 16px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #6688ff, #43b9ff);
+      font-size: 14px;
+      box-shadow: 0 7px 16px rgba(78, 113, 235, .18);
+    }
+    .chips {
+      justify-content: flex-start;
+      gap: 8px;
+      margin: 0;
+    }
+    .chip {
+      background: #edf4ff;
+      color: #53699a;
+      border: 1px solid #dbe8ff;
+      font-size: 12px;
+      padding: 6px 11px;
+    }
+    .chip.primary {
+      background: #e8f8ff;
+      color: #2578d8;
+    }
+    .analysis-card h1 {
+      margin: 0;
+      color: #26345c;
+      font-size: 21px;
+      line-height: 1.28;
+    }
+    .analysis-card p {
+      color: #5f6c89;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .analysis-card .main-summary {
+      grid-column: 1 / -1;
+      width: min(100%, 560px);
+      margin: 4px auto 0;
+      text-align: center;
+    }
+    .replay {
+      padding: 0 28px 26px;
+    }
+    .replay::before {
+      content: "动作片段回放";
+      font-size: 19px;
+    }
+    .replay-bg {
+      display: none;
+    }
+    .replay-label {
+      position: static;
+      display: inline-block;
+      margin: 0 0 10px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #edf4ff;
+      color: #496cae;
+      font-size: 13px;
+    }
+    .review-shell {
+      width: 100%;
+    }
+    .review-shell img, .review-shell video {
+      border-radius: 8px;
+      box-shadow: none;
+      border: 1px solid #dfe9ff;
+      background: #edf4ff;
+    }
+    .review-note {
+      width: 100%;
+      margin: 12px 0 0;
+      background: #f4f8ff;
+      color: #516081;
+      border: 1px solid #e7efff;
+      font-size: 14px;
+    }
+    .action-analysis {
+      width: 100%;
+      margin: 14px 0 0;
+    }
+    .action-analysis > h3 {
+      margin: 0 0 10px;
+      color: #334166;
+      font-size: 15px;
+      line-height: 1.35;
+      text-align: center;
+    }
+    .action-analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .action-analysis-card {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 62px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      padding: 13px;
+      border-radius: 9px;
+      background: #f4f8ff;
+      border: 1px solid #e4edff;
+      text-align: left;
+    }
+    .action-analysis-metric {
+      width: 62px;
+      min-height: 54px;
+      display: grid;
+      place-items: center;
+      align-content: center;
+      border-radius: 8px;
+      background: linear-gradient(135deg, #6688ff, #43b9ff);
+      color: #fff;
+      font-size: 23px;
+      line-height: 1;
+      font-weight: 950;
+    }
+    .action-analysis-metric small {
+      display: block;
+      margin-top: 4px;
+      color: rgba(255,255,255,.88);
+      font-size: 9px;
+      line-height: 1.15;
+      font-weight: 850;
+      text-align: center;
+    }
+    .action-analysis-card strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #344265;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+    .action-analysis-card p {
+      margin: 0;
+      color: #66718c;
+      font-size: 11px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+    .chain-overlay {
+      width: 100%;
+      grid-template-columns: repeat(4, 1fr);
+    }
+    .chain-step {
+      min-height: 88px;
+      background: #f8fbff;
+      border: 1px solid #e5edff;
+      box-shadow: none;
+    }
+    .chain-step b {
+      background: #5b7cff;
+    }
+    .chain-step span {
+      color: #334166;
+    }
+    .chain-step small {
+      color: #6a7592;
+    }
+    .focus-item, .moment-dark, .insight-card, .speed-hero, .speed-row {
+      background: #f7f9ff;
+      border: 1px solid #edf2ff;
+      box-shadow: none;
+      border-radius: 9px;
+    }
+    .focus-item h3, .focus-item h4, .insight-card h3, .moment-dark h3, .moment-dark h4, .speed-hero h3, .speed-row strong {
+      color: #344265;
+    }
+    .focus-item p, .moment-dark p, .insight-card p, .speed-hero p, .speed-row p {
+      color: #66718c;
+    }
+    .icon-shell {
+      background: #e6f3ff;
+      box-shadow: none;
+    }
+    .icon-shell svg {
+      stroke: #fff;
+      color: #fff;
+    }
+    .icon-shell svg path, .icon-shell svg circle, .icon-shell svg line, .icon-shell svg polyline, .icon-shell svg polygon {
+      stroke: #fff;
+    }
+    .icon-shell svg [fill]:not([fill="none"]) {
+      fill: #fff;
+    }
+    .icon-shell svg [stroke] {
+      stroke: #fff;
+    }
+    .radar text {
+      fill: #435179;
+    }
+    .metric-row {
+      grid-template-columns: 92px 1fr 42px;
+      color: #435179;
+    }
+    .metric-track, .speed-meter {
+      height: 11px;
+      background: #e6ebf6;
+    }
+    .metric-track i, .speed-meter i {
+      background: linear-gradient(90deg, #596bf3, #4eb7ff);
+    }
+    .metric-row b, .speed-row b {
+      color: #297bff;
+    }
+    .score-note {
+      background: #f3f8ff;
+      color: #66718c;
+      border: 1px solid #e5efff;
+    }
+    .kinetic-lab {
+      gap: 12px;
+    }
+    .kinetic-visual {
+      min-height: 244px;
+      border-color: rgba(120, 177, 255, .34);
+    }
+    .kinetic-visual > img,
+    .kinetic-visual > video {
+      min-height: 244px;
+    }
+    .kinetic-data {
+      background: linear-gradient(180deg, rgba(41, 53, 86, .94), rgba(26, 35, 61, .94));
+    }
+    .lab-chain-card {
+      background: #f7f9ff;
+      border-color: #edf2ff;
+    }
+    .lab-chain-card strong {
+      color: #344265;
+    }
+    .lab-chain-card small {
+      color: #66718c;
+    }
+    .lab-thumbs figure {
+      background: #f7f9ff;
+      border-color: #edf2ff;
+    }
+    .lab-thumbs figcaption {
+      color: #496cae;
+    }
+    .speed-score {
+      background:
+        radial-gradient(circle at 50% 50%, #fff 0 54%, transparent 55%),
+        conic-gradient(#4e71ff 0deg, #46bdf4 276deg, #e6ebf6 276deg 360deg);
+      box-shadow: inset 0 0 0 8px #eef5ff;
+    }
+    .speed-score strong {
+      color: #405fde;
+    }
+    .time-badge {
+      background: #e7f3ff;
+      color: #3477d9;
+    }
+    .time-badge span {
+      color: #7f8aa5;
+    }
+    @media (max-width: 620px) {
+      .page { padding: 34px 13px 28px; }
+      .analysis-card { padding: 0 18px 24px; }
+      .score-line strong { font-size: 58px; }
+      .score-line span { font-size: 20px; }
+      .stage { font-size: 17px; }
+      .badge { font-size: 15px; padding: 9px 18px; }
+      .analysis-card h1 { font-size: 21px; }
+      .analysis-card p { font-size: 15px; line-height: 1.55; }
+      .replay { padding: 0 12px 18px; }
+      .review-shell, .review-note, .chain-overlay { width: 84%; }
+      .review-shell img, .review-shell video { border-radius: 10px; }
+      .replay-label { left: 58px; top: 20px; font-size: 11px; }
+      .review-note { font-size: 12px; padding: 9px 11px; }
+      .action-analysis { width: 84%; margin-left: auto; margin-right: auto; }
+      .action-analysis-grid { grid-template-columns: 1fr; gap: 8px; }
+      .action-analysis-card { grid-template-columns: 56px minmax(0, 1fr); padding: 11px; }
+      .action-analysis-metric { width: 56px; min-height: 50px; font-size: 21px; }
+      .action-analysis-card strong { font-size: 13px; }
+      .action-analysis-card p { font-size: 11px; }
+      .chain-overlay { grid-template-columns: repeat(2, 1fr); gap: 7px; }
+      .chain-step { min-height: 70px; padding: 9px; }
+      .chain-step span { font-size: 12px; }
+      .chain-step small { font-size: 10px; }
+      .section-body { padding: 0 14px 18px; }
+      .section-title, .analysis-card .eyebrow, .replay::before {
+        width: 206px;
+        max-width: calc(100% - 44px);
+        min-height: 44px;
+        margin: 0 auto 18px;
+        padding: 8px 14px 7px;
+        font-size: 18px;
+      }
+      .focus-item, .moment-dark, .insight-card { padding: 14px; gap: 11px; }
+      .focus-item p, .moment-dark p, .insight-card p { font-size: 13px; }
+      .focus-item h3, .insight-card h3, .moment-dark h3 { font-size: 16px; }
+      .focus-item h4, .moment-dark h4 { font-size: 14px; }
+      .metric-row { grid-template-columns: 72px 1fr 28px; font-size: 12px; }
+      .time-badge { width: 49px; font-size: 11px; }
+      .kinetic-lab { grid-template-columns: 1fr; gap: 10px; }
+      .kinetic-visual { min-height: 218px; border-radius: 13px; }
+      .kinetic-visual > img, .kinetic-visual > video { min-height: 218px; }
+      .kinetic-visual::after { inset: 10px; border-radius: 12px; }
+      .lab-badge { left: 14px; top: 13px; font-size: 11px; padding: 6px 9px; }
+      .kinetic-data { padding: 14px; border-radius: 13px; text-align: center; }
+      .kinetic-data h3 { font-size: 17px; }
+      .kinetic-data p { font-size: 12px; }
+      .kinetic-data .tracking-note { font-size: 10px; }
+      .lab-stats { grid-template-columns: repeat(2, 1fr); gap: 10px; text-align: left; }
+      .lab-stat strong { font-size: 16px; }
+      .lab-chain-grid { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .lab-chain-card { min-height: 92px; padding: 11px; }
+      .lab-chain-card strong { font-size: 13px; }
+      .lab-chain-card small { font-size: 10px; }
+      .lab-thumbs { grid-template-columns: repeat(3, 1fr); }
+      .speed-hero { grid-template-columns: 1fr; gap: 12px; padding: 14px; text-align: center; justify-items: center; }
+      .speed-score { width: 76px; height: 76px; justify-self: center; }
+      .speed-score strong { font-size: 23px; }
+      .speed-hero h3 { font-size: 16px; text-align: center; }
+      .speed-hero p { font-size: 13px; text-align: center; }
+      .speed-row { grid-template-columns: 1fr; gap: 8px; padding: 12px; }
+      .speed-row b { text-align: left; }
+      .report-header { min-height: 96px; padding: 8px 4px 16px; }
+      .report-title { font-size: 28px; }
+      .report-subtitle { font-size: 17px; }
+      .analysis-card { grid-template-columns: 1fr; text-align: center; gap: 14px; }
+      .analysis-card .main-summary { grid-column: auto; width: 100%; }
+      .analysis-card .eyebrow { font-size: 17px; margin-bottom: 0; }
+      .score-line { grid-row: auto; width: 156px; height: 156px; justify-self: center; }
+      .score-line strong { font-size: 40px; }
+      .score-line span { font-size: 13px; }
+      .stage { font-size: 14px; }
+      .badge { justify-self: center; }
+      .chips { justify-content: center; }
+      .chain-overlay { width: 100%; grid-template-columns: repeat(2, 1fr); }
+      .replay-label { position: static; font-size: 12px; }
+      .review-shell, .review-note { width: 100%; }
+      .metric-row { grid-template-columns: 76px 1fr 30px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="report-header">
+      <h1 class="report-title">网球动作能力测试</h1>
+      <p class="report-subtitle">Tennis Movement Test</p>
+    </header>
+
+    <section class="panel analysis-card">
+      <p class="eyebrow">测评得分</p>
+      <div class="score-line"><strong>91</strong><span>/100</span></div>
+      <p class="stage">已进入动作链高效阶段（Advanced+），本评分基于准备启动、动力链传导、击球时机、挥速释放、随挥回收与身体稳定的综合动作评定。</p>
+      <div class="badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h.01"/><path d="M17 7h.01"/><path d="M7 17h.01"/><path d="M17 17h.01"/><path d="M7 7h10v10H7z"/></svg>动作链综合评定</div>
+      <div class="chips">
+        <span class="chip primary">进阶</span>
+        <span class="chip">示范动作，不估级</span>
+        <span class="chip">分析置信度：中高</span>
+      </div>
+      <h1>提前转肩、外侧腿加载、身体前侧触球和完整随挥连接成了清晰的正手动力链。</h1>
+      <p class="main-summary">动力链顺序清楚：外侧腿先承重，髋胸打开，击球臂和拍头最后进入加速区。 这是一拍的三次回放，能说明动作结构，但不能代表不同落点、旋转和压力下的重复性。</p>
+    </section>
+
+    <section class="panel">
+      <div class="section-body">
+        <h2 class="section-title"><span class="title-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 21 7v10l-9 5-9-5V7l9-5Z"/><path d="M12 6 17 9v6l-5 3-5-3V9l5-3Z"/><path d="M12 2v20"/><path d="M3 7l18 10"/><path d="M21 7 3 17"/></svg></span>动作能力分项</h2>
+        <div class="radar-wrap">
+          
+      <svg class="radar" viewBox="0 0 320 320" role="img" aria-label="能力雷达">
+        <polygon points="160.0,142.0 175.6,151.0 175.6,169.0 160.0,178.0 144.4,169.0 144.4,151.0" fill="none" stroke="rgba(45,151,255,.22)" stroke-width="2"/><polygon points="160.0,124.0 191.2,142.0 191.2,178.0 160.0,196.0 128.8,178.0 128.8,142.0" fill="none" stroke="rgba(45,151,255,.22)" stroke-width="2"/><polygon points="160.0,106.0 206.8,133.0 206.8,187.0 160.0,214.0 113.2,187.0 113.2,133.0" fill="none" stroke="rgba(45,151,255,.22)" stroke-width="2"/><polygon points="160.0,88.0 222.4,124.0 222.4,196.0 160.0,232.0 97.6,196.0 97.6,124.0" fill="none" stroke="rgba(45,151,255,.22)" stroke-width="2"/><polygon points="160.0,70.0 237.9,115.0 237.9,205.0 160.0,250.0 82.1,205.0 82.1,115.0" fill="none" stroke="rgba(45,151,255,.22)" stroke-width="2"/>
+        <line x1="160.0" y1="160.0" x2="160.0" y2="70.0" stroke="rgba(45,151,255,.18)" stroke-width="2"/><line x1="160.0" y1="160.0" x2="237.9" y2="115.0" stroke="rgba(45,151,255,.18)" stroke-width="2"/><line x1="160.0" y1="160.0" x2="237.9" y2="205.0" stroke="rgba(45,151,255,.18)" stroke-width="2"/><line x1="160.0" y1="160.0" x2="160.0" y2="250.0" stroke="rgba(45,151,255,.18)" stroke-width="2"/><line x1="160.0" y1="160.0" x2="82.1" y2="205.0" stroke="rgba(45,151,255,.18)" stroke-width="2"/><line x1="160.0" y1="160.0" x2="82.1" y2="115.0" stroke="rgba(45,151,255,.18)" stroke-width="2"/>
+        <polygon points="160.0,79.0 231.7,118.6 230.9,200.9 160.0,242.8 89.1,201.0 90.6,120.0" fill="rgba(20,145,255,.62)" stroke="#1da1ff" stroke-width="4"/>
+        <circle cx="160.0" cy="160.0" r="4" fill="#35aaff"/>
+        <text x="160.0" y="48.4" text-anchor="middle" dominant-baseline="middle">准备启动</text><text x="256.6" y="104.2" text-anchor="middle" dominant-baseline="middle">动力链</text><text x="256.6" y="215.8" text-anchor="middle" dominant-baseline="middle">击球时机</text><text x="160.0" y="271.6" text-anchor="middle" dominant-baseline="middle">挥速释放</text><text x="63.4" y="215.8" text-anchor="middle" dominant-baseline="middle">随挥收拍</text><text x="63.4" y="104.2" text-anchor="middle" dominant-baseline="middle">身体稳定</text>
+      </svg>
+    
+          <div class="metric-list">
+          <div class="metric-row">
+            <span>准备启动</span>
+            <div class="metric-track"><i style="width:90%"></i></div>
+            <b>90</b>
+          </div>
+        
+          <div class="metric-row">
+            <span>动力链</span>
+            <div class="metric-track"><i style="width:92%"></i></div>
+            <b>92</b>
+          </div>
+        
+          <div class="metric-row">
+            <span>击球时机</span>
+            <div class="metric-track"><i style="width:91%"></i></div>
+            <b>91</b>
+          </div>
+        
+          <div class="metric-row">
+            <span>挥速释放</span>
+            <div class="metric-track"><i style="width:92%"></i></div>
+            <b>92</b>
+          </div>
+        
+          <div class="metric-row">
+            <span>随挥收拍</span>
+            <div class="metric-track"><i style="width:91%"></i></div>
+            <b>91</b>
+          </div>
+        
+          <div class="metric-row">
+            <span>身体稳定</span>
+            <div class="metric-track"><i style="width:89%"></i></div>
+            <b>89</b>
+          </div>
+        </div>
+          <p class="score-note">分数基于 1 个完整正手动作、正常速度回放、2 段慢动作和 8fps 关键帧生成；重复回放不重复计分。</p>
+        </div>
+      </div>
+    </section>
+
+    
+      <section class="panel">
+        <div class="section-body">
+          <h2 class="section-title"><span class="title-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h.01"/><path d="M17 7h.01"/><path d="M7 17h.01"/><path d="M17 17h.01"/><path d="M7 7h10v10H7z"/></svg></span>动力链分析</h2>
+          <div class="kinetic-lab">
+            <div class="kinetic-visual">
+              <video class="kinetic-motion-video" controls playsinline autoplay muted loop preload="metadata" poster="assets/kinetic_chain_poster.jpg"><source src="assets/kinetic_chain_overlay.mp4" type="video/mp4"></video>
+              <div class="lab-badge">逐帧姿态跟踪</div>
+            </div>
+            <aside class="kinetic-data">
+              <h3>动作分析</h3>
+              <p>可见顺序为脚步调整 → 外侧腿加载 → 髋躯干打开 → 击球臂与拍头释放 → 跨体随挥和恢复。慢动作中没有看到明显断链，主要限制来自单一动作样本而非动作结构。</p>
+              <p class="tracking-note">关节点依据慢动作关键帧校准，并随身体逐帧进行二维跟踪；黄色高亮仅用于辅助观察动作传导顺序。 本片段采用关键帧校准后的二维跟踪，仅用于观察动作顺序，不代表精确三维角度或受力测量。</p>
+              <div class="lab-stats">
+          <div class="lab-stat">
+            <span>挥速释放</span>
+            <strong>92/100</strong>
+            <i><b style="width:92%"></b></i>
+          </div>
+        
+          <div class="lab-stat">
+            <span>击球时机</span>
+            <strong>91/100</strong>
+            <i><b style="width:91%"></b></i>
+          </div>
+        
+          <div class="lab-stat">
+            <span>动力链</span>
+            <strong>92/100</strong>
+            <i><b style="width:92%"></b></i>
+          </div>
+        
+          <div class="lab-stat">
+            <span>稳定性</span>
+            <strong>89/100</strong>
+            <i><b style="width:89%"></b></i>
+          </div>
+        </div>
+            </aside>
+          </div>
+          <div class="lab-chain-grid">
+          <div class="lab-chain-card good">
+            <span>1</span>
+            <strong>脚步与击球距离</strong>
+            <small>先找到距离。</small>
+          </div>
+        
+          <div class="lab-chain-card good">
+            <span>2</span>
+            <strong>腿髋加载</strong>
+            <small>外侧腿先压住。</small>
+          </div>
+        
+          <div class="lab-chain-card good">
+            <span>3</span>
+            <strong>髋躯干与肩</strong>
+            <small>髋先开，胸口跟上。</small>
+          </div>
+        
+          <div class="lab-chain-card good">
+            <span>4</span>
+            <strong>手臂与拍头</strong>
+            <small>手臂放松，拍头最后释放。</small>
+          </div>
+        </div>
+          <div class="lab-thumbs">
+              <figure>
+                <img src="assets/freeze_annotated.jpg" alt="正常速度">
+                <figcaption>正常速度</figcaption>
+              </figure>
+            
+              <figure>
+                <img src="assets/freeze_annotated-2.jpg" alt="慢动作">
+                <figcaption>慢动作</figcaption>
+              </figure>
+            
+              <figure>
+                <img src="assets/freeze_annotated-3.jpg" alt="慢动作复核">
+                <figcaption>慢动作复核</figcaption>
+              </figure>
+            </div>
+        </div>
+      </section>
+    
+
+    <section class="panel">
+      <div class="section-body">
+        <h2 class="section-title"><span class="title-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9h-3a6 6 0 1 1-6-6V3Z"/><path d="M12 8a4 4 0 1 0 4 4h-3a1 1 0 1 1-1-1V8Z"/><path d="M13 3h8v3h-5v5h-3V3Z"/></svg></span>技能点得分分析</h2>
+        <div class="focus-list">
+          <article class="focus-item good">
+            <div class="icon-shell"><svg class="asset-icon" aria-hidden="true" width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M40 20C40 26.8077 35.7484 32.6224 29.7555 34.9336H24H18.2445C12.2516 32.6224 8 26.8077 8 20C8 11.1634 15.1634 4 24 4C32.8366 4 40 11.1634 40 20Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M29.7557 34.9336L29.0766 43.0831C29.0334 43.6014 28.6001 44 28.08 44H19.9203C19.4002 44 18.9669 43.6014 18.9238 43.0831L18.2446 34.9336" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 17V23L24 20L30 23V17" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div>
+              <h3>亮点</h3>
+              <h4>动力链顺序清晰</h4>
+              <p>外侧腿建立支撑后，髋躯干带动击球臂，拍头最后通过击球区。</p>
+            </div>
+          </article>
+        
+          <article class="focus-item warn">
+            <div class="icon-shell"><svg class="asset-icon" aria-hidden="true" width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 44C29.5228 44 34.5228 41.7614 38.1421 38.1421C41.7614 34.5228 44 29.5228 44 24C44 18.4772 41.7614 13.4772 38.1421 9.85786C34.5228 6.23858 29.5228 4 24 4C18.4772 4 13.4772 6.23858 9.85786 9.85786C6.23858 13.4772 4 18.4772 4 24C4 29.5228 6.23858 34.5228 9.85786 38.1421C13.4772 41.7614 18.4772 44 24 44Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path fill-rule="evenodd" clip-rule="evenodd" d="M24 37C25.3807 37 26.5 35.8807 26.5 34.5C26.5 33.1193 25.3807 32 24 32C22.6193 32 21.5 33.1193 21.5 34.5C21.5 35.8807 22.6193 37 24 37Z" fill="currentColor"/><path d="M24 12V28" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div>
+              <h3>待改进</h3>
+              <h4>待验证：变化来球下的重复性</h4>
+              <p>不能据此判断连续多拍、移动范围扩大或被动来球下是否仍能保持同样动力链。</p>
+            </div>
+          </article>
+        
+          <article class="focus-item info">
+            <div class="icon-shell"><svg class="asset-icon" aria-hidden="true" width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M14.4917 24.5H32.4917" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M23.4917 15.5L32.4917 24.5L23.4917 33.5" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div>
+              <h3>下一步</h3>
+              <h4>同节奏三落点迁移</h4>
+              <p>三落点正手各 8 球：保持脚下先到位、髋胸带动、拍头最后释放。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    
+      <section class="panel">
+        <div class="section-body">
+          <h2 class="section-title"><span class="title-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 17a8 8 0 1 1 16 0"/><path d="M12 17l4-7"/><path d="M8 17h8"/></svg></span>挥速分析</h2>
+          <div class="speed-hero">
+            <div class="speed-score"><strong>92</strong><span>/100</span></div>
+            <div>
+              <h3>分段加速清楚，释放完整</h3>
+              <p>这里评估的是视频中可见的拍头释放质量，不是实测拍速。外侧腿和躯干先建立速度，拍头在击球区完成最后释放。</p>
+            </div>
+          </div>
+          <div class="speed-list">
+          <div class="speed-row">
+            <div>
+              <strong>启动加速</strong>
+              <p>前挥由腿髋和躯干启动，击球臂没有过早抢先。</p>
+            </div>
+            <div class="speed-meter"><i style="width:90%"></i></div>
+            <b>90</b>
+          </div>
+        
+          <div class="speed-row">
+            <div>
+              <strong>击球区释放</strong>
+              <p>拍头下降、滞后并快速通过身体前侧的击球窗口。</p>
+            </div>
+            <div class="speed-meter"><i style="width:93%"></i></div>
+            <b>93</b>
+          </div>
+        
+          <div class="speed-row">
+            <div>
+              <strong>减速收拍</strong>
+              <p>拍头跨体完成减速，肩带和身体继续自然转动。</p>
+            </div>
+            <div class="speed-meter"><i style="width:91%"></i></div>
+            <b>91</b>
+          </div>
+        </div>
+        </div>
+      </section>
+    
+    
+    <section class="panel">
+      <div class="section-body">
+        <h2 class="section-title"><span class="title-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 8v5l3 2"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg></span>关键片段分析</h2>
+        <div class="moment-list">
+          <article class="moment-dark">
+            <div class="time-badge"><b>4.00s</b><span>5.80s</span></div>
+            <div>
+              <h3>正常速度</h3>
+              <h4>完整节奏下，准备、加载、释放和随挥连接顺畅。</h4>
+              <p>正常速度适合判断整体节奏，但不适合单独测量精确拍面角度。</p>
+            </div>
+          </article>
+        
+          <article class="moment-dark">
+            <div class="time-badge"><b>15.25s</b><span>17.05s</span></div>
+            <div>
+              <h3>慢动作</h3>
+              <h4>慢放清楚显示腿髋、躯干、手臂和拍头的先后传导。</h4>
+              <p>这是同一拍回放，不能用来判断多拍重复性。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="section-body">
+        <h2 class="section-title"><span class="title-icon"><svg class="asset-icon" aria-hidden="true" width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 23C26.7614 23 29 20.7614 29 18C29 15.2386 26.7614 13 24 13C21.2386 13 19 15.2386 19 18C19 20.7614 21.2386 23 24 23Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M10.022 38.332C10.3657 33.1206 14.7016 29 20 29H28C33.2914 29 37.6229 33.1097 37.9767 38.3113" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>教练反馈</h2>
+        <div class="insight-list">
+      <article class="insight-card">
+        <div class="icon-shell"><svg class="asset-icon" aria-hidden="true" width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M24 44C35.0457 44 44 35.0457 44 24C44 12.9543 35.0457 4 24 4C12.9543 4 4 12.9543 4 24C4 35.0457 12.9543 44 24 44Z" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M24 23C26.7614 23 29 20.7614 29 18C29 15.2386 26.7614 13 24 13C21.2386 13 19 15.2386 19 18C19 20.7614 21.2386 23 24 23Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M10.022 38.332C10.3657 33.1206 14.7016 29 20 29H28C33.2914 29 37.6229 33.1097 37.9767 38.3113" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <h3>打球风格</h3>
+          <p>保持脚、髋、胸、拍头的传导顺序</p>
+        </div>
+      </article>
+    
+      <article class="insight-card">
+        <div class="icon-shell"><svg class="asset-icon" aria-hidden="true" width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M31 21L35 18L44 24V34L34 40L24 34V13L13 7L4 13V24L13 30L17 27" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <h3>球路组织</h3>
+          <p>正手结构完整：准备提前、下盘加载明确、触球位于身体前侧、拍头释放和跨体随挥连续。</p>
+        </div>
+      </article>
+    
+      <article class="insight-card">
+        <div class="icon-shell"><svg class="asset-icon" aria-hidden="true" width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 25C14 19.4772 18.4772 15 24 15C29.5228 15 34 19.4772 34 25V41H14V25Z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/><path d="M24 5V8" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M35.8918 9.32823L33.9634 11.6264" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M42.2187 20.2873L39.2642 20.8083" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.78116 20.2874L8.73558 20.8083" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M12.1086 9.32802L14.037 11.6262" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M6 41H43" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div>
+          <h3>训练边界</h3>
+          <p>不能据此判断连续多拍、移动范围扩大或被动来球下是否仍能保持同样动力链。</p>
+        </div>
+      </article>
+    </div>
+      </div>
+    </section>
+
+    <section class="panel replay">
+      <div class="replay-bg"></div>
+      <div class="replay-label">慢动作正手完整回放</div>
+      <div class="review-shell"><video controls playsinline preload="metadata" poster="assets/freeze_raw-2.jpg"><source src="assets/rally_002_t000009-000020.mp4" type="video/mp4"></video></div>
+      
+      <div class="action-analysis">
+        <h3>视频动作分析说明</h3>
+        <div class="action-analysis-grid">
+              <article class="action-analysis-card">
+                <span class="action-analysis-metric">3<small>个回放片段</small></span>
+                <div>
+                  <strong>按录屏转场完成分段</strong>
+                  <p>分别为正常速度、慢动作和慢动作复核，顶部与底部应用界面已从分析画面中裁除。</p>
+                </div>
+              </article>
+            
+              <article class="action-analysis-card">
+                <span class="action-analysis-metric">1<small>个独立正手动作</small></span>
+                <div>
+                  <strong>评分样本说明</strong>
+                  <p>三段是同一拍的重复回放，因此评分按一个完整动作生成，不按三次命中计算。</p>
+                </div>
+              </article>
+            
+              <article class="action-analysis-card">
+                <span class="action-analysis-metric">0<small>个可读反手</small></span>
+                <div>
+                  <strong>反手未采样</strong>
+                  <p>视频没有完整反手序列，反手准备、触球和动力链均不评分。</p>
+                </div>
+              </article>
+            </div>
+      </div>
+    
+      <div class="review-note">该片段保留准备、加载、前挥、触球、随挥和恢复，用于观察动力链的完整顺序。</div>
+      <div class="chain-overlay">
+          <div class="chain-step good">
+            <b>1</b>
+            <span>脚步与击球距离</span>
+            <small>先找到距离。</small>
+          </div>
+        
+          <div class="chain-step good">
+            <b>2</b>
+            <span>腿髋加载</span>
+            <small>外侧腿先压住。</small>
+          </div>
+        
+          <div class="chain-step good">
+            <b>3</b>
+            <span>髋躯干与肩</span>
+            <small>髋先开，胸口跟上。</small>
+          </div>
+        
+          <div class="chain-step good">
+            <b>4</b>
+            <span>手臂与拍头</span>
+            <small>手臂放松，拍头最后释放。</small>
+          </div>
+        </div>
+    </section>
+  </main>
+</body>
+</html>
