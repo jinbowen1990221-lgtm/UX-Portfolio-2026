@@ -7,7 +7,7 @@
   document.documentElement.lang = 'en';
 
   const PHRASES = {
-    '靳博文的游戏世界 · Portfolio': "Bowen Jin’s Game World",
+    '靳博文的游戏世界 · Portfolio': 'Bowen Jin’s Game World',
     '吃豆人大作战 | 靳博文作品集': 'Chomper Rush | Jin Bowen Portfolio',
     '吃豆人大作战': 'Chomper Rush',
     'Tennis Video Coach Report | 靳博文作品集': 'Tennis Video Coach Report | Jin Bowen Portfolio',
@@ -33,7 +33,7 @@
     '第一次找摊位时，我没有找到统一的官方入口，只能加入付费群、私聊主办方、线下转账。进一步收集到的摊主经历反复指向同一个问题：流程不可见，押金无保障。': 'When I first looked for a booth, there was no official entry point. I had to join a paid group, message an organizer privately, and transfer money offline. Vendor stories kept pointing to the same problem: the process was invisible and deposits were unprotected.',
     '以报名交易为入口，用 SaaS、内容、AI 与现场连接能力，逐步形成可复用的市集经营闭环。': 'Use applications and transactions as the entry point, then build a reusable market-operations loop through SaaS, content, AI, and on-site connections.',
     '靳博文的': 'Bowen Jin’s',
-    '游戏世界': 'GAME WORLD',
+    '游戏世界': 'Game World',
     '插入卡带，进入我的游戏世界。': 'Insert a cartridge and enter my game world.',
     '13 年用户体验 / 产品设计经验。': '13 years of UX / product design experience.',
     '擅长 0-1 孵化、商业化设计与 AI 产品设计。': 'I specialize in 0→1 incubation, monetization, and AI product design.',

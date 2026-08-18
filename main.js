@@ -1,7 +1,45 @@
-import * as THREE from 'three';
-import { USDZLoader } from 'three/addons/loaders/USDZLoader.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+let THREE;
+let USDZLoader;
+let RoomEnvironment;
+let OrbitControls;
+let threeModulesPromise = null;
+let loader = null;
+let EMPTY_GEO = null;
+let _texLoader = null;
+let clock = null;
+const MODULE_LOAD_TIMEOUT_MS = 12000;
+const MODEL_LOAD_TIMEOUT_MS = 20000;
+
+function withTimeout(promise, timeoutMs, message){
+  let timer = 0;
+  const timeout = new Promise((_, reject)=>{
+    timer = window.setTimeout(()=> reject(new Error(message)), timeoutMs);
+  });
+  return Promise.race([promise, timeout]).finally(()=> window.clearTimeout(timer));
+}
+
+function loadThreeModules(){
+  if(threeModulesPromise) return threeModulesPromise;
+  threeModulesPromise = withTimeout(Promise.all([
+    import('./assets/vendor/three/build/three.module.js'),
+    import('./assets/vendor/three/examples/jsm/loaders/USDZLoader.js'),
+    import('./assets/vendor/three/examples/jsm/environments/RoomEnvironment.js'),
+    import('./assets/vendor/three/examples/jsm/controls/OrbitControls.js'),
+  ]), MODULE_LOAD_TIMEOUT_MS, '3D module loading timed out').then(([three, usdz, room, controls])=>{
+    THREE = three;
+    USDZLoader = usdz.USDZLoader;
+    RoomEnvironment = room.RoomEnvironment;
+    OrbitControls = controls.OrbitControls;
+    EMPTY_GEO = new THREE.BufferGeometry();
+    _texLoader = new THREE.TextureLoader();
+    loader = new USDZLoader();
+    clock = new THREE.Clock();
+  }).catch(error=>{
+    threeModulesPromise = null;
+    throw error;
+  });
+  return threeModulesPromise;
+}
 
 /* ---------- pixel IP characters (cyber mascot + per-theme) ---------- */
 const IP = {
@@ -96,13 +134,14 @@ const ICON = {
 };
 
 /* ---------- config ---------- */
+const IS_ENGLISH = /\/en(?:\/|$)/.test(location.pathname);
 const CARTS = [
   { id:'pokemon', body:'GBA_Cartridge_Yellow_GBA_Pokemon_MTL_0', label_:'Yellow_Label_GBA_Pokemon_MTL_0', theme:'pokemon',
-    label:'个人履历',   en:'RESUME',       ico:'resume',  section:'resume' },
+    label:'个人履历', labelEn:'Resume', en:'RESUME',       ico:'resume',  section:'resume' },
   { id:'zelda',   body:'GBA_Cartridge_Zelda_GBA_Zelda_MTL_0',   label_:'Zelda_Label_GBA_Zelda_MTL_0',   theme:'zelda',
-    label:'用户体验作品集', en:'UX PORTFOLIO', ico:'gamepad', section:'ux' },
+    label:'用户体验作品集', labelEn:'UX Portfolio', en:'UX PORTFOLIO', ico:'gamepad', section:'ux' },
   { id:'kirby',   body:'GBA_Cartridge_Kirby_GBA_Kirby_MTL_0',   label_:'Kirby_Label_GBA_Kirby_MTL_0',   theme:'kirby',
-    label:'编程小游戏',  en:'CODING GAMES', ico:'palette', section:'art' },
+    label:'编程小游戏', labelEn:'Coding Games', en:'CODING GAMES', ico:'palette', section:'art' },
 ];
 const REF_BODY='GBA_Cartridge_Kirby_GBA_Kirby_MTL_0', REF_LABEL='Kirby_Label_GBA_Kirby_MTL_0';
 const LCD = {
@@ -122,7 +161,8 @@ function makeViewer(canvas, { alpha=true } = {}){
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(35, 1, 0.01, 1000);
   const pmrem = new THREE.PMREMGenerator(renderer);
-  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  const environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environment = environment;
   const key = new THREE.DirectionalLight(0xffffff, 2.2); key.position.set(2,4,3); scene.add(key);
   const fill = new THREE.DirectionalLight(0xffffff, 0.8); fill.position.set(-3,1,-2); scene.add(fill);
   scene.add(new THREE.HemisphereLight(0xffffff,0x404040,0.6));
@@ -132,12 +172,21 @@ function makeViewer(canvas, { alpha=true } = {}){
     renderer.setSize(w,h,false);
     camera.aspect = w/h; camera.updateProjectionMatrix();
   }
-  return { renderer, scene, camera, resize };
+  const viewer = {
+    renderer, scene, camera, resize,
+    dispose(){
+      viewer.controls?.dispose();
+      scene.clear();
+      environment.dispose();
+      pmrem.dispose();
+      renderer.dispose();
+    },
+  };
+  return viewer;
 }
 
 // USDZLoader makes a duplicate "ghost" mesh for every ancestor Xform (sharing the
 // first descendant's geometry). Keep only true leaf meshes; empty the rest.
-const EMPTY_GEO = new THREE.BufferGeometry();
 function pruneGhosts(root){
   const ghosts=[];
   root.traverse(o=>{
@@ -193,7 +242,6 @@ const TEX = {
   Kirby:{   b:'assets/tex/cart/GBA_Kirby_MTL_baseColor.jpg', n:'assets/tex/cart/GBA_Kirby_MTL_normal.jpg',
             m:'assets/tex/cart/GBA_Kirby_MTL_metallicRoughness_metal.jpg', r:'assets/tex/cart/GBA_Kirby_MTL_metallicRoughness_rough.jpg' },
 };
-const _texLoader = new THREE.TextureLoader();
 const _texCache = new Map();
 function tex(url, srgb){
   if(_texCache.has(url)) return _texCache.get(url);
@@ -270,11 +318,23 @@ function applyN64(root){
 }
 
 /* ---------- load + build ---------- */
-const loader = new USDZLoader();
 const loadingEl = document.getElementById('loading');
+const modelPromiseCache = new Map();
 
 async function loadUSDZ(url){
-  return new Promise((res,rej)=> loader.load(url, res, undefined, rej));
+  const cacheKey = new URL(url, document.baseURI).href;
+  if(modelPromiseCache.get(cacheKey)) return modelPromiseCache.get(cacheKey);
+  const promise = withTimeout(
+    new Promise((res,rej)=> loader.load(url, res, undefined, rej)),
+    MODEL_LOAD_TIMEOUT_MS,
+    `3D model loading timed out: ${url}`
+  )
+    .catch(error=>{
+      modelPromiseCache.delete(cacheKey);
+      throw error;
+    });
+  modelPromiseCache.set(cacheKey, promise);
+  return promise;
 }
 
 // Pull the leaf meshes of one cartridge into a fresh group, baking world transforms
@@ -302,6 +362,13 @@ function recenter(g){
 let gbViewer, gbModel;
 const cartViewers = [];
 let animationStarted = false;
+let animationFrameId = 0;
+let mainModelLoadPromise = null;
+let cartridgeLoadPromise = null;
+let cartridgeObserver = null;
+let pageInitialized = false;
+let pageActive = true;
+let rotResetTimer = 0;
 // Baked cart geometries (theme → {meshes: [{geom, mat}], size}) for slot-insert animation
 const cartShapes = {};
 let slotMesh = null;          // currently-inserted cart inside gbViewer.scene
@@ -440,23 +507,45 @@ function hideCartFromSlot(){
   }
 }
 function startAnimationLoop(){
-  if(animationStarted) return;
+  if(animationStarted || !pageActive) return;
   animationStarted = true;
   animate();
   window.addEventListener('resize', onResize);
 }
 
-function scheduleIdleTask(fn, timeout=1200){
-  if('requestIdleCallback' in window){
-    window.requestIdleCallback(fn, { timeout });
-    return;
-  }
-  window.setTimeout(fn, 250);
+function ensureCartridgeModels(){
+  if(cartridgeLoadPromise) return cartridgeLoadPromise;
+  cartridgeObserver?.disconnect();
+  cartridgeObserver = null;
+  cartridgeLoadPromise = loadThreeModules()
+    .then(loadCartridgeModels)
+    .catch(error=>{
+      cartridgeLoadPromise = null;
+      console.error('cartridges load failed', error);
+      return null;
+    });
+  return cartridgeLoadPromise;
+}
+
+function armCartridgeLoading(){
+  const tray = document.getElementById('tray');
+  if(!pageActive || !tray || cartridgeLoadPromise || cartridgeObserver) return;
+  if(!('IntersectionObserver' in window)) return;
+  cartridgeObserver = new IntersectionObserver((entries, observer)=>{
+    if(entries.some(entry=>entry.isIntersecting)){
+      observer.disconnect();
+      cartridgeObserver = null;
+      ensureCartridgeModels();
+    }
+  }, { root:null, rootMargin:'240px 0px', threshold:0.01 });
+  cartridgeObserver.observe(tray);
 }
 
 async function loadCartridgeModels(){
+  if(!pageActive) return;
   try{
     const cartRoot = await loadUSDZ('assets/cartridges.usdz?v=2');
+    if(!pageActive) return;
     pruneGhosts(cartRoot);
     const pickCart = (name)=> name.includes('Zelda') ? 'Zelda'
       : (name.includes('Pokemon')||name.includes('Yellow')) ? 'Pokemon'
@@ -494,19 +583,20 @@ async function loadCartridgeModels(){
       );
       if(currentCart) showCartInSlot(currentCart.theme);
     }
-  }catch(e){
-    console.error('cartridges load failed', e);
+    startAnimationLoop();
+  }catch(error){
     cartViewers.forEach(v=>{
       if(v.fallback){
         v.fallback.hidden = false;
         v.fallback.textContent = 'READY';
       }
     });
+    throw error;
   }
 }
 
-async function init(){
-  setIp('default');
+async function initMainModel(){
+  if(!pageActive) return;
   gbViewer = makeViewer(document.getElementById('gbCanvas'));
   // 360° rotate hint: fade out once the user starts dragging the model
   document.getElementById('gbCanvas').addEventListener('pointerdown', ()=>{
@@ -515,44 +605,95 @@ async function init(){
   }, { once:true });
   try{
     const gb = await loadUSDZ('assets/gameboy.usdz?v=2');
+    if(!pageActive) return;
     pruneGhosts(gb);
     applyMaterial(gb, ()=> 'gameboy');
     gbModel = gb;
     gbViewer.scene.add(gb);
-    gbViewer.resize();
-    const box = boxOfVisible(gb);
-    const center = frame(gbViewer.camera, box, { offset:1.18, dir:new THREE.Vector3(0,0.05,1) });
-    setupGameBoyScreen(box);
-    drawScreen('default');
-    // Free 360° rotation
-    const ctrl = new OrbitControls(gbViewer.camera, gbViewer.renderer.domElement);
-    ctrl.enableZoom = false;
-    ctrl.enablePan = false;
-    ctrl.rotateSpeed = 0.7;
-    ctrl.target.copy(center);
-    ctrl.update();
-    gbViewer.controls = ctrl;
-    gbViewer.initSpherical = new THREE.Spherical().setFromVector3(
-      new THREE.Vector3().copy(gbViewer.camera.position).sub(center)
-    );
-    // Hide LCD overlay while the user is rotating (it's tied to the un-rotated screen position)
-    const lcdEl = document.getElementById('lcd');
-    let rotResetTimer;
-    ctrl.addEventListener('start', ()=>{ lcdEl.style.opacity = '0'; clearTimeout(rotResetTimer); });
-    ctrl.addEventListener('change', ()=>{ lcdEl.style.opacity = '0'; });
-    ctrl.addEventListener('end', ()=>{
-      rotResetTimer = setTimeout(()=>{ rotateGB('front'); }, 1800);
-    });
-    loadingEl.hidden = true;
-    document.body.classList.remove('booting');
+    finishMainModelSetup(gb);
   }catch(e){
     console.error('gameboy load failed', e);
-    loadingEl.textContent = '3D 加载失败，请用本地服务器打开';
+    createGameBoyFallback();
   }
-
-  buildCards();
   startAnimationLoop();
-  scheduleIdleTask(loadCartridgeModels);
+}
+
+function finishMainModelSetup(model){
+  gbViewer.resize();
+  const box = boxOfVisible(model);
+  const center = frame(gbViewer.camera, box, { offset:1.18, dir:new THREE.Vector3(0,0.05,1) });
+  setupGameBoyScreen(box);
+  drawScreen('default');
+  const ctrl = new OrbitControls(gbViewer.camera, gbViewer.renderer.domElement);
+  ctrl.enableZoom = false;
+  ctrl.enablePan = false;
+  ctrl.rotateSpeed = 0.7;
+  ctrl.target.copy(center);
+  ctrl.update();
+  gbViewer.controls = ctrl;
+  gbViewer.initSpherical = new THREE.Spherical().setFromVector3(
+    new THREE.Vector3().copy(gbViewer.camera.position).sub(center)
+  );
+  const lcdEl = document.getElementById('lcd');
+  ctrl.addEventListener('start', ()=>{ lcdEl.style.opacity = '0'; clearTimeout(rotResetTimer); });
+  ctrl.addEventListener('change', ()=>{ lcdEl.style.opacity = '0'; });
+  ctrl.addEventListener('end', ()=>{
+    rotResetTimer = setTimeout(()=>{ rotateGB('front'); }, 1800);
+  });
+  loadingEl.hidden = true;
+  document.body.classList.remove('booting');
+}
+
+function createGameBoyFallback(){
+  if(!gbViewer || gbModel) return;
+  const model = new THREE.Group();
+  const body = new THREE.Mesh(
+    new THREE.BoxGeometry(2.25, 3.45, 0.48),
+    new THREE.MeshStandardMaterial({ color:0xd9d1ba, roughness:0.6, metalness:0.05 })
+  );
+  const bezel = new THREE.Mesh(
+    new THREE.BoxGeometry(1.47, 1.35, 0.08),
+    new THREE.MeshStandardMaterial({ color:0x252331, roughness:0.5 })
+  );
+  bezel.position.set(0, 0.53, 0.28);
+  const dpad = new THREE.Group();
+  const dpadMaterial = new THREE.MeshStandardMaterial({ color:0x4b4c59, roughness:0.65 });
+  const dpadHorizontal = new THREE.Mesh(new THREE.BoxGeometry(0.68, 0.23, 0.1), dpadMaterial);
+  const dpadVertical = new THREE.Mesh(new THREE.BoxGeometry(0.23, 0.68, 0.1), dpadMaterial);
+  dpad.add(dpadHorizontal, dpadVertical);
+  dpad.position.set(-0.55, -0.78, 0.29);
+  const buttonMaterial = new THREE.MeshStandardMaterial({ color:0xa5365f, roughness:0.45 });
+  [-0.1, 0.43].forEach((x, index)=>{
+    const button = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.1, 24), buttonMaterial);
+    button.rotation.x = Math.PI / 2;
+    button.position.set(x, -0.75 - index * 0.1, 0.29);
+    model.add(button);
+  });
+  model.add(body, bezel, dpad);
+  gbModel = model;
+  gbViewer.scene.add(model);
+  finishMainModelSetup(model);
+}
+
+function startMainModelLoad(){
+  if(mainModelLoadPromise) return mainModelLoadPromise;
+  mainModelLoadPromise = loadThreeModules()
+    .then(initMainModel)
+    .catch(error=>{
+      console.error('3D modules load failed', error);
+      loadingEl.textContent = IS_ENGLISH ? '3D UNAVAILABLE' : '3D 暂不可用';
+      document.body.classList.remove('booting');
+    })
+    .finally(armCartridgeLoading);
+  return mainModelLoadPromise;
+}
+
+function init(){
+  if(pageInitialized) return;
+  pageInitialized = true;
+  setIp('default');
+  buildCards();
+  requestAnimationFrame(startMainModelLoad);
 }
 
 function buildCards(){
@@ -560,6 +701,7 @@ function buildCards(){
   CARTS.forEach((c,i)=>{
     const card = document.createElement('div');
     card.className='card'; card.dataset.id=c.id; card.dataset.idx=i;
+    const label = IS_ENGLISH ? c.labelEn : c.label;
     card.innerHTML = `
       <div class="card-canvas-wrap">
         <canvas></canvas>
@@ -567,20 +709,23 @@ function buildCards(){
       </div>
       <div class="card-label">
         <span class="card-ico">${ICON[c.ico] || ''}</span>
-        <span class="card-txt"><b>${c.label}</b><small>${c.en}</small></span>
+        <span class="card-txt"><b>${label}</b><small>${c.en}</small></span>
       </div>`;
     tray.appendChild(card);
     const canvas = card.querySelector('canvas');
     const v = { canvas, card, fallback: card.querySelector('.loading'), cart:c };
     cartViewers.push(v);
+    card.addEventListener('pointerenter', ensureCartridgeModels, { once:true, passive:true });
+    card.addEventListener('pointerdown', ensureCartridgeModels, { once:true, passive:true });
+    card.addEventListener('focusin', ensureCartridgeModels, { once:true });
     setupDrag(card, c);
   });
 }
 
 /* ---------- animation ---------- */
-const clock = new THREE.Clock();
 function animate(){
-  requestAnimationFrame(animate);
+  if(!pageActive) return;
+  animationFrameId = requestAnimationFrame(animate);
   const t = clock.getElapsedTime();
   if(gbViewer && gbModel){
     if(gbViewer.controls) gbViewer.controls.update();
@@ -595,6 +740,29 @@ function onResize(){
   gbViewer?.resize();
   cartViewers.forEach(v=>v.resize?.());
 }
+
+function cleanup3D(){
+  pageActive = false;
+  if(animationFrameId) cancelAnimationFrame(animationFrameId);
+  animationFrameId = 0;
+  animationStarted = false;
+  clearTimeout(rotResetTimer);
+  cartridgeObserver?.disconnect();
+  cartridgeObserver = null;
+  window.removeEventListener('resize', onResize);
+  _screenPlane?.geometry.dispose();
+  _screenPlane?.material.dispose();
+  _screenTex?.dispose();
+  cartViewers.forEach(v=>{
+    v.model?.traverse(o=>{ if(o.isMesh) o.geometry.dispose(); });
+    v.dispose?.();
+  });
+  gbViewer?.dispose();
+}
+
+window.addEventListener('pagehide', event=>{
+  if(!event.persisted) cleanup3D();
+}, { once:true });
 
 /* ---------- insert interaction (click + drag-up) ---------- */
 let currentCart = null;
@@ -644,10 +812,12 @@ function insertCart(cart){
   // button -> 开始游戏
   const btn = document.getElementById('startBtn');
   btn.disabled = false; btn.classList.add('ready');
-  document.getElementById('startCn').textContent = '开始游戏';
+  document.getElementById('startCn').textContent = IS_ENGLISH ? 'START GAME' : '开始游戏';
   document.getElementById('startEn').textContent = 'START';
   document.getElementById('hint').innerHTML =
-    `已插入：<b>${cart.label}</b>。<br/>PRESS START TO ENTER.`;
+    IS_ENGLISH
+      ? `INSERTED: <b>${cart.labelEn}</b>.<br/>PRESS START TO ENTER.`
+      : `已插入：<b>${cart.label}</b>。<br/>PRESS START TO ENTER.`;
   document.getElementById('ejectBtn').hidden = false;
   flash();
 }
@@ -666,7 +836,7 @@ function ejectCart(){
   document.getElementById('lcdArrows').textContent = l.arrows;
   const btn = document.getElementById('startBtn');
   btn.disabled = true; btn.classList.remove('ready');
-  document.getElementById('startCn').textContent = '请先插卡';
+  document.getElementById('startCn').textContent = IS_ENGLISH ? 'INSERT A CARTRIDGE' : '请先插卡';
   document.getElementById('startEn').textContent = 'INSERT';
   document.getElementById('hint').innerHTML =
     'DRAG A 3D CARTRIDGE UP TO INSERT.<br/>PRESS START TO LOAD A PORTFOLIO WORLD.';
@@ -720,7 +890,7 @@ const SECTION_HTML = {
     <div class="row"><b>上海屹道晟辉信息服务有限公司 · 产品设计负责人</b><span class="mono">2024.02 — 至今</span></div>
     <p class="row-desc"><b>小市集 go（数字化市集报名平台）</b>：针对「报名流程复杂、押金风险高、私域营销弱」三大痛点，搭建主办方 + 摊主双端架构，覆盖活动发布、在线报名、资金担保、UGC 社区等核心模块；验证「C 端会员订阅 + B 端招商服务费 + 课程」多元盈利模型。<br/>
     <b>领标 AI（AI 标书智能生成与审查平台）</b>：切入招投标行业人均 3-5 天、查重合规风险高的痛点，主导产品定位、用户旅程与核心工作台设计，搭建「上传 → AI 解析 → 参数配置 → 大纲确认 → 正文生成 → 审查降重 → 知识库沉淀」7 步完整闭环；规划 RAG 知识库增强、查重审查、AI 改写降重等核心 AI 能力，设计按量计费（Token）的商业模式。<br/>
-    <b>业绩</b>：小市集 go 上海试点 0 投放冷启动，上线首月跑通商业闭环，支付转化率 37.34%、会员复购率近 20%，验证 PMF；领标 AI 完成从 0 到 1 的产品定义与核心方案，形成覆盖 6 大模块的完整产品交付方案。</p>
+      <b>业绩</b>：小市集 go 上海试点上线首月取得 37.34% 支付转化率、19.77% 会员复购率，形成早期付费验证；领标 AI 完成从 0 到 1 的产品定义与核心方案，形成覆盖 6 大模块的完整产品交付方案。</p>
 
     <div class="row"><b>叽里呱啦文化传播（上海）有限公司 · 资深产品设计师</b><span class="mono">2022.04 — 2024.02</span></div>
     <p class="row-desc">作为海外业务（Jiligaga）核心设计负责人，主导产品从 0 到 1 孵化与迭代，推动产品形态从「教育工具」向「沉浸式游戏化体验」转型。<br/>
@@ -749,22 +919,27 @@ const SECTION_HTML = {
   ux: () => renderProjectList(),
 
   art: `
-    <h3>编程小游戏 · Vibe Coding</h3>
-    <p>设计师也能造游戏。这里是我用 AI 辅助编程（Vibe Coding）做出来的可玩作品 —
-    从想法到上线，不写一行传统意义上的"手写代码"，全靠对话与设计判断。</p>
+    <h3>编程作品 · Vibe Coding</h3>
+    <p>用 AI 辅助编程，把专业方法、设计判断和可运行代码组合成真正可以使用的产品。</p>
 
     <div class="grid">
-      <div class="work"><div class="ph pixel-art ph-pikachu"></div>
-        <p><b>GameBoy 作品集（本站）</b><br/>你现在玩的这个网站本身就是作品 #1：Three.js 实机 3D GameBoy、可插拔卡带、主题切换与像素 IP 动画，全程 Vibe Coding 完成。<br/>
-        <span class="kpi">Three.js</span> <span class="kpi">USDZ 3D</span> <span class="kpi">零手写代码</span></p></div>
+      <a class="work work-link" href="case-studies/tennis-video-coach/">
+        <div class="ph pixel-art ph-tennis" role="img" aria-label="像素风网球拍和网球插画"><span>CODEX SKILL</span></div>
+        <p><b>网球视频教练报告 Skill</b><br/>把训练视频转化为有证据链的动作诊断、动力链分析、慢动作片段与可分享报告。<br/>
+        <span class="kpi">视频分析</span> <span class="kpi">动作诊断</span> <span class="kpi">HTML / PNG / PDF</span></p>
+      </a>
 
-      <div class="work"><div class="ph pixel-art ph-triforce"></div>
-        <p><b>领标 AI · 可交互原型</b><br/>用 Bolt 把 B 端 SaaS 的 7 步标书生成流程做成了可点击走通的"游戏关卡"，在 UX 作品集的领标 AI 详情页可在线体验。<br/>
-        <span class="kpi">Bolt</span> <span class="kpi">可在线试玩</span></p></div>
+      <a class="work work-link" href="case-studies/chomper-rush/">
+        <div class="ph pixel-art ph-pacman" role="img" aria-label="像素风吃豆人与幽灵插画"><span>GAME</span></div>
+        <p><b>吃豆人大作战</b><br/>把经典吃豆重构为资源争夺、成长反杀与限时冲榜的移动横屏竞技体验。<br/>
+        <span class="kpi">街机竞技</span> <span class="kpi">AI 对手</span> <span class="kpi">在线试玩</span></p>
+      </a>
 
-      <div class="work"><div class="ph pixel-art ph-kirby"></div>
-        <p><b>更多游戏 · 装填中</b><br/>新的小游戏正在制作中，敬请期待。<br/>
-        <span class="kpi">COMING SOON</span></p></div>
+      <button class="work work-project" type="button" data-project-key="vibecoding">
+        <div class="ph pixel-art ph-xiaoman" role="img" aria-label="像素风记录本、预感星光与新芽插画"><span>VIBE CODING</span></div>
+        <p><b>小满 · AI 陪伴记录 App</b><br/>通过每日记录与情绪标签形成趋势分析，并生成对明天状态的概率预感。<br/>
+        <span class="kpi">AI 陪伴</span> <span class="kpi">情绪预测</span> <span class="kpi">MVP 已上线</span></p>
+      </button>
     </div>`,
 };
 
@@ -791,7 +966,7 @@ const PROJECTS = {
     subtitle: '面向企业投标的 AI 撰写工作台 — 把一份标书的 12 天，变成一个下午',
     cover: 'assets/lb_cover.png',
     accent: '#36f5c8',
-    meta: [['时间','2024.10 – 2025.04'],['角色','主导体验设计'],['阶段','0→1 · 待上线'],['类型','B端 SaaS']],
+    meta: [['时间','2026'],['角色','主导体验设计'],['阶段','0→1 · 待上线'],['类型','B端 SaaS']],
     sections: [
       { intro:{
         title:'项目介绍',
@@ -799,7 +974,7 @@ const PROJECTS = {
           { h:'领标 AI', p:'领标AI 是一款面向企业投标场景的 AI 撰写工作台，覆盖招标文件解析、企业知识库训练、正文生成、查重审查、版本管理五大能力。我主导整个体验设计——从用户研究到信息架构、从交互设计到视觉系统。这不是又一个"AI 写作工具"：企业标书的核心从来不是"写得快"，而是"赢的概率"，它需要的是合规、可控、可复用的工作流。' },
           { h:'我能帮用户解决什么问题?', p:'帮助用户完成招标文件解析、标书生成、查重审查、AI 改写优化和知识库沉淀，降低写标书门槛，提升交付效率与内容质量，减少漏项、重复率和不合规风险。' },
         ],
-        image:'assets/lb_cover.png',
+        image:'assets/lb_intro_cover.png',
         stats:[
           ['12.3天 → 1天','单份标书耗时'],
           ['70%','历史素材复用率'],
@@ -931,25 +1106,26 @@ const PROJECTS = {
   xiaoshiji: {
     tag: 'O2O / C端+B端',
     title: '小市集 go',
-    subtitle: '数字化市集报名平台 — 用一个平台连接主办方、摊主与消费者',
+    subtitle: '市集报名与交易信任平台 — 连接主办方、摊主与消费者',
     accent: '#ffd836',
-    meta: [['时间','2024'],['角色','创始人'],['验证','PMF 达成'],['类型','O2O 双边平台']],
+    detailUrl: 'case-studies/xiaoshiji/',
+    meta: [['时间','2025'],['角色','创始人 / 产品设计'],['验证','上海首月上线'],['类型','微信小程序']],
     sections: [
-      { h:'项目背景', p:'线下市集是城市生活的重要载体，但报名流程依赖微信群+Excel+人工审核，效率低、押金风险高、私域营销弱。我们看到了数字化重构这一垂直场景的机会。' },
+      { h:'项目背景', p:'第一次摆摊时，我发现活动入口分散在微信群与朋友圈，报名、审核和押金退款都缺少可追踪的统一流程。小市集 go 从这条真实链路出发，连接主办方、摊主与消费者。' },
       { h:'核心策略', cards:[
-        ['01','双端架构','主办方端(招商管理) + 摊主端(报名管理) + C端(发现市集)，形成闭环'],
-        ['02','押金担保','平台托管押金，规避双方风险，建立信任机制'],
-        ['03','多元盈利','C端会员订阅 + B端招商服务费 + 课程付费，分散单点风险'],
+        ['01','信任优先','先解决报名与押金的高频刚需，再扩展内容、课程与增长能力'],
+        ['02','三方协作','主办方发布与审核、摊主报名与参展、消费者浏览与互动，共享活动状态'],
+        ['03','线上线下闭环','用二维码连接现场行为，把活动、内容与交易数据沉淀回平台'],
       ]},
       { h:'设计过程', process:[
-        ['市场调研','走访上海、杭州 20+ 市集，访谈主办方、摊主、消费者各类角色'],
-        ['核心流程设计','聚焦"报名-审核-缴费-参展-复盘"5 步主流程，去除冗余环节'],
-        ['双端体验设计','主办方关注效率，C端关注发现，UI 风格统一但侧重点不同'],
-        ['私域营销工具','海报生成、邀请有礼、社群转化等增长工具内嵌'],
+        ['问题定义','从个人摆摊经历和摊主反馈中确认入口分散、进度不可见与押金风险'],
+        ['信任链设计','把报名、缴费、审核、摊位分配、签到与退款状态统一到平台'],
+        ['三端架构','围绕同一场市集拆分主办方、摊主和消费者的核心任务'],
+        ['分阶段验证','先上线报名、会员与交易能力，再验证 SaaS、AI 和品牌孵化'],
       ]},
-      { highlight:['验证 PMF','上线首月支付转化率达 37.34%，会员复购率近 20%，远超行业平均水平。已与上海 10+ 市集主办方达成合作。'] },
-      { h:'项目成果', stats:[['37.34%','首月支付转化'],['~20%','会员复购率'],['10+','合作主办方']] },
-      { tags:['O2O','双边平台','创业项目','PMF验证','商业化设计','私域营销'] },
+      { highlight:['早期验证','上海上线首月记录 37.34% 支付转化率与 19.77% 会员复购率，说明用户愿意为更集中、更可控的市集服务付费。长期留存与跨城市复制仍待持续验证。'] },
+      { h:'项目成果', stats:[['37.34%','首月支付转化'],['19.77%','会员复购率'],['4,000+','访问用户']] },
+      { tags:['O2O','三方平台','创业项目','微信小程序','商业化设计','信任机制'] },
     ],
   },
 
@@ -959,6 +1135,7 @@ const PROJECTS = {
     subtitle: '叽里呱啦海外英语启蒙产品 · 主导出海业务核心体验设计，台湾市场 0→1 落地',
     accent: '#02CC6B',
     style: 'cute',
+    detailUrl: 'case-studies/jiligaga/',
     meta: [['时间','2022.04 — 2024.02'],['角色','资深产品设计师'],['市场','台湾 / 日本'],['对象','3-6 岁儿童']],
     sections: [
       { cuteIntro:{
@@ -1124,28 +1301,9 @@ const PROJECTS = {
           { image:'assets/img22.png', caption:'结果呈现' },
           { tags:['电商SaaS','组件库','设计规范','千人千面','可视化装修'] },
         ]},
-      { label:'项目二 / Starbucks', title:'星巴克会员支付裂变',
-        sections:[
-          { image:'assets/img23.png', caption:'星巴克会员支付裂变 · 封面' },
-          { h:'项目背景', p:'星巴克会员支付后原有分享路径触达较弱，会员分享意愿仅为 8%。需要从支付完成页切入，设计游戏化的支付裂变营销方案。' },
-          { h:'核心策略', cards:[
-            ['01','强引导入口','将分享入口升级为"弹窗+Banner"，提升曝光与点击率'],
-            ['02','游戏化设计','引入翻牌/抽奖等游戏化概念，将分享行为转化为获得感'],
-            ['03','闭环路径','重构"下单→分享→领福利"闭环，最大化裂变效率'],
-          ]},
-          { h:'设计过程', process:[
-            ['用户路径梳理','拆解支付完成后用户的注意力分布与心理预期'],
-            ['营销裂变方案','设计"弹窗+Banner"强引导，引入游戏化概念'],
-            ['视觉适配','贴合星巴克品牌调性，避免营销感过强'],
-            ['效果验证','A/B 测试不同入口形式，迭代最优方案'],
-          ]},
-          { highlight:['关键成果','星巴克会员支付后分享意愿从 8% 显著提升至 23%，方案后续被复用到微盟其他头部商户。'] },
-          { h:'项目成果', stats:[['8% → 23%','分享意愿提升'],['2.9x','分享率倍增'],['100%','头部商户验证']] },
-          { tags:['增长设计','支付裂变','游戏化','星巴克','社交分享'] },
-        ]},
       { label:'项目三 / OFF-WHITE', title:'OFF-WHITE 购物模块',
         sections:[
-          { image:'assets/img24.png', caption:'OFF-WHITE 购物模块 · 封面' },
+          { image:'assets/img24.jpg', caption:'OFF-WHITE 购物模块 · 封面' },
           { h:'项目背景', p:'OFF-WHITE 进入中国市场，需基于微盟微商城搭建符合其潮牌调性的购物模块。挑战在于既要满足品牌方对视觉调性的高要求，又要复用平台已有的组件能力。' },
           { h:'核心策略', cards:[
             ['01','调性优先','以品牌方视觉语言为锚点，定制专属购物模块'],
@@ -1162,7 +1320,7 @@ const PROJECTS = {
           { h:'页面展示', p:'OFF-WHITE 中国区微商城购物模块的实际页面交付，覆盖商品详情、订单、首页与分类全链路。' },
           { image:'assets/img25.png', caption:'商品详情 / 心愿单 — 标题栏、SKU 滚轮选择、图片信息切换' },
           { image:'assets/img26.png', caption:'订单详情 — 订单确认、商品信息、订单信息层级' },
-          { image:'assets/img27.png', caption:'首页交付方案 — Tannin Series / 春季限定 / Band News' },
+          { image:'assets/img27.jpg', caption:'首页交付方案 — Tannin Series / 春季限定 / Band News' },
           { image:'assets/img28.png', caption:'交付方案 — 分类筛选页 / 分类页 / 个人中心页 / 商品详情页' },
           { tags:['奢侈品电商','购物模块','品牌定制','OFF-WHITE','移动端'] },
         ]},
@@ -1182,6 +1340,9 @@ const PROJECTS = {
           { h:'小满是什么?', p:'小满是一款"预测你明天"的 AI 陪伴记录 App。设计初衷来自《黑镜》——如果有一个软件能预测你的未来呢?以现有的技术看，预测未来唯一可行的路径是：让它足够了解你的现在。于是小满把"预测"做成了"陪伴"：你随手记下此刻的一句话，它替你看见情绪的趋势。' },
           { h:'它怎么工作?', p:'你每天对它说一句话——打字或语音都行，小满会记住、整理，并写成一封回信。基于你的记录与情绪标签，它给出"今日趋势"和"小满的预感"：对你明天心情的概率预测，辅助你做决策，甚至给你一点买彩票式的灵感。陪伴是入口，预测是回报。' },
         ],
+        image:'assets/xm_hand_phone.png',
+        imageAlt:'手持手机展示小满首页界面',
+        visualClass:'pf-intro-visual--cutout',
         stats:[
           ['0 行','手写代码'],
           ['1 人','设计 + 开发 + 部署'],
@@ -1217,7 +1378,8 @@ const PROJECTS = {
     ],
   },
 };
-const PROJECT_ORDER = ['lingbiao','xiaoshiji','jiligaga','ximalaya','weimob','vibecoding'];
+const PROJECT_ORDER = ['jiligaga','weimob','lingbiao','xiaoshiji'];
+const CODING_PROJECT_ORDER = ['vibecoding'];
 
 function escapeHtml(s){ return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
@@ -1226,7 +1388,7 @@ function renderProjectList(){
     <div class="pf-list-intro">
       <p class="pf-list-lead">从 0→1 孵化到商业化设计，从出海儿童教育到 AI SaaS — 覆盖 B / C 端的核心体验与转化。</p>
       <div class="pf-list-stats">
-        <span><b>06</b> 精选项目</span>
+        <span><b>${String(PROJECT_ORDER.length).padStart(2,'0')}</b> 精选项目</span>
         <span><b>13</b> 年经验</span>
         <span><b>B / C</b> 双端</span>
       </div>
@@ -1237,7 +1399,7 @@ function renderProjectList(){
         const num = String(i+1).padStart(2,'0');
         return `
           <button class="pf-card" data-key="${k}" style="--pf-accent:${p.accent}">
-            <div class="pf-card-num mono">${num} / 06</div>
+            <div class="pf-card-num mono">${num} / ${String(PROJECT_ORDER.length).padStart(2,'0')}</div>
             <div class="pf-card-tag mono">${escapeHtml(p.tag)}</div>
             <h4 class="pf-card-title">${escapeHtml(p.title)}</h4>
             <p class="pf-card-sub">${escapeHtml(p.subtitle)}</p>
@@ -1282,8 +1444,8 @@ function renderSection(s){
             `).join('')}
           </div>
           ${it.image ? `
-            <div class="pf-intro-visual">
-              <div class="pf-intro-shot"><img src="${escapeHtml(it.image)}" alt="${escapeHtml(it.title||'')}" loading="lazy"/></div>
+            <div class="pf-intro-visual${it.visualClass ? ` ${escapeHtml(it.visualClass)}` : ''}">
+              <div class="pf-intro-shot"><img src="${escapeHtml(it.image)}" alt="${escapeHtml(it.imageAlt||it.title||'')}" loading="lazy"/></div>
             </div>
           ` : ''}
         </div>
@@ -1683,9 +1845,10 @@ function renderProjectDetail(key, modIdx){
   const p = PROJECTS[key]; if (!p) return '';
   _currentProject = key;
   _currentModuleIdx = modIdx || 0;
-  const idx = PROJECT_ORDER.indexOf(key);
-  const prevKey = idx > 0 ? PROJECT_ORDER[idx-1] : null;
-  const nextKey = idx < PROJECT_ORDER.length-1 ? PROJECT_ORDER[idx+1] : null;
+  const projectOrder = _activeSection?.section === 'art' ? CODING_PROJECT_ORDER : PROJECT_ORDER;
+  const idx = projectOrder.indexOf(key);
+  const prevKey = idx > 0 ? projectOrder[idx-1] : null;
+  const nextKey = idx >= 0 && idx < projectOrder.length-1 ? projectOrder[idx+1] : null;
   const activeMod = p.modules ? (p.modules[_currentModuleIdx] || p.modules[0]) : null;
   const sections = activeMod ? activeMod.sections : p.sections;
 
@@ -1730,7 +1893,8 @@ function renderProjectDetail(key, modIdx){
 }
 
 function showProject(key, modIdx){
-  document.getElementById('ovTag').textContent = `UX · ${PROJECTS[key].title}`;
+  const contextLabel = _activeSection?.section === 'art' ? 'CODE' : 'UX';
+  document.getElementById('ovTag').textContent = `${contextLabel} · ${PROJECTS[key].title}`;
   document.getElementById('ovTitle').textContent = PROJECTS[key].title;
   document.getElementById('ovBody').innerHTML = renderProjectDetail(key, modIdx||0);
   document.querySelector('.detail').scrollTop = 0;
@@ -1739,13 +1903,20 @@ function backToProjects(){
   if (!_activeSection) return;
   document.getElementById('ovTag').textContent = _activeSection.en;
   document.getElementById('ovTitle').textContent = _activeSection.label;
-  document.getElementById('ovBody').innerHTML = renderProjectList();
+  const content = SECTION_HTML[_activeSection.section];
+  document.getElementById('ovBody').innerHTML = typeof content === 'function' ? content() : (content || '');
   document.querySelector('.detail').scrollTop = 0;
 }
 
 document.getElementById('ovBody').addEventListener('click', (e)=>{
-  const card = e.target.closest('.pf-card');
-  if (card){ showProject(card.dataset.key); return; }
+  const card = e.target.closest('.pf-card, [data-project-key]');
+  if (card){
+    const key = card.dataset.key || card.dataset.projectKey;
+    const project = PROJECTS[key];
+    if (project?.detailUrl){ window.location.href = project.detailUrl; return; }
+    showProject(key);
+    return;
+  }
   const back = e.target.closest('[data-back-list]');
   if (back){ backToProjects(); return; }
   const navItem = e.target.closest('.pf-nav-item[data-key]');
