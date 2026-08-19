@@ -1013,6 +1013,8 @@
   const ENGLISH_POLISH = new Map([
     ['Jin Bowen', 'Bowen Jin'],
     ['JIN BOWEN — PORTFOLIO 2026', 'BOWEN JIN — PORTFOLIO 2026'],
+    ['projectContext', 'Project context'],
+    ['coreStrategy', 'Core strategy'],
     ['A commercial designer with a founder’s perspective', 'A product designer with a founder’s mindset'],
     ['Dual strength across B2B and B2C', 'B2B systems thinking × B2C growth design'],
     ['independently incubated SaaS and transaction platforms from 0 to 1', 'taken SaaS and transaction-based products from concept to launch'],
@@ -1410,10 +1412,7 @@
       if (!detail.dataset.englishProcessed && applyOrderedCopy(detail, DYNAMIC_TEXT[key])) {
         detail.dataset.englishProcessed = key;
       }
-      if (/^weimob(?:-|$)/.test(key || '')) {
-        renderWeimobEnglishVisuals(detail);
-        useWeimobEnglishImages(detail);
-      }
+      if (/^weimob(?:-|$)/.test(key || '')) useWeimobEnglishImages(detail);
     }
     root.querySelectorAll?.('[aria-label], [title], [alt], meta[content]').forEach((el) => {
       for (const attr of ['aria-label', 'title', 'alt', 'content']) {
