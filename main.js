@@ -708,6 +708,15 @@ function buildCards(){
     const label = IS_ENGLISH ? c.labelEn : c.label;
     card.innerHTML = `
       <div class="card-canvas-wrap">
+        ${IS_ENGLISH ? `<div class="card-placeholder" aria-hidden="true">
+          <div class="card-placeholder-shell">
+            <div class="card-placeholder-screen"><b>${c.en}</b><small>FLAT MODE</small></div>
+            <span class="card-placeholder-dpad"></span>
+            <span class="card-placeholder-buttons"><i></i><i></i></span>
+            <span class="card-placeholder-speaker"></span>
+          </div>
+          <span class="card-placeholder-status mono">READY TO INSERT</span>
+        </div>` : ''}
         <canvas></canvas>
         <div class="loading mono">${IS_ENGLISH ? 'HOVER TO LOAD' : '悬停加载 3D'}</div>
       </div>
