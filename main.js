@@ -709,11 +709,10 @@ function buildCards(){
     card.innerHTML = `
       <div class="card-canvas-wrap">
         ${IS_ENGLISH ? `<div class="card-placeholder" aria-hidden="true">
-          <div class="card-placeholder-shell">
-            <div class="card-placeholder-screen"><b>${c.en}</b><small>FLAT MODE</small></div>
-            <span class="card-placeholder-dpad"></span>
-            <span class="card-placeholder-buttons"><i></i><i></i></span>
-            <span class="card-placeholder-speaker"></span>
+          <div class="card-placeholder-shell card-placeholder-cartridge">
+            <span class="card-placeholder-notch"></span>
+            <div class="card-placeholder-screen"><b>${c.en}</b><small>GAME CARTRIDGE</small></div>
+            <span class="card-placeholder-contacts"><i></i><i></i><i></i><i></i><i></i><i></i></span>
           </div>
           <span class="card-placeholder-status mono">READY TO INSERT</span>
         </div>` : ''}

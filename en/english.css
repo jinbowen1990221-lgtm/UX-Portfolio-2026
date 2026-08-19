@@ -134,19 +134,58 @@ html[lang="en"] .card.loaded .card-placeholder {
 
 html[lang="en"] .card-placeholder-shell {
   position: relative;
-  width: 112px;
-  height: 138px;
+  width: 92px;
+  height: 126px;
   border: 5px solid #101322;
-  border-radius: 13px 13px 22px 13px;
+  border-radius: 9px 9px 5px 5px;
   background: #d8d1bd;
   box-shadow: 5px 6px 0 #101322, inset 3px 3px 0 #f8f3e5, inset -4px -5px 0 #aaa390;
-  transform: rotate(-7deg);
+  transform: rotate(-6deg);
+}
+
+html[lang="en"] .card-placeholder-cartridge::before,
+html[lang="en"] .card-placeholder-cartridge::after {
+  content: "";
+  position: absolute;
+  top: -5px;
+  width: 20px;
+  height: 12px;
+  border: 5px solid #101322;
+  background: #d8d1bd;
+  z-index: -1;
+}
+
+html[lang="en"] .card-placeholder-cartridge::before {
+  left: 5px;
+  border-bottom: 0;
+  transform: skewX(-18deg);
+  transform-origin: bottom left;
+}
+
+html[lang="en"] .card-placeholder-cartridge::after {
+  right: 5px;
+  border-bottom: 0;
+  transform: skewX(18deg);
+  transform-origin: bottom right;
+}
+
+html[lang="en"] .card-placeholder-notch {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  width: 26px;
+  height: 9px;
+  transform: translateX(-50%);
+  border: 5px solid #101322;
+  border-top: 0;
+  background: #d8d1bd;
+  z-index: 2;
 }
 
 html[lang="en"] .card-placeholder-screen {
   position: absolute;
-  inset: 13px 11px auto;
-  height: 48px;
+  inset: 29px 9px auto;
+  height: 45px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -172,42 +211,24 @@ html[lang="en"] .card-placeholder-screen small {
   letter-spacing: .1em;
 }
 
-html[lang="en"] .card-placeholder-dpad {
+html[lang="en"] .card-placeholder-contacts {
   position: absolute;
-  left: 16px;
-  top: 78px;
-  width: 28px;
-  height: 28px;
-  background: linear-gradient(90deg, transparent 32%, #363948 32% 68%, transparent 68%), linear-gradient(0deg, transparent 32%, #363948 32% 68%, transparent 68%);
-  filter: drop-shadow(2px 2px 0 rgba(0, 0, 0, .22));
+  left: 12px;
+  right: 12px;
+  bottom: 10px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 3px;
+  height: 11px;
+  padding: 2px 3px;
+  border: 3px solid #262633;
+  background: #262633;
 }
 
-html[lang="en"] .card-placeholder-buttons {
-  position: absolute;
-  right: 14px;
-  top: 89px;
-  display: flex;
-  gap: 6px;
-  transform: rotate(-25deg);
-}
-
-html[lang="en"] .card-placeholder-buttons i {
+html[lang="en"] .card-placeholder-contacts i {
   display: block;
-  width: 15px;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: #d84b8d;
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, .24);
-}
-
-html[lang="en"] .card-placeholder-speaker {
-  position: absolute;
-  right: 13px;
-  bottom: 13px;
-  width: 31px;
-  height: 10px;
-  opacity: .55;
-  background: repeating-linear-gradient(100deg, transparent 0 3px, #3c4050 3px 5px);
+  background: #d9a62e;
+  box-shadow: inset 1px 0 #f4d778;
 }
 
 html[lang="en"] .card-placeholder-status {
