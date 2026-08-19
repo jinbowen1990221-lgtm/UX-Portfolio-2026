@@ -986,7 +986,7 @@
       }
     }
     if (uniqueSource.length !== copy.length) return false;
-    const translated = new Map(uniqueSource.map((source, index) => [source, copy[index]]));
+    const translated = new Map(uniqueSource.map((source, index) => [source, polishEnglish(copy[index])]));
     nodes.forEach((node) => {
       const source = node.nodeValue.trim();
       node.nodeValue = node.nodeValue.replace(source, translated.get(source));
@@ -1008,19 +1008,137 @@
   const replacements = Object.entries({ ...WORDS, ...PHRASES, ...FINAL_PHRASES })
     .sort((a, b) => b[0].length - a[0].length);
   const hasChinese = /[\u3400-\u9fff]/;
+  // English pages combine authored case-study copy with dynamically translated
+  // Chinese source text. Keep terminology consistent across both sources.
+  const ENGLISH_POLISH = new Map([
+    ['Jin Bowen', 'Bowen Jin'],
+    ['JIN BOWEN — PORTFOLIO 2026', 'BOWEN JIN — PORTFOLIO 2026'],
+    ['A commercial designer with a founder’s perspective', 'A product designer with a founder’s mindset'],
+    ['Dual strength across B2B and B2C', 'B2B systems thinking × B2C growth design'],
+    ['independently incubated SaaS and transaction platforms from 0 to 1', 'taken SaaS and transaction-based products from concept to launch'],
+    ['viable revenue loops', 'sustainable revenue models'],
+    ['commercialization design', 'commercialization strategy'],
+    ['value-added growth paths', 'new revenue opportunities'],
+    ['increased acquisition conversion by 131%', 'increased conversion by 131%'],
+    ['increased 131% on Android and 62% on iOS', 'increased by 131% on Android and by 62% on iOS'],
+    ['Payment conversion', 'Payment conversion rate'],
+    ['payment conversion.', 'payment conversion rate.'],
+    ['overseas English-learning product', 'international English-learning product'],
+    ['Khan Kids', 'Khan Academy Kids'],
+    ['educational digital toy', 'play-based digital learning experience'],
+    ['learning cost', 'learning curve'],
+    ['stage floor', 'lower bound of the target'],
+    ['First-month payment conversion', 'First-month payment conversion rate'],
+    ['ANCHOR CASE · SENIOR UX / OVERSEAS EDTECH', 'ANCHOR CASE · SENIOR UX / INTERNATIONAL EDTECH'],
+    ['I specialize in 0→1 incubation, monetization, and AI product design.', 'I design and launch products from 0→1, with a focus on monetization and AI-powered experiences.'],
+    ['Formerly at Alibaba · Meiweibuyongdeng / Weimob / Himalaya / Jiligaga.', 'Previously at Alibaba Local Services (Meiweibuyongdeng), Weimob, Himalaya, and Jiligaga.'],
+    ['From 0→1 incubation to commercialization, and from international children’s education to AI SaaS—covering the core experiences and conversion systems across B2B and B2C.', 'From 0→1 product building to commercialization, and from international children’s education to AI SaaS—covering core experiences and conversion systems across B2B and B2C.'],
+    ['Rebuilding the learning starting point so children want to come back', 'Redesigning onboarding to turn a first lesson into continued learning'],
+    ['Jiligaga serves children aged 2–8 overseas.', 'Jiligaga is an English-learning product for children aged 2–8 in international markets.'],
+    ['preparation for the first lesson', 'the first step of the learning journey'],
+    ['Overall onboarding lift · V1.9 → V1.10', 'Overall onboarding completion increased by 15.86% · V1.9 → V1.10'],
+    ['The interview sample included four families. Version data is a directional comparison with concurrent variables; it locates problems and guides iteration, but does not establish strict causality.', 'The interview sample included four families. Version-to-version comparisons are directional and include confounding factors, so they were used to identify problems and guide iteration rather than establish causality.'],
+    ['experienced learners', 'children with prior English exposure'],
+    ['The Have an Account click rate rose from 4% to 15%. Combined with roughly 10% loss at the start of sign-up, we treated this as a routing signal rather than a growth result.', 'The “Already have an account?” click-through rate increased from 4% to 15%. Combined with roughly 10% drop-off at the start of sign-up, we treated this as a routing signal rather than a growth result.'],
+    ['Have an Account click-through rate', '“Already have an account?” click-through rate'],
+    ['V1.10 Android only · at least +15pp · stage floor reached', 'V1.10 Android only · +15pp · minimum target reached'],
+    ['Only Android V1.10 is confirmed at the 79% stage floor;', 'Only Android V1.10 is confirmed at the 79% lower bound of the target;'],
+    ['BEFORE · expectations interrupted', 'BEFORE · Learning intent interrupted'],
+    ['adding calendar-conversion effort', 'adding unnecessary calendar-conversion effort'],
+    ['From V1.5 onward, Product, Data, and I tracked a complete funnel rather than a single onboarding conversion: product entry, sign-up, lesson entry, completion, and completed return lessons on D3 and D7.', 'From V1.5 onward, I worked with the product and data teams to track the full learning funnel: product entry, sign-up, lesson entry, completion, and whether users returned and completed another lesson on D3 and D7.'],
+    ['The funnel showed that users could finish a first lesson, but numbers contracted sharply from day three.', 'The funnel showed that users could finish a first lesson, but it dropped sharply from D3 onward.'],
+    ['Little Market go — Market applications and transaction trust', 'Little Market Go — Building trust into market applications and payments'],
+    ['Little Market go is a WeChat Mini Program connecting organizers, vendors, and visitors. Starting from a real market-vending experience, I rebuilt flows scattered across group chats, spreadsheets, and private transfers into a trackable application and transaction loop.', 'Little Market Go is a WeChat Mini Program connecting organizers, vendors, and visitors. Starting from my own experience as a pop-up market vendor, I rebuilt flows scattered across group chats, spreadsheets, and private transfers into an end-to-end application and payment flow.'],
+    ['One market visit exposed the industry’s trust gap', 'One experience as a vendor exposed a wider trust gap'],
+    ['my RMB 500 deposit kept being delayed. They only said finance had not transferred it.', 'my RMB 500 deposit refund kept getting delayed. They just kept saying the finance team hadn’t processed it yet.'],
+    ['acting as a trusted third party for one deposit, one event, and one fulfillment', 'acting as a trusted third party across each application, deposit, and event'],
+    ['around the same event object', 'around the same event'],
+    ['One event object carries the tasks of three roles', 'One event connects the workflows of all three roles'],
+    ['while the platform closes the transaction, content, and data loops.', 'while the platform connects transactions, content, and operational data.'],
+    ['AI enablement', 'AI-assisted operations'],
+    ['AI enablement: differentiate through an AI + policy dual engine', 'AI-assisted operations: differentiate through an AI and policy engine'],
+    ['Consumer side: upgrade the experience to upgrade the market', 'Visitor experience: improve discovery and on-site engagement'],
+    ['repeat-purchase entry', 'repeat usage'],
+    ['Rebuild classic Pac-Man as a landscape mobile competition about resource capture, growth comebacks, and timed leaderboard climbs.', 'Rebuild classic Pac-Man as a landscape mobile competition about resource capture, growth, counterattacks, and timed leaderboard climbs.'],
+    ['Make every pickup change the next risk', 'Every pickup changes the risk landscape'],
+    ['Climb the ranking', 'Climb the leaderboard'],
+    ['Timed ranking sprint', 'Timed leaderboard sprint'],
+    ['Grower', 'Farmer'],
+    ['Landscape mobile layout with bilateral touch controls', 'Landscape mobile layout with dual-side touch controls'],
+    ['Native Canvas single-page prototype', 'Vanilla JavaScript + Canvas prototype'],
+    ['movement diagnosis', 'stroke analysis'],
+    ['movement evidence', 'visual evidence'],
+    ['movement scores', 'technique scores'],
+    ['movement phases', 'stroke phases'],
+    ['Capability radar and movement scores come from visible evidence, not fixed sample values; unreadable dimensions are marked unknown.', 'Capability radar and technique scores come from visible evidence, not fixed sample values; dimensions without sufficient visual evidence are left unscored.'],
+    ['The sample report includes movement scores, kinetic-chain analysis, skill-point scores, key clips, coaching feedback, and next-stage priorities.', 'The sample report includes technique scores, kinetic-chain analysis, skill-point scores, key clips, coaching feedback, and next-stage priorities.'],
+    ['Turn a tennis training video into reviewable movement evidence, kinetic-chain diagnosis, training advice, and a shareable report.', 'Turn a tennis training video into reviewable visual evidence, kinetic-chain diagnosis, practice plans, and a shareable report.'],
+    ['Identify candidate contacts, practice segments, or rallies', 'Identify candidate strokes, practice segments, or rallies'],
+    ['representative movement sequences', 'representative stroke sequences'],
+    ['unreadable dimensions are marked unknown.', 'Dimensions without sufficient visual evidence are left unscored.'],
+    ['Bind timestamps, frames, slow motion, and limitations.', 'Link each finding to timestamps, key frames, slow-motion evidence, and stated limitations.'],
+    ['Training prescription and next step', 'Practice plan and next step'],
+    ['Mobile long-image PNG', 'Scrollable PNG report'],
+    ['This clip checks continuity.', 'This clip is used to assess stroke continuity.'],
+    ['It is not another independent contact sample.', 'It is not a separate stroke sample.'],
+    ['cannot count as a third independent hit.', 'should not be treated as a third independent stroke.'],
+    ['Slow 0.75x', '0.75× Slow'], ['Normal 1x', '1× Normal'], ['Quick 1.25x', '1.25× Fast'], ['Sprint 2x', '2× Fast'],
+    ['The movement chain has reached an efficient Advanced+ stage. The score combines ready position, kinetic transfer, contact timing, racquet-head release, follow-through, and body stability.', 'Technique assessment: strong kinetic-chain efficiency in the observed forehand. The score combines ready position, kinetic transfer, contact timing, racquet-head release, follow-through, and body stability.'],
+    ['Three replays describe one stroke, not repeatability under varied placement, spin, or pressure.', 'The three clips are replays of the same stroke and do not demonstrate repeatability across different balls or situations.'],
+    ['Scores use one complete forehand, one normal-speed replay, two slow-motion clips, and 8 fps keyframes;', 'Scores are based on one complete forehand, one normal-speed replay, two slow-motion replays, and key frames extracted at 8 fps;'],
+    ['The outside leg and trunk create speed', 'The outside leg and trunk generate momentum'],
+    ['Training boundary', 'Evidence limits'],
+    ['From 0 to 1 · A lightweight learning product that redefined fragmented learning through audio content', 'From concept to MVP · A lightweight product designed for bite-sized learning through audio'],
+    ['exploratory research', 'discovery'], ['Exploratory', 'Discovery'],
+    ['modularize the product, build an accessible independent admin, and strengthen brand perception.', 'build a modular product architecture, create an accessible independent admin, and strengthen product branding.'],
+    ['The learning path follows the user mental model. Course themes configure the page color;', 'The learning path mirrors how users think about their learning journey. Page colors adapt to course themes;'],
+    ['Productizing knowledge cards improved perceived value', 'Turning knowledge cards into a reusable product feature improved perceived value'],
+    ['0→1 incubation', '0→1 product building'],
+    ['Weimob Storefront consumer-component redesign', 'Weimob Storefront · Consumer-Facing Component Redesign'],
+    ['Graduated options', 'Tiered options'], ['learning cost.', 'learning curve.'],
+    ['exacting brand expression', 'distinctive brand expression'],
+    ['Extend a skin layer over standardized components to reduce development cost.', 'Apply a branded skin to standardized platform components to reduce development cost.'],
+    ['Mobile first', 'Mobile-first'],
+    ['enterprise knowledge-base training', 'enterprise knowledge-base management'],
+    ['The core of enterprise proposals is not writing faster but increasing the chance of winning through a compliant, controllable, reusable workflow.', 'The goal is not simply to write faster, but to produce proposals that are compliant, controllable, reusable, and easier for teams to trust.'],
+    ['◆ What user problem do I solve?', '◆ The problem'],
+    ['Owns 80+ bidding documents per year. Strong writer, limited energy, and highly intolerant of repetitive work.', 'Handles 80+ bid documents per year. A strong writer with limited bandwidth who has little tolerance for repetitive work.'],
+    ['each time concerns a contract worth millions', 'each bid may determine a multimillion-RMB contract'],
+    ['Historical proposals are an enterprise’s most valuable and least manageable asset.', 'Historical proposals are among an enterprise’s most valuable—and hardest-to-manage—knowledge assets.'],
+    ['A 20% match with a previous proposal is an increasingly regulated gray area.', 'High similarity with previous proposals can create compliance and originality risks.'],
+    ['Default-value design', 'Smart defaults'], ['Control action cost', 'Reduce interaction cost'],
+    ['Eight core pages consolidate into three mental paths:', 'Eight core screens map to three primary user journeys:'],
+    ['turning a blocked user into a guided user.', 'helping users move forward when they get stuck.'],
+    ['Tone training', 'Voice adaptation'],
+    ['※ bolt.host security policy blocks iframe embedding; the prototype opens in a new window.', 'Prototype opens in a new tab due to hosting restrictions.'],
+    ['An AI companion journal that forecasts tomorrow — inspired by Black Mirror and shipped full-stack by a designer with no handwritten code.', 'An AI companion journal that forecasts tomorrow’s mood — inspired by Black Mirror and designed and shipped end-to-end through AI-assisted coding.'],
+    ['record one sentence now and it reveals an emotional trend.', 'record one sentence, and Xiaoman turns it into part of an emotional trend.'],
+    ['offer a little lottery-like inspiration.', 'offer a small sense of playful anticipation.'],
+    ['Forecast, not assertion', 'Forecast, not certainty'],
+    ['When you speak it keeps the thought; when you do not, it waits quietly.', 'When you speak, it keeps the thought; when you don’t, it waits quietly.'],
+    ['No-code full-stack', 'AI-assisted full-stack development']
+  ]);
+  const englishPolishReplacements = Array.from(ENGLISH_POLISH.entries()).sort((a, b) => b[0].length - a[0].length);
   let homeRoutingInstalled = false;
   let hashRoutingInstalled = false;
   let pageTextApplied = false;
 
+  function polishEnglish(value) {
+    let result = value;
+    for (const [from, to] of englishPolishReplacements) result = result.split(from).join(to);
+    return result;
+  }
+
   function translate(value) {
-    if (!value || !hasChinese.test(value)) return value;
+    if (!value) return value;
+    if (!hasChinese.test(value)) return polishEnglish(value);
     let result = value;
     // Two passes let polished whole-string fixes replace an intermediate
     // phrase created by the legacy word-level compatibility dictionary.
     for (let pass = 0; pass < 2; pass += 1) {
       for (const [from, to] of replacements) result = result.split(from).join(to);
     }
-    return result;
+    return polishEnglish(result);
   }
 
   function includingRoot(root, selector) {
@@ -1292,7 +1410,10 @@
       if (!detail.dataset.englishProcessed && applyOrderedCopy(detail, DYNAMIC_TEXT[key])) {
         detail.dataset.englishProcessed = key;
       }
-      if (/^weimob(?:-|$)/.test(key || '')) useWeimobEnglishImages(detail);
+      if (/^weimob(?:-|$)/.test(key || '')) {
+        renderWeimobEnglishVisuals(detail);
+        useWeimobEnglishImages(detail);
+      }
     }
     root.querySelectorAll?.('[aria-label], [title], [alt], meta[content]').forEach((el) => {
       for (const attr of ['aria-label', 'title', 'alt', 'content']) {
