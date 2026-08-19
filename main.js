@@ -962,7 +962,20 @@ function openSection(cart){
   document.getElementById('ovTag').textContent = cart.en;
   document.getElementById('ovTitle').textContent = cart.label;
   const content = SECTION_HTML[cart.section];
-  document.getElementById('ovBody').innerHTML = typeof content === 'function' ? content() : (content || '');
+  const body = document.getElementById('ovBody');
+  body.innerHTML = typeof content === 'function' ? content() : (content || '');
+  if (IS_ENGLISH && cart.section === 'resume') {
+    const resumeDates = {
+      '2024.02 — 至今': 'Feb 2024 — Present',
+      '2022.04 — 2024.02': 'Apr 2022 — Feb 2024',
+      '2021.05 — 2021.11': 'May 2021 — Nov 2021',
+      '2019.10 — 2021.05': 'Oct 2019 — May 2021',
+      '2015.11 — 2019.05': 'Nov 2015 — May 2019',
+    };
+    body.querySelectorAll('.row .mono').forEach((date) => {
+      date.textContent = resumeDates[date.textContent] || date.textContent;
+    });
+  }
   document.body.classList.add('detail-open');
   document.querySelector('.detail').scrollTop = 0;
   window.scrollTo(0,0);
