@@ -698,6 +698,9 @@ function init(){
     ? (callback)=>window.requestIdleCallback(callback, { timeout:1200 })
     : (callback)=>window.setTimeout(callback, 250);
   schedule(startMainModelLoad);
+  // Warm the cartridge previews without requiring an insert or hover action.
+  // Pointer interactions remain as a fallback for pages restored from cache.
+  schedule(ensureCartridgeModels);
 }
 
 function buildCards(){
