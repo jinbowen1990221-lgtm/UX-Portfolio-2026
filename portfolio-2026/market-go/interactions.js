@@ -1,6 +1,6 @@
 (()=>{
  const canvas=document.getElementById('canvas');
- function fit(){canvas.style.zoom=Math.max(1100,innerWidth)/1440;}
+ function fit(){canvas.style.zoom=Math.min(1,Math.max(1100,innerWidth)/1440);canvas.style.margin='0 auto';}
  fit();addEventListener('resize',fit);
  const targets={'20121:35464':'20121:35460','20121:35465':'20121:35585','20121:35466':'20121:35617','20121:35467':'20121:35773','20121:35468':'20121:35874','20121:35542':'20121:35617','20121:35920':'20121:35460'};
  const home=['20121:35462','20121:35918'];
