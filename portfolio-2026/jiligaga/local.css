@@ -1,0 +1,16 @@
+:root{--font-geist-sans:Arial,"PingFang SC","Microsoft YaHei",sans-serif;--font-geist-mono:"SFMono-Regular",Consolas,monospace;}
+/* Preserve the source case study while making every section readable without hydration. */
+[data-reveal]{opacity:1;transform:none;}
+@media(min-width:1121px){.hero h1{font-size:clamp(50px,4.2vw,64px);line-height:1.18;}.hero h1 span{white-space:nowrap;}}
+.case-back{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;white-space:nowrap;}
+.case-footer-actions{display:flex;gap:24px;align-items:center;}
+.case-home-link{padding:11px 18px;border-radius:30px;background:#08794f;color:white;font-size:13px;}
+a:focus-visible,button:focus-visible,img[role="button"]:focus-visible{outline:3px solid #08794f;outline-offset:5px;}
+.case-art-dialog{position:fixed;border:0;padding:14px;border-radius:18px;max-width:94vw;max-height:94vh;background:#fffefa;box-shadow:0 20px 100px #10231740;}
+.case-art-dialog::backdrop{background:#153327a6;backdrop-filter:blur(7px);}
+.case-art-dialog img{display:block;max-width:86vw;max-height:83vh;object-fit:contain;}
+.case-art-dialog button{display:block;margin:0 0 12px auto;border:0;border-radius:30px;padding:9px 17px;background:#101b17;color:white;font-size:13px;cursor:pointer;}
+.phone-screen img,.journey-tablet-screen img,.expression-media img{cursor:zoom-in;}
+.case-source-link{display:block;padding:0 0 30px;text-align:center;color:#68736b;font-size:11px;}
+@media(max-width:620px){.case-footer{flex-wrap:wrap;gap:20px;}.case-footer-actions{gap:16px;}.case-nav-meta{display:none;}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}html{scroll-behavior:auto;}}

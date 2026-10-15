@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="860" viewBox="0 0 1280 860">
+<defs><filter id="shadow" x="-50%" y="-40%" width="200%" height="200%"><feDropShadow dx="0" dy="18" stdDeviation="19" flood-color="#254e88" flood-opacity=".13"/></filter><pattern id="grid" width="54" height="54" patternUnits="userSpaceOnUse"><path d="M54 0H0V54" fill="none" stroke="#7094c5" stroke-opacity=".08"/></pattern><linearGradient id="blue" x2="1" y2="1"><stop stop-color="#4d94ff"/><stop offset="1" stop-color="#1464e8"/></linearGradient></defs>
+<style>text{font-family:'PingFang SC','Microsoft YaHei',Arial,sans-serif}.mono{font-family:monospace;letter-spacing:3px}</style>
+<rect width="1280" height="860" fill="#eaf2ff"/><rect width="1280" height="860" fill="url(#grid)"/>
+<text x="66" y="71" class="mono" font-size="20" fill="#5276a2">COMMERCE / A SYSTEM FOR EVERY BUSINESS</text>
+<text x="66" y="164" font-size="73" font-weight="650" letter-spacing="-3" fill="#153456">微盟微商城</text><text x="68" y="218" font-size="25" fill="#5276a2">用一套清晰的系统，支持不一样的生意。</text>
+<g transform="translate(289 274) rotate(-8 148 237)" filter="url(#shadow)">
+ <rect width="296" height="478" rx="40" fill="#172f50"/>
+ <rect x="10" y="10" width="276" height="458" rx="32" fill="#fff"/>
+ <rect x="108" y="18" width="80" height="18" rx="9" fill="#172f50"/>
+ <text x="26" y="34" font-family="Arial,sans-serif" font-size="10" font-weight="600" fill="#172f50">9:41</text>
+ <path d="M247 26v5m5-8v8m5-11v11" stroke="#172f50" stroke-width="2" stroke-linecap="round"/><rect x="265" y="23" width="9" height="7" rx="1" fill="#172f50"/>
+ <circle cx="37" cy="66" r="12" fill="#176aeb"/><path d="m32 66 4 4 6-8" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+ <text x="57" y="72" font-size="17" font-weight="600" fill="#153456">品牌旗舰店</text><path d="M254 64h13m-13 5h13" stroke="#5276a2" stroke-width="2" stroke-linecap="round"/>
+ <rect x="25" y="94" width="246" height="70" rx="13" fill="url(#blue)"/>
+ <text x="40" y="124" font-size="23" font-weight="600" fill="white">好物上新</text><text x="40" y="148" font-size="12" fill="#e6f0ff">把好生活，装进口袋。</text>
+ <circle cx="238" cy="125" r="18" fill="#ffffff22"/><path d="m230 125 5 5 10-13" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+ <rect x="25" y="179" width="246" height="151" rx="13" fill="#e8f1ff"/>
+ <ellipse cx="148" cy="307" rx="52" ry="8" fill="#c7dbf6"/>
+ <rect x="126" y="220" width="44" height="87" rx="11" fill="#67a0ef"/><rect x="138" y="204" width="20" height="22" rx="4" fill="#2366c1"/><rect x="131" y="246" width="34" height="36" rx="4" fill="white"/><path d="M140 258h17m-14 9h11" stroke="#a9c5e9" stroke-width="3" stroke-linecap="round"/>
+ <text x="25" y="359" font-size="17" font-weight="600" fill="#153456">精选好物 · 每日上新</text><text x="25" y="391" font-family="Arial,sans-serif" font-size="23" font-weight="600" fill="#1464e8">¥ 128.00</text>
+ <rect x="190" y="372" width="81" height="33" rx="16.5" fill="#1464e8"/><text x="214" y="394" font-size="13" fill="white">选购</text>
+ <path d="M25 416h246" stroke="#e7eef8"/>
+ <g fill="none" stroke="#8ea7c7" stroke-width="2" stroke-linejoin="round"><path d="m40 435 8-7 8 7v8H40Z"/><rect x="110" y="429" width="14" height="14" rx="2"/><path d="M178 429h14l-2 14h-10Zm3 0v-4h8v4"/><circle cx="252" cy="433" r="4"/><path d="M245 444c0-8 14-8 14 0"/></g>
+ <path d="M112 456h72" stroke="#172f50" stroke-width="4" stroke-linecap="round"/>
+</g>
+<g transform="translate(126 469) rotate(-11 87 92)" filter="url(#shadow)">
+ <rect width="180" height="180" rx="23" fill="white"/><text x="20" y="32" class="mono" font-size="10" fill="#6484aa">01 / MOBILE UI</text>
+ <rect x="20" y="47" width="140" height="73" rx="11" fill="#e4efff"/><path d="M70 101V70h40v31Zm10-31v-9a10 10 0 0 1 20 0v9" stroke="#347bdf" stroke-width="4" fill="none" stroke-linejoin="round"/>
+ <text x="20" y="148" font-size="15" font-weight="600" fill="#153456">组件，走进手机。</text><path d="M20 163h77" stroke="#c7dbf6" stroke-width="5" stroke-linecap="round"/>
+</g>
+<g transform="translate(635 293) rotate(6 194 180)" filter="url(#shadow)">
+ <rect width="388" height="209" rx="25" fill="url(#blue)"/><text x="27" y="44" class="mono" font-size="14" fill="#dfedff">02 / CONTENT MODULE</text>
+ <text x="27" y="106" font-size="30" font-weight="600" fill="white">为不同生意，</text><text x="27" y="149" font-size="30" font-weight="600" fill="white">搭建更多可能。</text>
+ <g fill="none" stroke="#a3c9ff" stroke-width="3"><rect x="290" y="70" width="43" height="43" rx="9" transform="rotate(15 311 91)"/><circle cx="310" cy="143" r="19"/><path d="m272 154-16 26h32Z"/></g>
+</g>
+<g transform="translate(644 536) rotate(6 194 88)" filter="url(#shadow)">
+ <rect width="388" height="179" rx="25" fill="white"/><text x="27" y="40" class="mono" font-size="14" fill="#6484aa">03 / NAVIGATION</text>
+ <g transform="translate(28 65)"><g fill="#e4efff"><rect width="62" height="61" rx="18"/><rect x="90" width="62" height="61" rx="18"/><rect x="180" width="62" height="61" rx="18"/><rect x="270" width="62" height="61" rx="18"/></g><g fill="none" stroke="#347bdf" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M19 26h24l-3 17H22Zm5 0v-6h13v6M106 24h29v21h-29Zm0 5h29m-14-5v21M193 24h29v19h-29Zm4-5h20m-23 28h29M287 24h24v20h-24Zm0 5h24m-15 0v15"/></g><g fill="#5276a2" font-size="12" text-anchor="middle"><text x="31" y="85">商品</text><text x="121" y="85">门店</text><text x="211" y="85">直播</text><text x="301" y="85">分类</text></g></g>
+</g>
+<g transform="translate(1011 510) rotate(11)"><rect width="130" height="130" rx="26" fill="#c9dfff"/><path d="M31 35h27v27H31Zm39 0h27v27H70ZM31 74h27v27H31Z" fill="#347bdf"/><path d="M84 72v29M70 86h29" stroke="#347bdf" stroke-width="7" stroke-linecap="round"/></g>
+<path d="M1056 273v35m-17-17h35" stroke="#8db3e6" stroke-width="4" stroke-linecap="round"/><circle cx="118" cy="494" r="7" fill="#8db3e6"/>
+<text x="68" y="816" class="mono" font-size="16" fill="#5276a2">COMPONENTS × LAYOUTS × SCENARIOS</text>
+</svg>

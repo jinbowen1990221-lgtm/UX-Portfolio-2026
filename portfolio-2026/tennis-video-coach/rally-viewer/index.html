@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>网球片段浏览器</title>
+  <style>
+    * { box-sizing: border-box; }
+    :root {
+      --ink: #26345c;
+      --muted: #66718c;
+      --blue: #4f76ef;
+      --blue-bright: #43b9ff;
+      --blue-soft: #edf5ff;
+      --paper: rgba(255,255,255,.97);
+      --line: #e3ecff;
+    }
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #6594f2 0%, #5d8ef0 48%, #5f91ee 100%);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    }
+    main { width: min(100%, 980px); margin: 0 auto; padding: 26px 18px 46px; }
+    header {
+      position: relative;
+      margin: 0 0 18px;
+      padding: 10px 4px 0;
+    }
+    .viewer-nav { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+    .back-link {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 13px;
+      border: 1px solid rgba(255,255,255,.72);
+      border-radius: 999px;
+      background: rgba(255,255,255,.12);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+      backdrop-filter: blur(10px);
+    }
+    .back-link:hover { background: #fff; color: var(--blue); }
+    .viewer-nav span { color: rgba(255,255,255,.72); font-size: 12px; font-weight: 700; }
+    .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; color: #fff; }
+    .logo {
+      width: 48px;
+      height: 48px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #fff, #dff4ff);
+      color: #4b6fdc;
+      font-size: 15px;
+      font-weight: 950;
+      box-shadow: 0 10px 22px rgba(47, 82, 172, .22);
+      flex: 0 0 auto;
+    }
+    h1 { margin: 0; font-size: clamp(27px, 5vw, 38px); line-height: 1.08; letter-spacing: 0; color: #fff; }
+    .hint { margin: 5px 0 0; color: rgba(255,255,255,.82); line-height: 1.55; font-size: 15px; }
+    .mode-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 32px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.68);
+      background: var(--paper);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .pill strong { color: var(--blue); }
+    .selected {
+      margin-top: 12px;
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      border-radius: 11px;
+      background: var(--paper);
+      border: 1px solid rgba(255,255,255,.72);
+      box-shadow: 0 9px 18px rgba(50, 91, 178, .14);
+    }
+    .selected strong { color: var(--blue); }
+    code { white-space: pre-wrap; word-break: break-word; color: #596988; font-size: 12px; }
+    .grid { display: grid; grid-template-columns: 1fr; max-width: 900px; margin: 0 auto; gap: 18px; }
+    .grid.portrait-heavy {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      max-width: 920px;
+      margin: 0 auto;
+      gap: 14px;
+    }
+    .card {
+      background: var(--paper);
+      border: 1px solid rgba(255,255,255,.76);
+      border-radius: 11px;
+      overflow: hidden;
+      box-shadow: 0 12px 28px rgba(47, 82, 172, .18);
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .favorite-label { color: var(--blue); font-weight: 900; white-space: nowrap; }
+    input[type="checkbox"] { accent-color: var(--blue); }
+    video { display: block; width: 100%; background: #edf4ff; aspect-ratio: 16 / 9; object-fit: contain; }
+    .card.portrait video {
+      aspect-ratio: 9 / 16;
+      max-height: min(78vh, 760px);
+    }
+    .card.portrait .top {
+      display: grid;
+      justify-content: stretch;
+      gap: 4px;
+      line-height: 1.25;
+    }
+    .card.portrait .body { padding: 11px; }
+    .card.portrait h2 { font-size: 17px; }
+    .card.portrait .speeds { gap: 6px; }
+    .card.portrait button, .card.portrait .download {
+      padding: 7px 9px;
+      font-size: 12px;
+    }
+    .card.portrait .analysis-points { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .card.portrait .analysis-point + .analysis-point { border-left: 0; }
+    .card.portrait .analysis-point:nth-child(even) { border-left: 1px solid var(--line); }
+    .card.portrait .analysis-point:nth-child(n+3) { border-top: 1px solid var(--line); }
+    .body { padding: 14px; }
+    h2 { margin: 0 0 10px; font-size: 20px; line-height: 1.2; letter-spacing: 0; }
+    .clip-analysis {
+      margin: 0 0 14px;
+      padding: 0 14px 14px;
+      background: #f4f8ff;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+    }
+    .clip-analysis h3 {
+      width: min(230px, calc(100% - 24px));
+      min-height: 42px;
+      display: grid;
+      place-items: center;
+      margin: 0 auto 12px;
+      padding: 7px 14px;
+      border-radius: 0 0 16px 16px;
+      background: linear-gradient(180deg, #eefaff, #d9f3ff);
+      color: #496cae;
+      font-size: 17px;
+      line-height: 1.25;
+      text-align: center;
+    }
+    .clip-analysis > p {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+      text-align: center;
+    }
+    .clip-analysis h4 {
+      margin: 0 0 6px;
+      color: #344265;
+      font-size: 14px;
+      line-height: 1.35;
+      text-align: center;
+    }
+    .analysis-points {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+    }
+    .analysis-point {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 24px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+      padding: 12px 10px 2px;
+    }
+    .analysis-point + .analysis-point { border-left: 1px solid var(--line); }
+    .analysis-point > span {
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--blue-bright));
+      color: #fff;
+      font-size: 11px;
+      font-weight: 950;
+    }
+    .analysis-point strong {
+      display: block;
+      margin-bottom: 4px;
+      color: #344265;
+      font-size: 13px;
+      line-height: 1.3;
+    }
+    .analysis-point small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+    .speeds { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    button, .download {
+      border: 1px solid #dbe8ff;
+      border-radius: 999px;
+      padding: 8px 11px;
+      background: var(--blue-soft);
+      color: #496cae;
+      font-weight: 800;
+      text-decoration: none;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    button:hover, .download:hover { background: #dff2ff; color: #315fd0; border-color: #bfdcff; }
+    .download { display: inline-flex; }
+    .empty {
+      grid-column: 1 / -1;
+      margin: 0;
+      padding: 24px;
+      border: 1px dashed rgba(79, 118, 239, .38);
+      border-radius: 8px;
+      background: var(--paper);
+      color: var(--muted);
+      text-align: center;
+    }
+    footer { display: none; }
+    @media (max-width: 520px) {
+      main { padding: 18px 10px 32px; }
+      header { margin: 0 0 14px; padding: 6px 2px 0; }
+      .logo { width: 42px; height: 42px; border-radius: 9px; }
+      h1 { font-size: 27px; }
+      .hint { font-size: 13px; }
+      .grid { grid-template-columns: 1fr; gap: 14px; }
+      .grid.portrait-heavy { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+      .card.portrait video { max-height: 76vh; }
+      .top { align-items: flex-start; }
+      .card.portrait .top { padding: 8px; font-size: 12px; }
+      .card.portrait .body { padding: 9px; }
+      .card.portrait h2 { font-size: 16px; margin-bottom: 8px; }
+      .card.portrait .speeds { gap: 5px; margin-bottom: 8px; }
+      .card.portrait button, .card.portrait .download { padding: 6px 7px; font-size: 11px; }
+      .clip-analysis { padding: 0 10px 10px; }
+      .clip-analysis h3 { min-height: 38px; margin-bottom: 10px; font-size: 15px; }
+      .clip-analysis > p { font-size: 12px; }
+      .analysis-points { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .analysis-point + .analysis-point { border-left: 0; }
+      .analysis-point:nth-child(even) { border-left: 1px solid var(--line); }
+      .analysis-point:nth-child(n+3) { border-top: 1px solid var(--line); }
+      .analysis-point { grid-template-columns: 22px minmax(0, 1fr); padding: 10px 7px 4px; }
+      .analysis-point > span { width: 22px; height: 22px; }
+      .analysis-point strong { font-size: 12px; }
+      .analysis-point small { font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <nav class="viewer-nav" aria-label="页面导航">
+        <a class="back-link" href="../">← 返回 Skill 详情</a>
+        <span>GENERATED REVIEW ASSET</span>
+      </nav>
+      <div class="brand">
+        <span class="logo" aria-hidden="true">AI</span>
+        <div>
+          <h1>网球片段浏览器</h1>
+          <p class="hint">查看系统自动拆出的候选片段，支持慢放、加速、收藏、下载，也可以把喜欢的片段合成一条精选视频。</p>
+        </div>
+      </div>
+      <div class="mode-row">
+        <span class="pill">当前模式：<strong>练习小段模式</strong></span>
+        <span class="pill">判断依据：依据录屏中的两次画面转场，自动整理为正常速度、慢动作和慢动作复核三段。</span>
+        <span class="pill">片段数：<strong>3</strong></span>
+      </div>
+      <div class="selected">
+        <strong>已收藏片段：<span id="selected">还没有收藏</span></strong>
+        <code id="command">收藏几个片段后，可以把这里的命令交给 Codex 合成精选视频。</code>
+      </div>
+    </header>
+    <section class="grid portrait-heavy">
+
+        <article class="card portrait" data-id="1">
+          <div class="top">
+            <label class="favorite-label"><input type="checkbox" class="favorite" data-id="1"> 收藏</label>
+            <span>00:00.00 - 00:09.60 · 9.6s</span>
+          </div>
+          <video controls playsinline preload="metadata" poster="posters/rally_001_t000000-000009.jpg">
+            <source src="rallies/rally_001_t000000-000009.mp4" type="video/mp4">
+          </video>
+          <div class="body">
+            <h2>练习小段 001</h2>
+            <section class="clip-analysis">
+              <h3>动作分析说明</h3>
+              <h4>正常速度：完整正手节奏</h4>
+              <p>这一段用于观察动作是否连贯。球员在移动中提前转肩，外侧腿完成加载，击球后拍头顺畅跨体并回到平衡。</p>
+              <div class="analysis-points">
+              <div class="analysis-point">
+                <span>1</span>
+                <div><strong>准备启动</strong><small>拍面保持在身体前方，判断来球后立即用调整步进入正手侧。</small></div>
+              </div>
+
+              <div class="analysis-point">
+                <span>2</span>
+                <div><strong>动力传导</strong><small>腿部加载后髋躯干开始转动，手臂与拍头随后进入击球区。</small></div>
+              </div>
+
+              <div class="analysis-point">
+                <span>3</span>
+                <div><strong>触球空间</strong><small>触球位于身体前侧，击球臂有伸展空间，没有明显被球挤住。</small></div>
+              </div>
+
+              <div class="analysis-point">
+                <span>4</span>
+                <div><strong>随挥回位</strong><small>拍头完成跨体随挥，身体没有在触球后失去平衡。</small></div>
+              </div>
+            </div>
+            </section>
+            <div class="speeds">
+              <button data-speed="0.5">0.5x</button>
+              <button data-speed="0.75">慢速 0.75x</button>
+              <button data-speed="1">正常 1x</button>
+              <button data-speed="1.25">轻快 1.25x</button>
+              <button data-speed="1.5">1.5x</button>
+              <button data-speed="2">冲刺 2x</button>
+            </div>
+            <a class="download" href="rallies/rally_001_t000000-000009.mp4" download>下载片段</a>
+          </div>
+        </article>
+
+        <article class="card portrait" data-id="2">
+          <div class="top">
+            <label class="favorite-label"><input type="checkbox" class="favorite" data-id="2"> 收藏</label>
+            <span>00:09.60 - 00:20.60 · 11.0s</span>
+          </div>
+          <video controls playsinline preload="metadata" poster="posters/rally_002_t000009-000020.jpg">
+            <source src="rallies/rally_002_t000009-000020.mp4" type="video/mp4">
+          </video>
+          <div class="body">
+            <h2>练习小段 002</h2>
+            <section class="clip-analysis">
+              <h3>动作分析说明</h3>
+              <h4>慢动作：动力链顺序</h4>
+              <p>慢放能看清脚下加载、髋肩打开、击球臂释放的先后关系。主要优势是拍头并非由手臂单独硬推。</p>
+              <div class="analysis-points">
+              <div class="analysis-point">
+                <span>1</span>
+                <div><strong>外侧腿加载</strong><small>膝髋保持屈曲，重心先进入支撑腿，为转体提供基础。</small></div>
+              </div>
+
+              <div class="analysis-point">
+                <span>2</span>
+                <div><strong>髋肩连接</strong><small>髋部和躯干先打开，肩带随后把击球臂带向前方。</small></div>
+              </div>
+
+              <div class="analysis-point">
+                <span>3</span>
+                <div><strong>拍头释放</strong><small>拍头先下降再加速通过，触球后继续向前上方释放。</small></div>
+              </div>
+
+              <div class="analysis-point">
+                <span>4</span>
+                <div><strong>判断边界</strong><small>背后机位不能精确测量拍面角度、旋转量或真实拍速。</small></div>
+              </div>
+            </div>
+            </section>
+            <div class="speeds">
+              <button data-speed="0.5">0.5x</button>
+              <button data-speed="0.75">慢速 0.75x</button>
+              <button data-speed="1">正常 1x</button>
+              <button data-speed="1.25">轻快 1.25x</button>
+              <button data-speed="1.5">1.5x</button>
+              <button data-speed="2">冲刺 2x</button>
+            </div>
+            <a class="download" href="rallies/rally_002_t000009-000020.mp4" download>下载片段</a>
+          </div>
+        </article>
+
+        <article class="card portrait" data-id="3">
+          <div class="top">
+            <label class="favorite-label"><input type="checkbox" class="favorite" data-id="3"> 收藏</label>
+            <span>00:20.60 - 00:30.83 · 10.2s</span>
+          </div>
+          <video controls playsinline preload="metadata" poster="posters/rally_003_t000020-000030.jpg">
+            <source src="rallies/rally_003_t000020-000030.mp4" type="video/mp4">
+          </video>
+          <div class="body">
+            <h2>练习小段 003</h2>
+            <section class="clip-analysis">
+              <h3>动作分析说明</h3>
+              <h4>慢动作复核：触球与收拍</h4>
+              <p>第三段重复同一动作，用于确认触球位置、头部稳定和收拍完整性；它不是新的独立击球样本。</p>
+              <div class="analysis-points">
+              <div class="analysis-point">
+                <span>1</span>
+                <div><strong>触球位置</strong><small>球位于身体前侧和侧前方，击球臂保持舒适伸展。</small></div>
+              </div>
+
+              <div class="analysis-point">
+                <span>2</span>
+                <div><strong>上身稳定</strong><small>触球附近头部和躯干没有明显提前抬起或后仰。</small></div>
+              </div>
+
+              <div class="analysis-point">
+                <span>3</span>
+                <div><strong>减速收拍</strong><small>拍头跨体完成减速，结束姿态仍保持在支撑范围内。</small></div>
+              </div>
+
+              <div class="analysis-point">
+                <span>4</span>
+                <div><strong>样本说明</strong><small>该段与前两段属于同一拍回放，不能当作第三次独立命中。</small></div>
+              </div>
+            </div>
+            </section>
+            <div class="speeds">
+              <button data-speed="0.5">0.5x</button>
+              <button data-speed="0.75">慢速 0.75x</button>
+              <button data-speed="1">正常 1x</button>
+              <button data-speed="1.25">轻快 1.25x</button>
+              <button data-speed="1.5">1.5x</button>
+              <button data-speed="2">冲刺 2x</button>
+            </div>
+            <a class="download" href="rallies/rally_003_t000020-000030.mp4" download>下载片段</a>
+          </div>
+        </article>
+
+    </section>
+    <footer>Made with Tennis Video Coach Report</footer>
+  </main>
+  <script>
+    const storageKey = "tennis-rally-favorites:rally_index.json";
+    const selectedEl = document.getElementById("selected");
+    const commandEl = document.getElementById("command");
+    const boxes = [...document.querySelectorAll(".favorite")];
+    function getFavorites() {
+      try { return JSON.parse(localStorage.getItem(storageKey) || "[]"); }
+      catch { return []; }
+    }
+    function setFavorites(ids) {
+      localStorage.setItem(storageKey, JSON.stringify(ids));
+      renderFavorites();
+    }
+    function renderFavorites() {
+      const ids = getFavorites().sort((a, b) => a - b);
+      selectedEl.textContent = ids.length ? ids.join(",") : "还没有收藏";
+      commandEl.textContent = ids.length
+        ? `python3 <skill-root>/scripts/compile_rallies.py rally_index.json --ids ${ids.join(",")} --out selected-rallies.mp4`
+        : "收藏几个片段后，可以把这里的命令交给 Codex 合成精选视频。";
+      boxes.forEach(box => box.checked = ids.includes(Number(box.dataset.id)));
+    }
+    boxes.forEach(box => box.addEventListener("change", () => {
+      const id = Number(box.dataset.id);
+      const ids = new Set(getFavorites());
+      box.checked ? ids.add(id) : ids.delete(id);
+      setFavorites([...ids]);
+    }));
+    document.querySelectorAll("button[data-speed]").forEach(button => {
+      button.addEventListener("click", () => {
+        const video = button.closest(".card").querySelector("video");
+        video.playbackRate = Number(button.dataset.speed);
+        video.play();
+      });
+    });
+    renderFavorites();
+  </script>
+</body>
+</html>

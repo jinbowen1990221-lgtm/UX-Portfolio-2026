@@ -1,0 +1,88 @@
+{
+  "video": {
+    "path": "source-video.mp4",
+    "duration_seconds": 30.833,
+    "width": 900,
+    "height": 946,
+    "fps": 30.0,
+    "codec": "unknown",
+    "format": "mp4"
+  },
+  "settings": {
+    "requested_mode": "practice",
+    "mode": "practice",
+    "mode_label": "练习小段模式",
+    "mode_reason": "依据录屏中的两次画面转场，自动整理为正常速度、慢动作和慢动作复核三段。",
+    "sample_fps": 1.5,
+    "sensitivity": 0.9,
+    "threshold": 0,
+    "smooth_seconds": 1.2,
+    "min_duration": 2.5,
+    "merge_gap": 4.5,
+    "pad": 0,
+    "crop": null
+  },
+  "samples": [],
+  "rallies": [
+    {
+      "id": 1,
+      "start": 0.0,
+      "end": 9.6,
+      "duration": 9.6,
+      "label": "练习小段 001",
+      "time_label": "00:00.00 - 00:09.60",
+      "clip": "rallies/rally_001_t000000-000009.mp4",
+      "poster": "posters/rally_001_t000000-000009.jpg",
+      "action_analysis": {
+        "title": "正常速度：完整正手节奏",
+        "summary": "这一段用于观察动作是否连贯。球员在移动中提前转肩，外侧腿完成加载，击球后拍头顺畅跨体并回到平衡。",
+        "items": [
+          {"label": "准备启动", "note": "拍面保持在身体前方，判断来球后立即用调整步进入正手侧。"},
+          {"label": "动力传导", "note": "腿部加载后髋躯干开始转动，手臂与拍头随后进入击球区。"},
+          {"label": "触球空间", "note": "触球位于身体前侧，击球臂有伸展空间，没有明显被球挤住。"},
+          {"label": "随挥回位", "note": "拍头完成跨体随挥，身体没有在触球后失去平衡。"}
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "start": 9.6,
+      "end": 20.6,
+      "duration": 11.0,
+      "label": "练习小段 002",
+      "time_label": "00:09.60 - 00:20.60",
+      "clip": "rallies/rally_002_t000009-000020.mp4",
+      "poster": "posters/rally_002_t000009-000020.jpg",
+      "action_analysis": {
+        "title": "慢动作：动力链顺序",
+        "summary": "慢放能看清脚下加载、髋肩打开、击球臂释放的先后关系。主要优势是拍头并非由手臂单独硬推。",
+        "items": [
+          {"label": "外侧腿加载", "note": "膝髋保持屈曲，重心先进入支撑腿，为转体提供基础。"},
+          {"label": "髋肩连接", "note": "髋部和躯干先打开，肩带随后把击球臂带向前方。"},
+          {"label": "拍头释放", "note": "拍头先下降再加速通过，触球后继续向前上方释放。"},
+          {"label": "判断边界", "note": "背后机位不能精确测量拍面角度、旋转量或真实拍速。"}
+        ]
+      }
+    },
+    {
+      "id": 3,
+      "start": 20.6,
+      "end": 30.833,
+      "duration": 10.233,
+      "label": "练习小段 003",
+      "time_label": "00:20.60 - 00:30.83",
+      "clip": "rallies/rally_003_t000020-000030.mp4",
+      "poster": "posters/rally_003_t000020-000030.jpg",
+      "action_analysis": {
+        "title": "慢动作复核：触球与收拍",
+        "summary": "第三段重复同一动作，用于确认触球位置、头部稳定和收拍完整性；它不是新的独立击球样本。",
+        "items": [
+          {"label": "触球位置", "note": "球位于身体前侧和侧前方，击球臂保持舒适伸展。"},
+          {"label": "上身稳定", "note": "触球附近头部和躯干没有明显提前抬起或后仰。"},
+          {"label": "减速收拍", "note": "拍头跨体完成减速，结束姿态仍保持在支撑范围内。"},
+          {"label": "样本说明", "note": "该段与前两段属于同一拍回放，不能当作第三次独立命中。"}
+        ]
+      }
+    }
+  ]
+}

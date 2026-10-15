@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="860" viewBox="0 0 1280 860">
+<defs><radialGradient id="market-glow"><stop stop-color="#ffffff" stop-opacity=".95"/><stop offset=".6" stop-color="#d9fff8" stop-opacity=".4"/><stop offset="1" stop-color="#d9fff8" stop-opacity="0"/></radialGradient><filter id="shadow" x="-50%" y="-40%" width="200%" height="200%"><feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#335648" flood-opacity=".16"/></filter><pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse"><path d="M64 0H0V64" fill="none" stroke="#007e6c" stroke-opacity=".06"/></pattern><clipPath id="stall-canopy"><path d="M37 24H423Q438 24 443 41L465 98Q470 111 455 111H5Q-10 111-5 98L18 42Q23 24 37 24Z"/></clipPath></defs>
+<style>text{font-family:'PingFang SC','Microsoft YaHei',Arial,sans-serif}.mono{font-family:monospace;letter-spacing:3px}</style>
+<rect width="1280" height="860" fill="#f0faf7"/>
+<!-- Soft topography and rounded shapes add depth behind the product story. -->
+<ellipse cx="726" cy="442" rx="587" ry="425" fill="url(#market-glow)"/>
+<rect x="937" y="-181" width="480" height="382" rx="175" transform="rotate(-19 1177 10)" fill="#d4f4e9" opacity=".68"/>
+<circle cx="-3" cy="800" r="199" fill="#ddf3e9" opacity=".65"/>
+<g fill="none" stroke="#5fbfa5" stroke-width="1.5" opacity=".17">
+ <path d="M757-15C729 103 876 113 908 215S832 366 924 415s223-42 336 41"/>
+ <path d="M790-15C762 83 903 99 938 205S863 353 947 385s216-41 313 37"/>
+ <path d="M-17 715C88 662 154 768 274 738s202-75 316-17"/>
+ <circle cx="1117" cy="168" r="62"/><circle cx="1117" cy="168" r="80"/>
+</g>
+<rect x="664" y="257" width="118" height="36" rx="18" transform="rotate(-22 723 275)" fill="#b9ebdb" opacity=".48"/>
+<g fill="#007e6c" opacity=".12"><circle cx="1196" cy="511" r="3"/><circle cx="1212" cy="511" r="3"/><circle cx="1228" cy="511" r="3"/><circle cx="1196" cy="527" r="3"/><circle cx="1212" cy="527" r="3"/><circle cx="1228" cy="527" r="3"/><circle cx="1196" cy="543" r="3"/><circle cx="1212" cy="543" r="3"/><circle cx="1228" cy="543" r="3"/></g>
+<rect width="1280" height="860" fill="url(#grid)"/>
+<text x="66" y="71" class="mono" font-size="20" fill="#627578">O2O / A SMALL MARKET. A BIG CONNECTION.</text>
+<text x="66" y="166" font-size="76" font-weight="650" letter-spacing="-3" fill="#172640">小市集 <tspan font-family="Georgia,serif" font-style="italic" font-size="89" fill="#007e6c">go.</tspan></text>
+<text x="68" y="219" font-size="25" fill="#627578">让好市集被发现，让每次报名更安心。</text>
+<ellipse cx="676" cy="677" rx="444" ry="104" fill="#d4eee6"/>
+<path d="M285 569C266 322 921 279 1052 470" fill="none" stroke="#86c7b8" stroke-width="2" stroke-dasharray="7 10"/>
+<g transform="translate(158 390) rotate(-10 116 128)" filter="url(#shadow)">
+ <rect width="244" height="263" rx="26" fill="#ffffff"/><circle cx="43" cy="47" r="16" fill="#f0faf7"/><path d="m37 47 5 5 8-10" stroke="#007e6c" stroke-width="3" fill="none" stroke-linecap="round"/>
+ <text x="70" y="54" font-size="19" font-weight="600" fill="#172640">发现一场市集</text><rect x="23" y="87" width="198" height="106" rx="14" fill="#dcf4ec"/>
+ <path d="M48 172v-43l32-16 35 23 30-30 49 27v39Z" fill="#a4dfce"/><circle cx="177" cy="111" r="12" fill="#ffffff"/><rect x="23" y="216" width="104" height="7" rx="3.5" fill="#73b8a6"/><rect x="23" y="234" width="161" height="5" rx="2.5" fill="#cde3dd"/>
+</g>
+<!-- Rounded market kiosk in the product's turquoise and mint palette. -->
+<g transform="translate(431 327)" filter="url(#shadow)">
+ <rect x="34" y="107" width="24" height="310" rx="12" fill="#007e6c"/>
+ <rect x="402" y="107" width="24" height="310" rx="12" fill="#007e6c"/>
+ <rect x="50" y="138" width="360" height="222" rx="28" fill="#e1f5ee"/>
+ <path d="M73 154h314" stroke="#f8fffc" stroke-width="5" stroke-linecap="round"/>
+ <path d="M37 24H423Q438 24 443 41L465 98Q470 111 455 111H5Q-10 111-5 98L18 42Q23 24 37 24Z" fill="#00c4a1"/>
+ <path d="M91 24h73l-14 83H70Zm146 0h73v83h-80Zm146 0h62l25 83h-80Z" fill="#d9fff8" clip-path="url(#stall-canopy)"/>
+ <g fill="#00c4a1"><path d="M-10 107h80v10a40 40 0 0 1-80 0Z"/><path d="M150 107h80v10a40 40 0 0 1-80 0Z"/><path d="M310 107h80v10a40 40 0 0 1-80 0Z"/></g>
+ <g fill="#d9fff8"><path d="M70 107h80v10a40 40 0 0 1-80 0Z"/><path d="M230 107h80v10a40 40 0 0 1-80 0Z"/><path d="M390 107h80v10a40 40 0 0 1-80 0Z"/></g>
+ <path d="M12 107h436" stroke="#ffffff" stroke-opacity=".35" stroke-width="3"/>
+ <!-- A leafy plant, a handmade bottle and a reusable shopping bag. -->
+ <path d="M125 272v-61m0 34-18-16m18-2 19-19" stroke="#007e6c" stroke-width="5" stroke-linecap="round" fill="none"/>
+ <path d="M125 224c-29 2-39-18-35-31 22-1 35 14 35 31Z" fill="#00c4a1"/>
+ <path d="M129 215c-1-27 20-37 35-29 0 19-15 30-35 29Z" fill="#69d9bb"/>
+ <path d="M95 258h62l-5 48q-2 12-15 12h-22q-13 0-15-12Z" fill="#fff"/>
+ <path d="M99 262h54" stroke="#b8e6d8" stroke-width="4" stroke-linecap="round"/>
+ <rect x="203" y="218" width="53" height="100" rx="18" fill="#fff"/>
+ <rect x="216" y="199" width="27" height="26" rx="7" fill="#007e6c"/>
+ <rect x="211" y="247" width="37" height="39" rx="9" fill="#c7eee1"/>
+ <path d="M220 267h19" stroke="#007e6c" stroke-width="3" stroke-linecap="round"/>
+ <rect x="298" y="247" width="71" height="71" rx="15" fill="#88e3cb"/>
+ <path d="M316 252v-12a17 17 0 0 1 34 0v12" fill="none" stroke="#007e6c" stroke-width="5" stroke-linecap="round"/>
+ <path d="M329 285q-2-16 14-18-2 16-14 18Z" fill="#007e6c"/>
+ <rect x="55" y="346" width="350" height="83" rx="24" fill="#fff" stroke="#b9e5d8" stroke-width="2"/>
+ <rect x="16" y="323" width="428" height="36" rx="18" fill="#007e6c"/>
+ <path d="M37 333h385" stroke="#31c9a7" stroke-width="3" stroke-linecap="round"/>
+ <rect x="76" y="421" width="28" height="24" rx="12" fill="#007e6c"/><rect x="356" y="421" width="28" height="24" rx="12" fill="#007e6c"/>
+ <rect x="81" y="371" width="298" height="37" rx="18.5" fill="#effaf6"/>
+ <circle cx="112" cy="389" r="9" fill="#00c4a1"/>
+ <path d="M140 389h211" stroke="#b7e0d3" stroke-width="5" stroke-linecap="round"/>
+</g>
+<g transform="translate(937 284) rotate(9 121 232)" filter="url(#shadow)">
+ <rect width="242" height="464" rx="36" fill="#172640"/>
+ <rect x="9" y="9" width="224" height="446" rx="29" fill="#ffffff"/>
+ <rect x="84" y="15" width="74" height="17" rx="8.5" fill="#172640"/>
+ <text x="25" y="29" font-family="Arial,sans-serif" font-size="9" font-weight="600" fill="#172640">9:41</text>
+ <path d="M192 22v6m5-9v9m5-12v12" stroke="#172640" stroke-width="2" stroke-linecap="round"/><rect x="211" y="19" width="9" height="7" rx="1" fill="#172640"/>
+ <text x="67" y="73" font-size="23" font-weight="600" fill="#172640">线上报名</text>
+ <rect x="23" y="94" width="196" height="94" rx="17" fill="#e4f6f0"/>
+ <text x="36" y="122" font-size="18" font-weight="600" fill="#172640">周末创意市集</text>
+ <text x="36" y="147" font-size="12" fill="#627578">上海 · 原创手作</text><text x="36" y="168" font-size="12" fill="#007e6c">查看活动 · 选择摊位</text>
+ <text x="25" y="217" font-size="14" font-weight="600" fill="#172640">填写摊主信息</text>
+ <rect x="23" y="231" width="196" height="37" rx="10" fill="#f0faf7"/><text x="36" y="255" font-size="12" fill="#627578">摊主姓名</text><path d="M109 249h92" stroke="#cde3dd" stroke-width="3" stroke-linecap="round"/>
+ <rect x="23" y="278" width="196" height="37" rx="10" fill="#f0faf7"/><text x="36" y="302" font-size="12" fill="#627578">联系电话</text><path d="M109 296h92" stroke="#cde3dd" stroke-width="3" stroke-linecap="round"/>
+ <rect x="23" y="325" width="196" height="37" rx="10" fill="#f0faf7"/><text x="36" y="349" font-size="12" fill="#627578">经营品类</text><text x="109" y="349" font-size="12" fill="#007e6c">原创手作</text>
+ <rect x="23" y="378" width="196" height="40" rx="20" fill="#00c4a1"/><text x="89" y="404" font-size="16" font-weight="600" fill="white">提交报名</text>
+ <text x="60" y="438" font-size="10" fill="#627578">提交后可查看审核状态</text><path d="M86 448h70" stroke="#172640" stroke-width="4" stroke-linecap="round"/>
+</g>
+<circle cx="109" cy="317" r="8" fill="#007e6c"/>
+<text x="68" y="816" class="mono" font-size="16" fill="#627578">DISCOVER → PARTICIPATE → CONNECT</text>
+</svg>

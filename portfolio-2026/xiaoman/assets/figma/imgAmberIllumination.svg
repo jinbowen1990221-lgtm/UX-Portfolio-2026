@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="570" height="480" viewBox="0 0 570 480" fill="none" xmlns="http://www.w3.org/2000/svg">
+<ellipse id="Amber illumination" cx="285" cy="240" rx="285" ry="240" fill="url(#paint0_radial_0_30)"/>
+<defs>
+<radialGradient id="paint0_radial_0_30" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(285 240) scale(285 240)">
+<stop stop-color="#D4A574" stop-opacity="0.301961"/>
+<stop offset="1" stop-color="#D4A574" stop-opacity="0"/>
+</radialGradient>
+</defs>
+</svg>

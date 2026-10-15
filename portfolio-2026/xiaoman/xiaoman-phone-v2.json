@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "name": "小满 AI 陪伴",
+  "profile": "play-phone-portrait",
+  "template": "halo",
+  "device": "ios",
+  "sourceLanguage": "en",
+  "slides": [
+    {
+      "image": "assets/live-captures/xiaoman-home.png",
+      "title": "小满 AI 陪伴",
+      "subtitle": "记录、回应、回看",
+      "style": {
+        "frame": false,
+        "camera": false,
+        "fit": "contain",
+        "background": "#E3ECDE",
+        "backgroundEnd": "#F8E1D6",
+        "backgroundMode": "gradient",
+        "textColor": "#332C28",
+        "accentColor": "#E85D3E",
+        "titleFont": "Manrope",
+        "bodyFont": "Manrope",
+        "titleWeight": "800",
+        "titleSize": 78,
+        "subtitleSize": 28,
+        "accentTitle": true,
+        "texture": "none"
+      }
+    }
+  ]
+}
