@@ -530,7 +530,7 @@ function ensureCartridgeModels(){
 function armCartridgeLoading(){
   const tray = document.getElementById('tray');
   if(!pageActive || !tray || cartridgeLoadPromise || cartridgeObserver) return;
-  if(!('IntersectionObserver' in window)) return;
+  if(!('IntersectionObserver' in window)){ ensureCartridgeModels(); return; }
   cartridgeObserver = new IntersectionObserver((entries, observer)=>{
     if(entries.some(entry=>entry.isIntersecting)){
       observer.disconnect();
@@ -698,9 +698,9 @@ function init(){
     ? (callback)=>window.requestIdleCallback(callback, { timeout:1200 })
     : (callback)=>window.setTimeout(callback, 250);
   schedule(startMainModelLoad);
-  // Warm the cartridge previews without requiring an insert or hover action.
+  // Load cartridge previews when the tray approaches the viewport.
   // Pointer interactions remain as a fallback for pages restored from cache.
-  schedule(ensureCartridgeModels);
+  schedule(armCartridgeLoading);
 }
 
 function buildCards(){
@@ -1451,7 +1451,7 @@ function renderSection(s){
     h += `<h3 class="pf-h">${escapeHtml(s.h)}</h3><p class="pf-p">${s.p}</p>`;
   }
   if (s.image) {
-    h += `<figure class="pf-figure"><div class="pf-figure-frame"><img src="${escapeHtml(s.image)}" alt="${escapeHtml(s.caption||'')}" loading="lazy"/></div>${s.caption?`<figcaption>${escapeHtml(s.caption)}</figcaption>`:''}</figure>`;
+    h += `<figure class="pf-figure"><div class="pf-figure-frame"><img src="${escapeHtml(s.image)}" alt="${escapeHtml(s.caption||'')}" loading="lazy" decoding="async"/></div>${s.caption?`<figcaption>${escapeHtml(s.caption)}</figcaption>`:''}</figure>`;
   }
   if (s.intro) {
     const it = s.intro;
@@ -1473,7 +1473,7 @@ function renderSection(s){
           </div>
           ${it.image ? `
             <div class="pf-intro-visual${it.visualClass ? ` ${escapeHtml(it.visualClass)}` : ''}">
-              <div class="pf-intro-shot"><img src="${escapeHtml(it.image)}" alt="${escapeHtml(it.imageAlt||it.title||'')}" loading="lazy"/></div>
+              <div class="pf-intro-shot"><img src="${escapeHtml(it.image)}" alt="${escapeHtml(it.imageAlt||it.title||'')}" loading="lazy" decoding="async"/></div>
             </div>
           ` : ''}
         </div>
@@ -1508,7 +1508,7 @@ function renderSection(s){
             </ul>
           </div>
           <div class="pf-page-right">
-            <div class="pf-page-shot"><img src="${escapeHtml(pg.image)}" alt="${escapeHtml(pg.title)}" loading="lazy"/></div>
+            <div class="pf-page-shot"><img src="${escapeHtml(pg.image)}" alt="${escapeHtml(pg.title)}" loading="lazy" decoding="async"/></div>
           </div>
         </div>
         <div class="pf-page-foot mono">UX / UI DESIGN  /  2026  ·  领标 AI</div>
@@ -1548,7 +1548,7 @@ function renderSection(s){
     s.mockups.forEach(m => {
       let screen = '';
       if (m.img) {
-        screen = `<img class="mk-shot" src="${escapeHtml(m.img)}" alt="${escapeHtml(m.name)}" loading="lazy"/>`;
+        screen = `<img class="mk-shot" src="${escapeHtml(m.img)}" alt="${escapeHtml(m.name)}" loading="lazy" decoding="async"/>`;
       } else if (m.kind === 'today') {
         screen = `
           <div class="mk-statusbar"><span></span></div>

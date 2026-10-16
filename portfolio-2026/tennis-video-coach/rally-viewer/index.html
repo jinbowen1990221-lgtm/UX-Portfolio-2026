@@ -297,8 +297,8 @@
             <label class="favorite-label"><input type="checkbox" class="favorite" data-id="1"> 收藏</label>
             <span>00:00.00 - 00:09.60 · 9.6s</span>
           </div>
-          <video controls playsinline preload="metadata" poster="posters/rally_001_t000000-000009.jpg">
-            <source src="rallies/rally_001_t000000-000009.mp4" type="video/mp4">
+          <video data-lazy-video controls playsinline preload="none" poster="posters/rally_001_t000000-000009.jpg">
+            <source data-src="rallies/rally_001_t000000-000009.mp4" type="video/mp4">
           </video>
           <div class="body">
             <h2>练习小段 001</h2>
@@ -345,8 +345,8 @@
             <label class="favorite-label"><input type="checkbox" class="favorite" data-id="2"> 收藏</label>
             <span>00:09.60 - 00:20.60 · 11.0s</span>
           </div>
-          <video controls playsinline preload="metadata" poster="posters/rally_002_t000009-000020.jpg">
-            <source src="rallies/rally_002_t000009-000020.mp4" type="video/mp4">
+          <video data-lazy-video controls playsinline preload="none" poster="posters/rally_002_t000009-000020.jpg">
+            <source data-src="rallies/rally_002_t000009-000020.mp4" type="video/mp4">
           </video>
           <div class="body">
             <h2>练习小段 002</h2>
@@ -393,8 +393,8 @@
             <label class="favorite-label"><input type="checkbox" class="favorite" data-id="3"> 收藏</label>
             <span>00:20.60 - 00:30.83 · 10.2s</span>
           </div>
-          <video controls playsinline preload="metadata" poster="posters/rally_003_t000020-000030.jpg">
-            <source src="rallies/rally_003_t000020-000030.mp4" type="video/mp4">
+          <video data-lazy-video controls playsinline preload="none" poster="posters/rally_003_t000020-000030.jpg">
+            <source data-src="rallies/rally_003_t000020-000030.mp4" type="video/mp4">
           </video>
           <div class="body">
             <h2>练习小段 003</h2>
@@ -475,5 +475,5 @@
     });
     renderFavorites();
   </script>
-</body>
+<script src="../../../assets/lazy-media.js?v=1" defer></script></body>
 </html>
