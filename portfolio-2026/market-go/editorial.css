@@ -157,3 +157,18 @@
 .mg-strategy .mg-heading-aside{padding-top:18px;}
 .mg-strategy .mg-heading-aside p{max-width:1000px;margin:0;font-size:16px;line-height:1.9;}
 .mg-strategy .mg-number{display:none;}
+
+/* All following chapters use the same headline/subtitle hierarchy. */
+.mg-redesign .mg-heading{display:block;position:relative;padding-right:96px;margin-bottom:40px;}
+.mg-heading h2{white-space:nowrap;}
+.mg-heading .mg-heading-aside{position:static;padding-top:18px;}
+.mg-heading .mg-heading-aside p{max-width:1000px;margin:0;font-size:16px;line-height:1.9;}
+.mg-heading .mg-number{top:28px;}
+.mg-results .mg-number{display:none;}
+.mg-results .mg-metrics article:after{content:none;display:none;}
+.mg-results .mg-metrics strong,.mg-results .mg-scale strong{font-weight:700;}
+.mg-reflection-grid{display:block;}
+.mg-reflection-grid h2{white-space:nowrap;}
+.mg-reflection-grid h2 span{display:inline;}
+.mg-reflection-grid>div{padding-top:18px;max-width:1000px;}
+.mg-reflection-grid .mg-intro{max-width:1000px;}
