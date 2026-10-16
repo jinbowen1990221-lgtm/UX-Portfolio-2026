@@ -150,3 +150,10 @@
 .mg-rental-crop{height:334px;}
 /* Keep the original vector mark's absolute coordinates intact. */
 .mg-brand-art [data-node-id="20121:35781"]{width:420px;height:94.584px;}
+
+/* Strategy: one headline with its supporting subtitle directly below. */
+.mg-strategy .mg-heading{display:block;margin-bottom:40px;}
+.mg-strategy .mg-heading h2{white-space:nowrap;}
+.mg-strategy .mg-heading-aside{padding-top:18px;}
+.mg-strategy .mg-heading-aside p{max-width:1000px;margin:0;font-size:16px;line-height:1.9;}
+.mg-strategy .mg-number{display:none;}
