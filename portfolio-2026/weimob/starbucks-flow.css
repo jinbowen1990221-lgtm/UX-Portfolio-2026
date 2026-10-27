@@ -1,0 +1,45 @@
+/* The six supplied Phase IV screens, with visible preview and zoom actions. */
+.sb-coffee-viewer{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:64px;padding:40px;overflow:hidden;align-items:center;}
+.sb-coffee-controls{order:2;min-width:0;}
+.sb-coffee-control-intro>h3{font-size:clamp(26px,2.8vw,37px);line-height:1.45;margin-top:14px;}
+.sb-coffee-control-intro>p{color:#c0d2bd;font-size:13px;line-height:1.9;margin-top:16px;}
+.sb-coffee-interaction-hint{display:flex;align-items:center;gap:8px;font-size:12px;color:#d8eead;margin:22px 0 14px;}
+.sb-coffee-interaction-hint>svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.6;flex:none;}
+.sb-coffee-tabs{gap:8px;margin-top:0;}
+.sb-coffee-tabs>button{grid-template-columns:23px 38px minmax(0,1fr) 68px;align-items:center;gap:12px;border:1px solid #5e7b65;border-radius:10px;padding:10px 12px;min-height:80px;background:#143a2c;color:#f0f4e6;transition:background .18s,border-color .18s,box-shadow .18s;}
+.sb-coffee-tabs>button:hover{background:#284f3c;border-color:#b3cc9b;}
+.sb-coffee-tabs>button>span{margin:0;}
+.sb-coffee-tabs>button>.sb-coffee-step-copy{color:#f0f4e6;}
+.sb-coffee-tabs>button[aria-selected="true"]>.sb-coffee-step-copy{color:#fff;}
+.sb-coffee-tabs>button:focus-visible{outline:2px solid #c2fa4b;outline-offset:3px;}
+.sb-coffee-tabs>button>.sb-coffee-step-number{font:12px var(--mono);color:#b2c8a4;margin:0;}
+.sb-coffee-step-thumb{display:block;height:56px;overflow:hidden;border:1px solid #78947e;border-radius:4px;background:#004a34;}
+.sb-coffee-step-thumb>img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;}
+.sb-coffee-tabs strong{font-size:15px;line-height:1.5;font-weight:600;}
+.sb-coffee-tabs small{display:block;color:#c2d1bc;font-size:11px;line-height:1.65;margin-top:4px;}
+.sb-coffee-tabs .sb-coffee-step-action{display:flex;align-items:center;justify-content:flex-end;gap:4px;font-size:11px;white-space:nowrap;color:#dbecbc;}
+.sb-coffee-step-action>svg,.sb-coffee-enlarge>svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;flex:none;}
+.sb-coffee-tabs>button[aria-selected="true"]{padding-block:10px;background:#3b5939;border-color:#c2fa4b;box-shadow:inset 3px 0 #c2fa4b;color:#fff;}
+.sb-coffee-tabs>button[aria-selected="true"]>.sb-coffee-step-number,.sb-coffee-tabs>button[aria-selected="true"] .sb-coffee-step-action{color:#d5ff84;}
+.sb-coffee-tabs>button[aria-selected="true"] small{color:#edf4dc;}
+.sb-coffee-display{order:1;gap:20px;min-height:0;width:100%;align-self:stretch;justify-content:center;scroll-margin-top:210px;}
+.sb-coffee-display:before{top:50%;transform:translate(-50%,-50%);width:390px;height:390px;}
+.sb-coffee-preview-heading{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;color:#bdd3b2;}
+.sb-coffee-preview-heading>.mono{font-size:9px;letter-spacing:1px;}
+.sb-coffee-preview-heading>span:last-child{font-size:11px;}
+.sb-coffee-display .sb-coffee-selected{max-width:256px;width:100%;border-width:4px;border-radius:23px;cursor:zoom-in;transition:border-color .18s,box-shadow .18s;}
+.sb-coffee-display .sb-coffee-selected:before{display:none;}
+.sb-coffee-selected>img{aspect-ratio:750/1794;width:100%;height:auto;object-fit:contain;background:#004632;}
+.sb-coffee-display .sb-coffee-selected:hover,.sb-coffee-display .sb-coffee-selected:focus-visible{border-color:#a1c980;box-shadow:0 20px 36px #0005;}
+.sb-coffee-preview-footer{display:grid;gap:14px;justify-items:center;width:100%;}
+.sb-coffee-display-nav{display:flex;align-items:center;gap:10px;width:100%;justify-content:center;}
+.sb-coffee-display-nav>button{display:grid;place-items:center;width:44px;height:44px;border:1px solid #789278;border-radius:50%;background:#163c2b;font-size:20px;color:#e0edca;flex:none;}
+.sb-coffee-display-nav>button:hover{background:#36583b;border-color:#c2fa4b;}
+.sb-coffee-display-label{font:11px/1.6 var(--font);letter-spacing:.3px;color:#e2eccf;text-align:center;min-width:140px;}
+.sb-coffee-enlarge{display:flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 18px;border:1px solid #c2fa4b;border-radius:30px;background:#c2fa4b;color:#172e20;font-size:12px;font-weight:600;}
+.sb-coffee-enlarge:hover{background:#dcffa1;}
+@media(max-width:1100px){.sb-coffee-viewer{padding:30px;gap:32px;}.sb-coffee-tabs>button{grid-template-columns:20px 32px minmax(0,1fr) 60px;gap:8px;padding:10px;}.sb-coffee-tabs strong{font-size:14px;}.sb-coffee-step-thumb{height:48px;}.sb-coffee-tabs .sb-coffee-step-action{font-size:10px;}.sb-coffee-step-action>svg{width:13px;height:13px;}.sb-coffee-display .sb-coffee-selected{max-width:242px;}}
+@media(max-width:900px){.sb-coffee-viewer{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:24px;padding:25px;}.sb-coffee-tabs>button{grid-template-columns:20px minmax(0,1fr) 60px;}.sb-coffee-tabs>button>.sb-coffee-step-thumb{display:none;}.sb-coffee-control-intro>h3{font-size:25px;}.sb-coffee-tabs small{font-size:10px;}.sb-coffee-preview-heading{flex-direction:column;align-items:center;gap:4px;}.sb-coffee-display .sb-coffee-selected{max-width:230px;}}
+@media(max-width:760px){.sb-coffee-viewer{grid-template-columns:minmax(0,1fr);gap:28px;padding:24px 18px;}.sb-coffee-controls{order:1;}.sb-coffee-display{order:2;scroll-margin-top:210px;gap:16px;}.sb-coffee-control-intro>h3{font-size:26px;}.sb-coffee-control-intro>p{font-size:12px;}.sb-coffee-interaction-hint{font-size:11px;margin-top:20px;}.sb-coffee-tabs{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;}.sb-coffee-tabs>button{grid-template-columns:20px minmax(0,1fr);gap:4px 7px;min-height:76px;padding:11px 10px;}.sb-coffee-tabs strong{font-size:13px;}.sb-coffee-tabs small{display:none;}.sb-coffee-tabs .sb-coffee-step-action{grid-column:2;justify-content:flex-start;gap:4px;font-size:10px;}.sb-coffee-preview-heading{flex-direction:row;gap:8px;}.sb-coffee-preview-heading>.mono{font-size:8px;}.sb-coffee-preview-heading>span:last-child{font-size:10px;}.sb-coffee-display .sb-coffee-selected{max-width:250px;border-radius:23px;}.sb-coffee-display:before{width:280px;height:280px;}.sb-coffee-display-label{min-width:135px;font-size:11px;}}
+@media(prefers-reduced-motion:reduce){.sb-coffee-tabs>button,.sb-coffee-display .sb-coffee-selected{transition:none;}}
+@media(max-width:760px){.sb-coffee-tabs>button[aria-selected="true"] small{display:none;}}

@@ -9,6 +9,12 @@ let galleryMode = "boards";
 let activeFigmaScreen;
 const figmaScreenNames = JSON.parse(document.querySelector("#sb-screen-data").textContent);
 const figmaScreenKeys = Object.keys(figmaScreenNames);
+const figmaScreenAssets = JSON.parse(document.querySelector('#sb-screen-assets').textContent);
+const coffeeScreenKeys = [...document.querySelectorAll('[data-coffee-step]')].map(button => button.dataset.coffeeStep);
+let activeFigmaKeys = figmaScreenKeys;
+function figmaScreenUrl(name) {
+  return figmaScreenAssets[name] || `assets/starbucks-figma/${name}.png`;
+}
 let boardNumbers = Array.from({length:11}, (_, i) => i + 12);
 document.querySelectorAll('[data-board]').forEach(button => {
   captions[button.dataset.board] = button.querySelector('img').alt;
@@ -32,7 +38,8 @@ document.addEventListener('click', event => {
   const figmaTrigger = event.target.closest('[data-figma-screen]');
   if (figmaTrigger) {
     opener = figmaTrigger;
-    showFigmaScreen(figmaTrigger.dataset.figmaScreen);
+    const name = figmaTrigger.dataset.figmaScreen;
+    showFigmaScreen(name, coffeeScreenKeys.includes(name) ? coffeeScreenKeys : figmaScreenKeys);
     dialog.showModal();
     document.body.style.overflow = 'hidden';
     return;
@@ -47,21 +54,22 @@ document.addEventListener('click', event => {
 document.querySelector('.close-dialog').addEventListener('click', () => dialog.close());
 dialog.addEventListener('close', () => { document.body.style.overflow = ''; opener?.focus({preventScroll:true}); });
 dialog.addEventListener('click', event => { if (event.target === dialog) dialog.close(); });
-function showFigmaScreen(name) {
+function showFigmaScreen(name, keys = figmaScreenKeys) {
   galleryMode = 'figma';
   activeFigmaScreen = name;
-  lightboxImage.src = `assets/starbucks-figma/${name}.png`;
+  activeFigmaKeys = keys;
+  lightboxImage.src = figmaScreenUrl(name);
   lightboxImage.alt = figmaScreenNames[name];
   caption.textContent = figmaScreenNames[name];
-  originalLink.href = `assets/starbucks-figma/${name}.png`;
+  originalLink.href = figmaScreenUrl(name);
   document.querySelector('#previous-board').hidden = false;
   document.querySelector('#next-board').hidden = false;
-  document.querySelector('#lightbox-count').textContent = `${String(figmaScreenKeys.indexOf(name) + 1).padStart(2,'0')} / ${figmaScreenKeys.length}`;
+  document.querySelector('#lightbox-count').textContent = `${String(activeFigmaKeys.indexOf(name) + 1).padStart(2,'0')} / ${String(activeFigmaKeys.length).padStart(2,'0')}`;
 }
 function advanceBoard(direction) {
   if (galleryMode === 'figma') {
-    const i = figmaScreenKeys.indexOf(activeFigmaScreen);
-    showFigmaScreen(figmaScreenKeys[(i + direction + figmaScreenKeys.length) % figmaScreenKeys.length]);
+    const i = activeFigmaKeys.indexOf(activeFigmaScreen);
+    showFigmaScreen(activeFigmaKeys[(i + direction + activeFigmaKeys.length) % activeFigmaKeys.length], activeFigmaKeys);
     return;
   }
   const index = boardNumbers.indexOf(activeBoard);
@@ -145,7 +153,11 @@ projectTabs.forEach((button,index) => {
     projectTabs[next].focus({preventScroll:true});
   });
 });
-activateProject(projectTabs[0],false);
+const isStarbucksLink = ['#starbucks','#coffee-classroom'].includes(window.location.hash);
+activateProject(isStarbucksLink ? projectTabs.find(tab => tab.dataset.projectTab === 'starbucks') : projectTabs[0],false);
+if (window.location.hash === '#coffee-classroom') {
+  requestAnimationFrame(() => document.querySelector('#coffee-classroom').scrollIntoView({block:'start'}));
+}
 
 
 // Inspect original coffee-classroom states without simulating business outcomes.
@@ -157,18 +169,27 @@ function selectCoffeeState(button) {
     const selected = tab === button;
     tab.setAttribute('aria-selected', String(selected));
     tab.tabIndex = selected ? 0 : -1;
+    tab.querySelector('.sb-coffee-step-action>span').textContent = selected ? '正在预览' : '点击预览';
   });
   coffeePanel.setAttribute('aria-labelledby',button.id);
-  const device = coffeePanel.querySelector('[data-figma-screen]');
-  device.dataset.figmaScreen = name;
-  device.setAttribute('aria-label',`放大：${figmaScreenNames[name]}`);
+  const device = coffeePanel.querySelector('.sb-coffee-selected');
+  coffeePanel.querySelectorAll('[data-figma-screen]').forEach(trigger => {
+    trigger.dataset.figmaScreen = name;
+    trigger.setAttribute('aria-label',`放大查看：${figmaScreenNames[name]}`);
+  });
   const image = device.querySelector('img');
-  image.src = `assets/starbucks-figma/${name}.png`;
+  image.src = figmaScreenUrl(name);
   image.alt = figmaScreenNames[name];
+  image.height = Number(button.querySelector('img').getAttribute('height'));
   coffeePanel.querySelector('.sb-coffee-display-label').textContent = `${String(coffeeTabs.indexOf(button) + 1).padStart(2,'0')} / 06 · ${button.dataset.coffeeLabel}`;
 }
 coffeeTabs.forEach((button,index) => {
-  button.addEventListener('click', () => selectCoffeeState(button));
+  button.addEventListener('click', () => {
+    selectCoffeeState(button);
+    if (window.matchMedia('(max-width:760px)').matches) {
+      coffeePanel.scrollIntoView({block:'start',behavior:window.matchMedia('(prefers-reduced-motion:reduce)').matches ? 'instant' : 'smooth'});
+    }
+  });
   button.addEventListener('keydown', event => {
     let next;
     if (['ArrowRight','ArrowDown'].includes(event.key)) next = (index + 1) % coffeeTabs.length;
@@ -179,3 +200,15 @@ coffeeTabs.forEach((button,index) => {
     event.preventDefault();selectCoffeeState(coffeeTabs[next]);coffeeTabs[next].focus({preventScroll:true});
   });
 });
+coffeePanel.querySelectorAll('[data-coffee-direction]').forEach(button => {
+  button.addEventListener('click', () => {
+    const index = coffeeTabs.findIndex(tab => tab.getAttribute('aria-selected') === 'true');
+    selectCoffeeState(coffeeTabs[(index + Number(button.dataset.coffeeDirection) + coffeeTabs.length) % coffeeTabs.length]);
+  });
+});
+const coffeeMobileQuery = window.matchMedia('(max-width:760px)');
+function updateCoffeeOrientation() {
+  document.querySelector('.sb-coffee-tabs').setAttribute('aria-orientation',coffeeMobileQuery.matches ? 'horizontal' : 'vertical');
+}
+coffeeMobileQuery.addEventListener('change',updateCoffeeOrientation);
+updateCoffeeOrientation();
